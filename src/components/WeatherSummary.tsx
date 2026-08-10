@@ -11,7 +11,7 @@ export function WeatherSummary({ text }: WeatherSummaryProps) {
   return (
     <div className="glass-card p-[18px] md:p-[22px] flex gap-3 items-start w-full select-none">
       <Info size={16} className="text-accent-custom shrink-0 mt-0.5" />
-      <p className="text-xs text-text-secondary dark:text-[#D9E2EF] leading-relaxed font-semibold">
+      <p className="text-sm text-text-primary leading-relaxed font-normal">
         {text}
       </p>
     </div>

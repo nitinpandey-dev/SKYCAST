@@ -40,16 +40,16 @@ export function WeatherHeader({
   };
 
   return (
-    <header className="w-full px-4 pt-4 sticky top-0 z-40 select-none">
-      <div className="max-w-7xl mx-auto glass-card h-16 px-4 flex items-center justify-between gap-3 md:gap-6 shadow-sm border border-border-custom/80">
+    <header className="w-full px-4 pt-3 sticky top-0 z-40 select-none">
+      <div className="max-w-7xl mx-auto glass-card h-[58px] md:h-[66px] px-3 sm:px-4 flex items-center justify-between gap-2.5 sm:gap-4 shadow-sm border border-border-custom/40">
         
         {/* Left Side: Logo & Location Switcher */}
-        <div className="flex items-center gap-4 shrink-0">
-          <Link to="/" className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-3 shrink-0">
+          <Link to="/" className="flex items-center gap-1.5 shrink-0">
             <div className="bg-accent-custom p-1.5 rounded-lg text-white shadow-sm flex items-center justify-center">
-              <CloudSun size={16} />
+              <CloudSun size={15} />
             </div>
-            <span className="font-extrabold text-sm tracking-tight text-text-primary hidden sm:block">
+            <span className="font-semibold text-xs tracking-wide text-text-primary hidden sm:block">
               SKYCAST
             </span>
           </Link>
@@ -59,16 +59,16 @@ export function WeatherHeader({
             <div className="relative" ref={switcherRef}>
               <button
                 onClick={() => setSwitcherOpen(!switcherOpen)}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-elevated/40 hover:bg-surface-elevated/70 text-xs font-semibold text-text-primary border border-border-custom/50 transition-all cursor-pointer"
+                className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-elevated/10 hover:bg-surface-elevated/35 text-[11px] font-medium text-text-primary border border-border-custom/30 transition-all cursor-pointer"
                 aria-label="Toggle location switcher"
               >
-                <MapPin size={12} className="text-accent-custom" />
-                <span className="truncate max-w-[100px] sm:max-w-[130px] font-semibold">{activeLocation.name}</span>
-                <ChevronDown size={11} className={`text-text-muted transition-transform duration-200 ${switcherOpen ? 'rotate-180 text-accent-custom' : ''}`} />
+                <MapPin size={11} className="text-accent-custom" />
+                <span className="truncate max-w-[90px] sm:max-w-[120px] font-semibold">{activeLocation.name}</span>
+                <ChevronDown size={10} className={`text-text-muted transition-transform duration-200 ${switcherOpen ? 'rotate-180 text-accent-custom' : ''}`} />
               </button>
 
               {switcherOpen && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-surface-elevated backdrop-blur-xl rounded-2xl shadow-xl border border-border-custom py-2.5 z-50 animate-in fade-in duration-200">
+                <div className="absolute top-full left-0 mt-2 w-64 glass-dropdown py-2.5 z-50 animate-in fade-in duration-200">
                   <button
                     onClick={() => { onUseLocation(); setSwitcherOpen(false); }}
                     disabled={locationLoading}
@@ -78,7 +78,7 @@ export function WeatherHeader({
                     <span>{locationLoading ? 'Locating...' : 'Use My Geolocation'}</span>
                   </button>
 
-                  <div className="border-t border-border-custom my-1.5 opacity-50"></div>
+                  <div className="border-t border-border-custom/30 my-1.5 opacity-50"></div>
 
                   {favorites.length > 0 && (
                     <div className="py-1">
@@ -99,7 +99,7 @@ export function WeatherHeader({
                   )}
 
                   {favorites.length > 0 && recentSearches.length > 0 && (
-                    <div className="border-t border-border-custom my-1.5 opacity-50"></div>
+                    <div className="border-t border-border-custom/30 my-1.5 opacity-50"></div>
                   )}
 
                   {recentSearches.length > 0 && (
@@ -126,14 +126,14 @@ export function WeatherHeader({
         </div>
 
         {/* Center Section: Search Bar */}
-        <div className="flex-1 max-w-xs md:max-w-md mx-2 sm:mx-4">
+        <div className="flex-1 max-w-[160px] sm:max-w-[220px] md:max-w-[260px] mx-1 sm:mx-2">
           <SearchBar onLocationSelect={onLocationSelect} />
         </div>
 
         {/* Right Section: Configuration Controls */}
-        <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <UnitToggle />
-          <div className="w-px h-5 bg-border-custom hidden sm:block"></div>
+          <div className="w-px h-4 bg-border-custom/50 hidden sm:block"></div>
           <ThemeToggle />
         </div>
 

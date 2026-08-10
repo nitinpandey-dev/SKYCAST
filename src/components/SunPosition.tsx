@@ -52,9 +52,9 @@ export function SunPosition({ sunrise, sunset }: SunPositionProps) {
   return (
     <div className="glass-card p-4 sm:p-5 transition-all duration-300 w-full select-none">
       <div className="flex items-center justify-between mb-3 border-b border-border-custom/25 pb-2">
-        <h2 className="text-xs font-bold text-text-primary uppercase tracking-wider">Sun Position</h2>
+        <h2 className="text-xs font-semibold text-text-primary tracking-wider">Sun Position</h2>
         {daylightDuration && (
-          <span className="text-[10px] text-text-muted font-bold uppercase tracking-wider">
+          <span className="text-[10px] text-text-muted font-medium">
             Daylight: {daylightDuration}
           </span>
         )}

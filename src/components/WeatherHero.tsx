@@ -56,56 +56,56 @@ export function WeatherHero({ data, onRefresh, isLoading, lastUpdated }: Weather
   };
 
   return (
-    <div className="w-full flex flex-col md:flex-row items-center md:items-end justify-between gap-6 py-6 md:py-10 select-none">
+    <div className="w-full flex flex-col md:flex-row items-center md:items-end justify-between gap-4 py-4 md:py-6 select-none">
       
       {/* Left / Center Info: Open Atmospheric Weather Display */}
       <div className="flex flex-col items-center md:items-start text-center md:text-left">
-        <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-text-primary">
+        <h1 className="text-3xl md:text-[38px] font-medium tracking-tight text-text-primary">
           {location.name}
         </h1>
-        <p className="text-xs font-medium text-text-secondary uppercase tracking-widest mt-1">
+        <p className="text-xs font-normal text-text-secondary mt-0.5">
           {formatDay(new Date().toISOString())}, {format(new Date(), 'MMMM d')}
         </p>
 
         {/* Dynamic Big Temperature Grid */}
-        <div className="flex items-center gap-4 mt-4 select-none">
-          <span className="text-7xl sm:text-8xl md:text-[7rem] font-light tracking-tighter leading-none text-text-primary dark:text-white">
+        <div className="flex items-center gap-4 mt-3 select-none">
+          <span className="text-7xl md:text-[92px] font-light tracking-tighter leading-none text-text-primary">
             {displayTemp}°
           </span>
           <div className="flex flex-col items-center md:items-start leading-none justify-center">
             <div className="text-accent-custom shrink-0">
-              <WeatherIcon name={condition.icon} size={48} strokeWidth={1.2} />
+              <WeatherIcon name={condition.icon} size={54} strokeWidth={1} />
             </div>
-            <span className="text-lg sm:text-xl font-semibold text-text-primary tracking-wide mt-1.5 block">
+            <span className="text-xl md:text-2xl font-medium text-text-secondary tracking-wide mt-1.5 block">
               {condition.description}
             </span>
           </div>
         </div>
 
         {/* Feels like / Highs / Lows / Precipitation details */}
-        <div className="mt-4 text-sm font-semibold text-text-secondary flex flex-wrap items-center justify-center md:justify-start gap-x-2 gap-y-1">
-          <span>Feels like <strong className="font-bold text-text-primary">{displayFeelsLike}°</strong></span>
-          <span className="opacity-40">•</span>
-          <span>H: <strong className="font-bold text-text-primary">{displayHigh}°</strong></span>
-          <span className="opacity-40">•</span>
-          <span>L: <strong className="font-bold text-text-primary">{displayLow}°</strong></span>
-          <span className="opacity-40">•</span>
+        <div className="mt-3 text-xs md:text-sm font-medium text-text-secondary flex flex-wrap items-center justify-center md:justify-start gap-x-2 gap-y-1">
+          <span>Feels like <strong className="font-semibold text-text-primary">{displayFeelsLike}°</strong></span>
+          <span className="opacity-40">·</span>
+          <span>H: <strong className="font-semibold text-text-primary">{displayHigh}°</strong></span>
+          <span className="opacity-40">·</span>
+          <span>L: <strong className="font-semibold text-text-primary">{displayLow}°</strong></span>
+          <span className="opacity-40">·</span>
           <span>{current.precipitationProbability}% Rain</span>
         </div>
       </div>
 
       {/* Right Side: Context Controls (Favorite + Refresh) */}
-      <div className="flex flex-col sm:flex-row md:flex-col items-center md:items-end gap-3 shrink-0">
+      <div className="flex flex-row md:flex-col items-center md:items-end gap-2.5 shrink-0 mt-3 md:mt-0">
         
         {/* Favorite capsule */}
         <button 
           onClick={toggleFavorite}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-custom hover:bg-surface-elevated text-xs font-semibold text-text-primary border border-border-custom shadow-sm active:scale-95 transition-all cursor-pointer ${
+          className={`flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-custom hover:bg-surface-elevated text-[11px] font-semibold text-text-primary border border-border-custom/80 shadow-sm active:scale-95 transition-all cursor-pointer ${
             fav ? 'bg-amber-400/10 dark:bg-amber-400/5 border-amber-400/30' : ''
           }`}
         >
           <Star 
-            size={12} 
+            size={11} 
             className={fav ? "fill-amber-400 text-amber-400" : "text-text-muted"} 
           />
           <span>{fav ? 'Favorited' : 'Favorite'}</span>
@@ -113,15 +113,15 @@ export function WeatherHero({ data, onRefresh, isLoading, lastUpdated }: Weather
 
         {/* Refresh button with status indicator */}
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-text-muted font-semibold uppercase tracking-wider">
+          <span className="text-[9px] text-text-muted font-medium uppercase tracking-wider">
             {isLoading ? 'Updating...' : `Updated ${timeAgo}`}
           </span>
           <button 
             onClick={onRefresh}
             disabled={isLoading}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-text-primary bg-surface-custom hover:bg-surface-elevated border border-border-custom active:scale-95 transition-all cursor-pointer shadow-sm"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold text-text-primary bg-surface-custom hover:bg-surface-elevated border border-border-custom/80 active:scale-95 transition-all cursor-pointer shadow-sm"
           >
-            <RefreshCw size={11} className={isLoading ? 'animate-spin' : ''} />
+            <RefreshCw size={10} className={isLoading ? 'animate-spin' : ''} />
             <span>Refresh</span>
           </button>
         </div>

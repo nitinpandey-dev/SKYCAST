@@ -34,7 +34,7 @@ export function Home() {
   const { locationName } = useParams();
   const navigate = useNavigate();
   const { requestLocation, loading: geoLoading } = useGeolocation();
-  const { units, theme } = useSettings();
+  const { units, isDark } = useSettings();
   
   const [activeLocation, setActiveLocation] = useState<LocationInfo | null>(null);
   const [initLoading, setInitLoading] = useState(true);
@@ -95,11 +95,7 @@ export function Home() {
     }
   };
 
-  // Theme checking
-  const isSystemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const isDark = theme === 'dark' || (theme === 'system' && isSystemDark);
-  
-  let bgClass = 'bg-[var(--background)]';
+  let bgClass = 'bg-[var(--bg)]';
   if (data?.current) {
     bgClass = getWeatherBackgroundClass(data.current.conditionCode, data.current.isDay, isDark);
   }

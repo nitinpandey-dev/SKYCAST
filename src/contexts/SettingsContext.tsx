@@ -4,6 +4,8 @@ import { LocationInfo, Theme, UnitSystem } from '../types/weather';
 interface SettingsContextType {
   theme: Theme;
   setTheme: (theme: Theme) => void;
+  /** Reactive resolved dark-mode flag. Use this instead of reading from the DOM. */
+  isDark: boolean;
   units: UnitSystem;
   setUnits: (units: UnitSystem) => void;
   favorites: LocationInfo[];
@@ -28,6 +30,22 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     setThemeState(newTheme);
     localStorage.setItem('theme', newTheme);
   };
+
+  // Reactive isDark — avoids one-time DOM reads in child components.
+  // Re-computes whenever theme changes or the OS preference changes.
+  const getSystemDark = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const [systemDark, setSystemDark] = useState(getSystemDark);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const handler = () => setSystemDark(mq.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
+
+  const isDark =
+    theme === 'dark' ||
+    (theme === 'system' && systemDark);
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -124,6 +142,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
       value={{
         theme,
         setTheme,
+        isDark,
         units,
         setUnits,
         favorites,

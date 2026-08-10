@@ -35,8 +35,8 @@ export function HourlyForecast({ hourly, activeIndex, onActiveIndexChange }: Hou
   return (
     <div className="glass-card p-4 sm:p-5 transition-all duration-300 w-full select-none">
       <div className="flex items-center justify-between mb-4 border-b border-border-custom/25 pb-2">
-        <h2 className="text-xs font-bold text-text-primary uppercase tracking-wider">Hourly Forecast</h2>
-        <span className="text-[10px] text-text-muted font-bold uppercase tracking-wider">Next 24 hours</span>
+        <h2 className="text-xs font-semibold text-text-primary tracking-wider">Hourly forecast</h2>
+        <span className="text-[10px] text-text-muted font-medium">Next 24 hours</span>
       </div>
 
       {/* Selected Hour Details (Floating Glass Pill) */}
@@ -46,13 +46,13 @@ export function HourlyForecast({ hourly, activeIndex, onActiveIndexChange }: Hou
             <WeatherIcon name={activeCondition.icon} size={16} />
           </div>
           <div className="text-left leading-none">
-            <span className="text-[8px] text-text-muted font-bold uppercase tracking-wider block mb-0.5">
+            <span className="text-[8px] text-text-muted font-semibold uppercase tracking-wider block mb-0.5">
               {activeIndex === 0 ? 'Currently' : formatHour(activeHour.time)}
             </span>
-            <div className="text-xs font-bold flex items-center gap-1.5 text-text-primary">
+            <div className="text-xs font-semibold flex items-center gap-1.5 text-text-primary">
               <span>{activeCondition.description}</span>
               <span className="opacity-40">•</span>
-              <span className="text-accent-custom font-extrabold">{activeTemp}°</span>
+              <span className="text-accent-custom font-bold">{activeTemp}°</span>
             </div>
           </div>
         </div>
@@ -60,19 +60,19 @@ export function HourlyForecast({ hourly, activeIndex, onActiveIndexChange }: Hou
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-1.5 text-[10px] text-text-secondary">
           <div className="flex items-center gap-1">
             <Eye size={11} className="text-text-muted" />
-            <span>Feels: <strong className="font-bold text-text-primary">{activeFeels}°</strong></span>
+            <span>Feels: <strong className="font-semibold text-text-primary">{activeFeels}°</strong></span>
           </div>
           <div className="flex items-center gap-1">
             <CloudRain size={11} className="text-accent-custom" />
-            <span>Rain: <strong className="font-bold text-text-primary">{activeHour.precipitationProbability}%</strong></span>
+            <span>Rain: <strong className="font-semibold text-text-primary">{activeHour.precipitationProbability}%</strong></span>
           </div>
           <div className="flex items-center gap-1">
             <Droplets size={11} className="text-teal-500" />
-            <span>Humidity: <strong className="font-bold text-text-primary">{activeHour.humidity}%</strong></span>
+            <span>Humidity: <strong className="font-semibold text-text-primary">{activeHour.humidity}%</strong></span>
           </div>
           <div className="flex items-center gap-1">
             <Wind size={11} className="text-emerald-500" />
-            <span>Wind: <strong className="font-bold text-text-primary">{Math.round(activeWind)} {activeWindUnit}</strong></span>
+            <span>Wind: <strong className="font-semibold text-text-primary">{Math.round(activeWind)} {activeWindUnit}</strong></span>
           </div>
         </div>
       </div>
@@ -91,11 +91,11 @@ export function HourlyForecast({ hourly, activeIndex, onActiveIndexChange }: Hou
                 onClick={() => onActiveIndexChange(index)}
                 className={`flex flex-col items-center justify-between w-[3.25rem] py-2 rounded-xl transition-all duration-200 border text-center cursor-pointer ${
                   isActive 
-                    ? 'bg-accent-custom/12 border-accent-custom/35 shadow-sm font-bold text-text-primary' 
-                    : 'bg-transparent border-transparent hover:bg-surface-elevated/30 text-text-secondary'
+                    ? 'bg-accent-custom/15 border-accent-custom/40 shadow-sm font-semibold text-text-primary' 
+                    : 'bg-transparent border-transparent hover:bg-surface-elevated/20 text-text-secondary'
                 }`}
               >
-                <span className="text-[9px] font-semibold text-text-muted">
+                <span className="text-[9px] font-normal text-text-muted">
                   {hour.time}
                 </span>
                 
@@ -106,9 +106,9 @@ export function HourlyForecast({ hourly, activeIndex, onActiveIndexChange }: Hou
                   className={`my-1.5 ${isActive ? 'text-accent-custom' : hour.isDay ? 'text-amber-500/80' : 'text-blue-400/80'}`} 
                 />
                 
-                <span className="text-xs font-bold text-text-primary">{hour.temp}°</span>
+                <span className="text-xs font-semibold text-text-primary">{hour.temp}°</span>
                 
-                <span className={`text-[8px] font-bold mt-0.5 ${hour.pop > 0 ? 'text-accent-custom' : 'text-text-muted opacity-40'}`}>
+                <span className={`text-[8px] font-semibold mt-0.5 ${hour.pop > 0 ? 'text-accent-custom' : 'text-text-muted opacity-40'}`}>
                   {hour.pop > 0 ? `${hour.pop}%` : '•'}
                 </span>
               </button>

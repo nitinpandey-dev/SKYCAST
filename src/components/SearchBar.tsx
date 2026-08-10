@@ -133,7 +133,7 @@ export function SearchBar({ onLocationSelect }: SearchBarProps) {
         <div 
           id="search-results-list"
           role="listbox"
-          className="absolute top-full left-0 right-0 mt-2 bg-surface-strong backdrop-blur-xl rounded-2xl shadow-xl border border-border-custom overflow-hidden max-h-80 overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200"
+          className="absolute top-full left-0 right-0 mt-2 glass-dropdown overflow-hidden max-h-80 overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200"
         >
           {loading && (
             <div className="p-4 flex items-center justify-center text-text-secondary">

@@ -11,7 +11,7 @@ interface TenDayForecastProps {
 }
 
 export function TenDayForecast({ daily, currentTemp }: TenDayForecastProps) {
-  const { units } = useSettings();
+  const { units, isDark } = useSettings();
   const [expandedIndex, setExpandedIndex] = useState<number | null>(0);
 
   const toggleExpand = (index: number) => {
@@ -30,16 +30,15 @@ export function TenDayForecast({ daily, currentTemp }: TenDayForecastProps) {
   const absoluteMax = Math.max(...convertedList.map(d => d.high));
   const absoluteDiff = absoluteMax - absoluteMin || 1;
 
-  // Colors
-  const isDark = document.documentElement.classList.contains('dark');
+  // Reactive — reads from context, not from DOM
   const barGradStart = isDark ? '#60A5FA' : '#3478F6';
   const barGradEnd = '#FBBF24'; // Warm yellow accent
 
   return (
     <div className="glass-card p-4 sm:p-5 transition-all duration-300 w-full select-none">
       <div className="flex items-center justify-between mb-4 border-b border-border-custom/25 pb-2">
-        <h2 className="text-xs font-bold text-text-primary uppercase tracking-wider">10-Day Forecast</h2>
-        <span className="text-[10px] text-text-muted font-bold uppercase tracking-wider">Expand for Details</span>
+        <h2 className="text-xs font-semibold text-text-primary tracking-wider">10-Day Forecast</h2>
+        <span className="text-[10px] text-text-muted font-medium">Next 10 days</span>
       </div>
 
       <div className="flex flex-col">
@@ -82,7 +81,7 @@ export function TenDayForecast({ daily, currentTemp }: TenDayForecastProps) {
           return (
             <div 
               key={day.date} 
-              className="border-b border-border-custom/20 last:border-none py-3"
+              className="border-b border-border-custom/10 last:border-none py-3"
             >
               {/* Row Header */}
               <button
