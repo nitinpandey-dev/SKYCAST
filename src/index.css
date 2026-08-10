@@ -17,7 +17,7 @@
 
   /* ── Light Mode — solid, clean, professional ── */
   :root {
-    --bg:               #F4F9FF;   /* fallback for solid-bg elements */
+    --bg:               #FFFFFF;
     --surface:          #FFFFFF;
     --surface-elevated: #F8FAFC;
     --surface-strong:   #FFFFFF;
@@ -85,10 +85,14 @@
   .glass-card {
     /* Light mode: solid white, clean border, soft shadow */
     background: #FFFFFF;
-    border: 1px solid #E2E8F0;
+    border: 1px solid #E5E7EB;
     border-radius: 18px;
-    box-shadow: 0 2px 10px rgba(30, 64, 175, 0.05);
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
     transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  html:not(.dark) .glass-card:hover {
+    box-shadow: 0 6px 22px rgba(15, 23, 42, 0.09);
   }
 
   /* Dark mode: translucent glass with blur */
@@ -103,12 +107,12 @@
 
   /* ── Header: frosted glass over the sky gradient in light mode ── */
   .glass-header {
-    background: rgba(255, 255, 255, 0.68);
-    backdrop-filter: blur(18px) saturate(140%);
-    -webkit-backdrop-filter: blur(18px) saturate(140%);
-    border: 1px solid rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid #E5E7EB;
     border-radius: 20px;
-    box-shadow: 0 4px 20px rgba(60, 100, 150, 0.08);
+    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06);
     transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
   }
 
@@ -124,7 +128,7 @@
   .glass-dropdown {
     /* Light mode: solid white */
     background: #FFFFFF;
-    border: 1px solid #E2E8F0;
+    border: 1px solid #E5E7EB;
     border-radius: 16px;
     box-shadow: 0 8px 32px rgba(15, 23, 42, 0.10);
     transition: background 0.25s ease;
@@ -140,11 +144,11 @@
 
   /* ── In-card sub-panel (active hourly row) ── */
   .glass-inset {
-    /* Light mode: very light gray, clearly distinct from white card */
-    background: #EFF6FF;
-    border: 1px solid #BFDBFE;
+    /* Light mode: selected weather details */
+    background: #F7FAFF;
+    border: 1px solid #DCE8FF;
     border-radius: 14px;
-    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.10);
+    box-shadow: none;
     transition: background 0.25s ease, border-color 0.25s ease;
   }
 
@@ -156,12 +160,13 @@
   }
 
   .glass-search {
-    background: rgba(255, 255, 255, 0.55);
-    border: 1px solid rgba(255, 255, 255, 0.80);
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid #E2E8F0;
     border-radius: 999px;
     color: #334155;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
   }
 
   .glass-search::placeholder {
@@ -169,7 +174,7 @@
   }
 
   .glass-search:focus {
-    background: rgba(255, 255, 255, 0.72);
+    background: #FFFFFF;
     border-color: rgba(59, 130, 246, 0.35);
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.08);
   }
@@ -192,11 +197,13 @@
   }
 
   .glass-location-control {
-    background: rgba(255, 255, 255, 0.50);
-    border: 1px solid rgba(255, 255, 255, 0.75);
+    background: #FFFFFF;
+    border: 1px solid #D1D5DB;
     color: #334155;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .glass-location-control:hover {
+    background: #F8FAFC;
   }
 
   html.dark .glass-location-control {
@@ -210,12 +217,16 @@
   .hourly-cell-current {
     background: #EFF6FF;
     border-color: #BFDBFE;
-    box-shadow: 0 2px 6px rgba(37, 99, 235, 0.10);
-    color: #1D4ED8;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.10);
+    color: #2563EB;
   }
 
   .hourly-forecast-card {
-    box-shadow: 0 2px 12px rgba(30, 64, 175, 0.05);
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.06);
+  }
+
+  .weather-summary-card {
+    box-shadow: 0 3px 14px rgba(15, 23, 42, 0.05);
   }
 
   html.dark .hourly-cell-current {
@@ -226,12 +237,22 @@
   }
 
   .weather-detail-tile {
-    background: #F8FAFC;
-    border: 1px solid #E2E8F0;
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
   }
 
   .weather-detail-tile:hover {
-    background: #F1F5F9;
+    background: #F8FAFC;
+  }
+
+  .weather-action-button {
+    background: #FFFFFF;
+    border-color: #D1D5DB;
+    color: #334155;
+  }
+
+  .weather-action-button:hover {
+    background: #F8FAFC;
   }
 
   html.dark .weather-detail-tile {
@@ -242,15 +263,25 @@
   html.dark .weather-detail-tile:hover {
     background: rgba(255, 255, 255, 0.028);
   }
+
+  html.dark .weather-action-button {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.14);
+    color: #E5EAF2;
+  }
+
+  html.dark .weather-action-button:hover {
+    background: rgba(96, 165, 250, 0.14);
+  }
 }
 
 /* ============================================================
    Utilities
    ============================================================ */
 
-/* Light-mode sky-blue gradient page background */
+/* Light-mode page background */
 .sky-bg {
-  background: linear-gradient(180deg, #EAF4FF 0%, #F4F9FF 45%, #F8FBFF 100%);
+  background: #FFFFFF;
 }
 
 /* The dark page gradient backgrounds are handled by Tailwind utility classes

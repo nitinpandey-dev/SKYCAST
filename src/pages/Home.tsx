@@ -95,8 +95,8 @@ export function Home() {
     }
   };
 
-  let bgClass = isDark ? 'bg-[var(--bg)]' : 'sky-bg';
-  if (data?.current) {
+  let bgClass = 'bg-[var(--bg)]';
+  if (isDark && data?.current) {
     bgClass = getWeatherBackgroundClass(data.current.conditionCode, data.current.isDay, isDark);
   }
 

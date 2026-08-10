@@ -42,7 +42,7 @@ export function HourlyForecast({ hourly, activeIndex, onActiveIndexChange }: Hou
       {/* Selected Hour Details (Floating Glass Pill) */}
       <div className="glass-inset p-3 flex flex-wrap items-center justify-between gap-3.5 mb-4 transition-all duration-300">
         <div className="flex items-center gap-2.5">
-          <div className="text-accent-custom bg-accent-custom/8 p-1.5 rounded-xl">
+          <div className="text-[#3478F6] dark:text-accent-custom bg-accent-custom/8 p-1.5 rounded-xl">
             <WeatherIcon name={activeCondition.icon} size={16} />
           </div>
           <div className="text-left leading-none">
@@ -67,12 +67,12 @@ export function HourlyForecast({ hourly, activeIndex, onActiveIndexChange }: Hou
             <span>Rain: <strong className="font-semibold text-accent-custom">{activeHour.precipitationProbability}%</strong></span>
           </div>
           <div className="flex items-center gap-1">
-            <Droplets size={11} className="text-teal-500" />
-            <span>Humidity: <strong className="font-semibold text-text-primary dark:text-[#34D399]">{activeHour.humidity}%</strong></span>
+            <Droplets size={11} className="text-[#059669] dark:text-teal-500" />
+            <span>Humidity: <strong className="font-semibold text-[#059669] dark:text-[#34D399]">{activeHour.humidity}%</strong></span>
           </div>
           <div className="flex items-center gap-1">
-            <Wind size={11} className="text-emerald-500" />
-            <span>Wind: <strong className="font-semibold text-text-primary dark:text-[#E8EEF6]">{Math.round(activeWind)} {activeWindUnit}</strong></span>
+            <Wind size={11} className="text-[#059669] dark:text-emerald-500" />
+            <span>Wind: <strong className="font-semibold text-[#059669] dark:text-[#E8EEF6]">{Math.round(activeWind)} {activeWindUnit}</strong></span>
           </div>
         </div>
       </div>
@@ -103,10 +103,10 @@ export function HourlyForecast({ hourly, activeIndex, onActiveIndexChange }: Hou
                   name={hour.condition.icon} 
                   size={14} 
                   animate={isActive}
-                  className={`my-1.5 ${isActive ? 'text-[#1D4ED8] dark:text-accent-custom' : 'text-[#3B82F6] dark:text-accent-custom'}`} 
+                  className={`my-1.5 ${hour.condition.icon === 'Sun' ? 'text-[#F4B400] dark:text-accent-custom' : 'text-[#3478F6] dark:text-accent-custom'}`}
                 />
                 
-                <span className="text-xs font-semibold text-text-primary">{hour.temp}°</span>
+                <span className={`text-xs font-semibold ${isActive ? 'text-accent-custom dark:text-text-primary' : 'text-[#1F2937] dark:text-text-primary'}`}>{hour.temp}°</span>
                 
                 <span className={`text-[8px] font-semibold mt-0.5 ${hour.pop > 0 ? 'text-accent-custom' : 'text-text-muted'}`}>
                   {hour.pop > 0 ? `${hour.pop}%` : '•'}

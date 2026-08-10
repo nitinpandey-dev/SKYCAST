@@ -101,11 +101,7 @@ export function WeatherHero({ data, onRefresh, isLoading, lastUpdated }: Weather
         <button 
           onClick={toggleFavorite}
           className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold border shadow-sm active:scale-95 transition-all cursor-pointer
-            bg-surface hover:bg-surface-elevated
-            text-text-secondary
-            border-border-custom
-            dark:bg-[rgba(255,255,255,0.07)] dark:hover:bg-[rgba(96,165,250,0.14)]
-            dark:text-[#E5EAF2] dark:border-[rgba(255,255,255,0.14)]
+            weather-action-button
             ${fav ? 'border-amber-400/50' : ''}
           `}
         >
@@ -125,9 +121,7 @@ export function WeatherHero({ data, onRefresh, isLoading, lastUpdated }: Weather
             onClick={onRefresh}
             disabled={isLoading}
             className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold active:scale-95 transition-all cursor-pointer shadow-sm border
-              bg-surface hover:bg-surface-elevated text-text-secondary border-border-custom
-              dark:bg-[rgba(255,255,255,0.07)] dark:hover:bg-[rgba(96,165,250,0.14)]
-              dark:text-[#E5EAF2] dark:border-[rgba(255,255,255,0.14)]"
+              weather-action-button"
           >
             <RefreshCw size={10} className={isLoading ? 'animate-spin' : ''} />
             <span>Refresh</span>
