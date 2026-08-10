@@ -7,14 +7,19 @@ import { CloudSun, ChevronDown, MapPin, Heart, Clock, Navigation } from 'lucide-
 import { Link } from 'react-router-dom';
 import { useSettings } from '../contexts/SettingsContext';
 
-interface HeaderProps {
+interface WeatherHeaderProps {
   onLocationSelect: (location: LocationInfo) => void;
   onUseLocation: () => void;
   locationLoading: boolean;
   activeLocation: LocationInfo | null;
 }
 
-export function Header({ onLocationSelect, onUseLocation, locationLoading, activeLocation }: HeaderProps) {
+export function WeatherHeader({ 
+  onLocationSelect, 
+  onUseLocation, 
+  locationLoading, 
+  activeLocation 
+}: WeatherHeaderProps) {
   const [switcherOpen, setSwitcherOpen] = useState(false);
   const { favorites, recentSearches } = useSettings();
   const switcherRef = useRef<HTMLDivElement>(null);
@@ -35,35 +40,35 @@ export function Header({ onLocationSelect, onUseLocation, locationLoading, activ
   };
 
   return (
-    <header className="w-full px-4 pt-3 sticky top-0 z-40 select-none">
-      <div className="max-w-7xl mx-auto bg-header-bg backdrop-blur-lg border border-border-custom px-4 py-2 rounded-2xl shadow-sm transition-all duration-300 flex flex-col md:flex-row items-center justify-between gap-3 md:gap-4">
+    <header className="w-full px-4 pt-4 sticky top-0 z-40 select-none">
+      <div className="max-w-7xl mx-auto glass-card h-16 px-4 flex items-center justify-between gap-3 md:gap-6 shadow-sm border border-border-custom/80">
         
-        {/* Brand & Location (Hidden on mobile to keep header minimal) */}
-        <div className="hidden md:flex items-center justify-between w-full md:w-auto gap-4 shrink-0">
+        {/* Left Side: Logo & Location Switcher */}
+        <div className="flex items-center gap-4 shrink-0">
           <Link to="/" className="flex items-center gap-2 shrink-0">
-            <div className="bg-gradient-to-tr from-blue-500 to-indigo-500 p-2 rounded-xl text-white shadow-sm">
-              <CloudSun size={20} />
+            <div className="bg-accent-custom p-1.5 rounded-lg text-white shadow-sm flex items-center justify-center">
+              <CloudSun size={16} />
             </div>
-            <span className="font-extrabold text-base tracking-tight text-text-primary">
+            <span className="font-extrabold text-sm tracking-tight text-text-primary hidden sm:block">
               SKYCAST
             </span>
           </Link>
 
-          {/* Location Selector Switcher (Desktop only) */}
+          {/* Location Selector Switcher */}
           {activeLocation && (
             <div className="relative" ref={switcherRef}>
               <button
                 onClick={() => setSwitcherOpen(!switcherOpen)}
-                className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-surface hover:bg-surface-strong text-xs font-bold text-text-secondary hover:text-text-primary border border-border-custom transition-all cursor-pointer"
+                className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-elevated/40 hover:bg-surface-elevated/70 text-xs font-semibold text-text-primary border border-border-custom/50 transition-all cursor-pointer"
                 aria-label="Toggle location switcher"
               >
-                <MapPin size={14} className="text-accent-custom" />
-                <span className="truncate max-w-[140px]">{activeLocation.name}</span>
-                <ChevronDown size={12} className={`text-text-muted transition-transform duration-250 ${switcherOpen ? 'rotate-180 text-accent-custom' : ''}`} />
+                <MapPin size={12} className="text-accent-custom" />
+                <span className="truncate max-w-[100px] sm:max-w-[130px] font-semibold">{activeLocation.name}</span>
+                <ChevronDown size={11} className={`text-text-muted transition-transform duration-200 ${switcherOpen ? 'rotate-180 text-accent-custom' : ''}`} />
               </button>
 
               {switcherOpen && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-surface-strong backdrop-blur-xl rounded-2xl shadow-xl border border-border-custom py-2.5 z-50 animate-in fade-in duration-200">
+                <div className="absolute top-full left-0 mt-2 w-64 bg-surface-elevated backdrop-blur-xl rounded-2xl shadow-xl border border-border-custom py-2.5 z-50 animate-in fade-in duration-200">
                   <button
                     onClick={() => { onUseLocation(); setSwitcherOpen(false); }}
                     disabled={locationLoading}
@@ -120,28 +125,20 @@ export function Header({ onLocationSelect, onUseLocation, locationLoading, activ
           )}
         </div>
 
-        {/* Center Section: Search Bar (Dominates on mobile) */}
-        <div className="w-full md:flex-1 md:max-w-md md:mx-4">
+        {/* Center Section: Search Bar */}
+        <div className="flex-1 max-w-xs md:max-w-md mx-2 sm:mx-4">
           <SearchBar onLocationSelect={onLocationSelect} />
         </div>
 
-        {/* Right Section: Configuration controls (Compact on mobile) */}
-        <div className="flex items-center justify-between md:justify-end gap-3 w-full md:w-auto shrink-0 border-t border-border-custom md:border-none pt-2 md:pt-0">
-          <div className="flex md:hidden items-center gap-1.5 bg-surface border border-border-custom px-3 py-1.5 rounded-full cursor-pointer hover:bg-surface-strong" onClick={onUseLocation}>
-            <Navigation 
-              size={12} 
-              className={`text-accent-custom ${locationLoading ? 'animate-pulse' : ''}`} 
-            />
-            <span className="text-[10px] text-text-secondary font-bold uppercase">GPS</span>
-          </div>
-          
-          <div className="flex items-center gap-3">
-            <UnitToggle />
-            <div className="w-px h-5 bg-border-custom hidden md:block"></div>
-            <ThemeToggle />
-          </div>
+        {/* Right Section: Configuration Controls */}
+        <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+          <UnitToggle />
+          <div className="w-px h-5 bg-border-custom hidden sm:block"></div>
+          <ThemeToggle />
         </div>
+
       </div>
     </header>
   );
 }
+export default WeatherHeader;

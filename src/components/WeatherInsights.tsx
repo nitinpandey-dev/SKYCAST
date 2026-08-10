@@ -12,7 +12,7 @@ export function WeatherInsights({ data }: WeatherInsightsProps) {
   const { units } = useSettings();
   const { hourly, current } = data;
 
-  // 1. Temp Range
+  // 1. Temperature Range
   const high = Math.round(units === 'imperial' ? cToF(current.high) : current.high);
   const low = Math.round(units === 'imperial' ? cToF(current.low) : current.low);
   const tempRange = high - low;
@@ -50,7 +50,7 @@ export function WeatherInsights({ data }: WeatherInsightsProps) {
     {
       title: "Today's Range",
       value: `${low}° – ${high}°`,
-      description: `The temperature range is ${tempRange}°${units === 'metric' ? 'C' : 'F'} today.`,
+      description: `Temperature span is ${tempRange}°${units === 'metric' ? 'C' : 'F'} today.`,
       icon: Thermometer,
       color: 'text-rose-500 bg-rose-500/10'
     },
@@ -64,7 +64,7 @@ export function WeatherInsights({ data }: WeatherInsightsProps) {
     {
       title: "Rain Peak",
       value: peakRainProb > 0 ? `Around ${peakRainHour} · ${peakRainProb}%` : 'No rain expected',
-      description: peakRainProb > 0 ? 'Peak precipitation probability period.' : 'No rainfall forecasted today.',
+      description: peakRainProb > 0 ? 'Peak precipitation probability window.' : 'No rainfall forecasted today.',
       icon: CloudRain,
       color: 'text-blue-500 bg-blue-500/10'
     },
@@ -78,30 +78,33 @@ export function WeatherInsights({ data }: WeatherInsightsProps) {
   ];
 
   return (
-    <div className="glass-card p-4 sm:p-5 transition-all duration-300 w-full">
-      <h2 className="text-xs font-bold text-text-primary uppercase tracking-wider mb-3.5 flex items-center gap-1.5">
-        <Sparkles size={13} className="text-accent-custom animate-pulse" />
-        Weather Insights
-      </h2>
+    <div className="glass-card p-4 sm:p-5 transition-all duration-300 w-full select-none">
+      <div className="flex items-center justify-between mb-4 border-b border-border-custom/25 pb-2">
+        <h2 className="text-xs font-bold text-text-primary uppercase tracking-wider flex items-center gap-1.5">
+          <Sparkles size={13} className="text-accent-custom animate-pulse" />
+          Weather Insights
+        </h2>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
         {cards.map((card, idx) => {
           const Icon = card.icon;
           return (
             <div 
               key={idx} 
-              className="flex gap-4 bg-white/[0.04] dark:bg-white/[0.05] border border-border-custom/50 dark:border-white/8 p-[18px] rounded-[18px] items-start transition-all hover:bg-white/[0.08] dark:hover:bg-white/[0.08] text-left leading-normal"
+              className="flex gap-4 bg-surface-elevated/20 border border-border-custom/40 p-4 rounded-2xl items-start hover:bg-surface-elevated/40 transition-colors text-left"
             >
               <div className={`p-2 rounded-xl shrink-0 ${card.color}`}>
                 <Icon size={14} />
               </div>
-              <div>
-                <h3 className="text-sm font-semibold text-text-secondary leading-none">
+              <div className="leading-tight">
+                <h3 className="text-xs font-bold text-text-secondary leading-none">
                   {card.title}
                 </h3>
-                <div className="text-base sm:text-lg font-semibold text-text-primary mt-1 leading-none">
+                <div className="text-sm sm:text-base font-extrabold text-text-primary mt-1 leading-none">
                   {card.value}
                 </div>
-                <p className="text-xs text-text-muted mt-1 leading-snug">
+                <p className="text-[10px] text-text-muted mt-1 leading-snug">
                   {card.description}
                 </p>
               </div>

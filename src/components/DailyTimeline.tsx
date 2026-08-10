@@ -4,11 +4,11 @@ import { getWeatherCondition, cToF } from '../utils/weatherUtils';
 import { WeatherIcon } from './Icons';
 import { useSettings } from '../contexts/SettingsContext';
 
-interface WeatherTimelineProps {
+interface DailyTimelineProps {
   hourly: HourlyForecast[];
 }
 
-export function WeatherTimeline({ hourly }: WeatherTimelineProps) {
+export function DailyTimeline({ hourly }: DailyTimelineProps) {
   const { units } = useSettings();
 
   const getPeriodData = (targetHour: number) => {
@@ -27,11 +27,13 @@ export function WeatherTimeline({ hourly }: WeatherTimelineProps) {
   ];
 
   return (
-    <div className="glass-card p-4 sm:p-5 transition-all duration-300 w-full">
-      <h2 className="text-xs font-bold text-text-primary uppercase tracking-wider mb-4">Today's Timeline</h2>
+    <div className="glass-card p-4 sm:p-5 transition-all duration-300 w-full select-none">
+      <div className="flex items-center justify-between mb-4 border-b border-border-custom/25 pb-2">
+        <h2 className="text-xs font-bold text-text-primary uppercase tracking-wider">Today's Timeline</h2>
+      </div>
       
-      <div className="relative flex flex-row items-center justify-between gap-1 w-full select-none">
-        {/* Connecting line */}
+      <div className="relative flex flex-row items-center justify-between gap-1 w-full">
+        {/* Connection line */}
         <div className="absolute top-[18px] left-[15px] right-[15px] h-[1px] bg-border-custom/50 -z-10 rounded-full"></div>
 
         {periods.map((period, index) => {
@@ -44,27 +46,27 @@ export function WeatherTimeline({ hourly }: WeatherTimelineProps) {
           return (
             <div 
               key={index} 
-              className="flex flex-col items-center gap-1.5 flex-1 relative z-10 text-center"
+              className="flex flex-col items-center gap-1 flex-1 relative z-10 text-center"
             >
-              {/* Softer circular icon container */}
-              <div className={`w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-105 bg-surface border border-border-custom/40 shadow-sm ${
+              {/* Circular container */}
+              <div className={`w-9 h-9 rounded-full flex items-center justify-center transition-transform hover:scale-105 bg-surface-custom border border-border-custom/40 shadow-sm ${
                 data.isDay ? 'text-amber-500' : 'text-blue-400'
               }`}>
                 <WeatherIcon name={condition.icon} size={15} />
               </div>
 
-              {/* Text info */}
-              <div className="leading-tight mt-0.5">
-                <div className="font-extrabold text-[11px] text-text-primary leading-tight">{period.label}</div>
-                <div className="text-[8px] font-bold text-text-muted uppercase tracking-wider mt-0.5">{period.timeLabel}</div>
-                <div className="text-[9px] text-text-secondary mt-0.5 font-semibold truncate max-w-[70px] mx-auto hidden sm:block">
+              {/* Description */}
+              <div className="leading-tight mt-1">
+                <div className="font-extrabold text-[10px] text-text-primary leading-none">{period.label}</div>
+                <div className="text-[7px] font-bold text-text-muted uppercase tracking-wider mt-0.5">{period.timeLabel}</div>
+                <div className="text-[8px] text-text-secondary mt-0.5 font-semibold truncate max-w-[70px] mx-auto hidden sm:block">
                   {condition.description}
                 </div>
               </div>
 
               {/* Temperature */}
-              <div className="shrink-0 mt-0.5">
-                <span className="text-xs font-black text-text-primary">{temp}°</span>
+              <div className="shrink-0 mt-1">
+                <span className="text-xs font-bold text-text-primary">{temp}°</span>
               </div>
             </div>
           );
@@ -73,4 +75,4 @@ export function WeatherTimeline({ hourly }: WeatherTimelineProps) {
     </div>
   );
 }
-export default WeatherTimeline;
+export default DailyTimeline;
