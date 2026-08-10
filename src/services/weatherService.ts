@@ -61,7 +61,7 @@ export async function getWeatherData(lat: number, lon: number): Promise<WeatherD
     const params = new URLSearchParams({
       latitude: lat.toString(),
       longitude: lon.toString(),
-      current: 'temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation_probability,precipitation,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m',
+      current: 'temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation_probability,precipitation,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m,dew_point_2m,cloud_cover',
       hourly: 'temperature_2m,apparent_temperature,precipitation_probability,relative_humidity_2m,weather_code,wind_speed_10m,wind_direction_10m,is_day',
       daily: 'weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max,uv_index_max,wind_speed_10m_max',
       timezone: 'auto'
@@ -85,12 +85,14 @@ export async function getWeatherData(lat: number, lon: number): Promise<WeatherD
       windSpeed: data.current.wind_speed_10m,
       windDirection: data.current.wind_direction_10m,
       pressure: data.current.surface_pressure,
-      visibility: 10, // Default visibility mapping
+      visibility: 10, // Default mapping
       uvIndex: data.daily.uv_index_max[0] || 0,
       sunrise: data.daily.sunrise[0],
       sunset: data.daily.sunset[0],
       high: data.daily.temperature_2m_max[0],
       low: data.daily.temperature_2m_min[0],
+      dewPoint: data.current.dew_point_2m,
+      cloudCover: data.current.cloud_cover
     };
 
     // Parse hourly forecast (next 24 hours)

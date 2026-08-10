@@ -4,7 +4,6 @@ import { format } from 'date-fns';
  * Open-Meteo WMO Weather interpretation codes
  */
 export function getWeatherCondition(code: number, isDay: boolean = true): { description: string, icon: string } {
-  // Map WMO codes to descriptions and Lucide icon names (we'll map these to actual icons in components)
   switch (code) {
     case 0:
       return { description: 'Clear sky', icon: isDay ? 'Sun' : 'Moon' };
@@ -105,41 +104,36 @@ export function getWindDirection(degrees: number): string {
 
 /**
  * Get dynamic background gradient classes based on weather and time of day.
- * Ensures the app "subtly responds to weather conditions".
+ * REDESIGNED: extremely subtle, low-contrast atmospheric tones to support the glass UI.
  */
 export function getWeatherBackgroundClass(code: number, isDay: boolean): string {
   const isDark = document.documentElement.classList.contains('dark');
   
-  // Sunny
-  if (code <= 1) {
-    return isDark 
-      ? (isDay ? 'bg-gradient-to-br from-blue-900 to-indigo-950' : 'bg-gradient-to-br from-slate-900 to-black')
-      : (isDay ? 'bg-gradient-to-br from-blue-100 to-indigo-50' : 'bg-gradient-to-br from-indigo-900 to-slate-900 text-white');
+  if (isDark) {
+    // All dark modes use a very deep charcoal/black base with a tiny color tint
+    if (code <= 1) { // Sunny / Clear Night
+      return 'bg-gradient-to-b from-[#0b0f19] to-[#030712] text-gray-100';
+    }
+    if (code <= 3 || code === 45 || code === 48) { // Cloudy
+      return 'bg-gradient-to-b from-[#0f1115] to-[#030712] text-gray-100';
+    }
+    if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) { // Rain
+      return 'bg-gradient-to-b from-[#080d1a] to-[#030712] text-gray-100';
+    }
+    return 'bg-gradient-to-b from-[#0f0f10] to-[#020204] text-gray-100';
+  } else {
+    // Light modes use a soft off-white/zinc base with very gentle sky tints
+    if (code <= 1) { // Sunny
+      return isDay 
+        ? 'bg-gradient-to-b from-[#f0f5ff] to-[#f8fafc] text-gray-800' 
+        : 'bg-gradient-to-b from-[#e8ecf5] to-[#f1f5f9] text-gray-800';
+    }
+    if (code <= 3 || code === 45 || code === 48) { // Cloudy
+      return 'bg-gradient-to-b from-[#f1f5f9] to-[#f8fafc] text-gray-800';
+    }
+    if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) { // Rain
+      return 'bg-gradient-to-b from-[#eaf2ff] to-[#f8fafc] text-gray-800';
+    }
+    return 'bg-gradient-to-b from-[#f4f4f5] to-[#fafafa] text-gray-800';
   }
-  // Cloudy
-  if (code <= 3 || code === 45 || code === 48) {
-    return isDark
-      ? 'bg-gradient-to-br from-gray-800 to-slate-950'
-      : 'bg-gradient-to-br from-slate-100 to-gray-200';
-  }
-  // Rain
-  if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) {
-    return isDark
-      ? 'bg-gradient-to-br from-slate-800 to-slate-950'
-      : 'bg-gradient-to-br from-slate-200 to-blue-200';
-  }
-  // Snow
-  if ((code >= 71 && code <= 77) || (code >= 85 && code <= 86)) {
-    return isDark
-      ? 'bg-gradient-to-br from-slate-700 to-slate-950'
-      : 'bg-gradient-to-br from-slate-100 to-blue-100';
-  }
-  // Thunder
-  if (code >= 95) {
-    return isDark
-      ? 'bg-gradient-to-br from-slate-900 to-slate-950'
-      : 'bg-gradient-to-br from-slate-300 to-slate-400';
-  }
-  
-  return isDark ? 'bg-gradient-to-br from-slate-900 to-black' : 'bg-gradient-to-br from-slate-50 to-slate-100';
 }

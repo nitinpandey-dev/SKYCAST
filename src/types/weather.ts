@@ -29,6 +29,8 @@ export interface CurrentWeather {
   sunset: string;
   high: number;
   low: number;
+  dewPoint: number;
+  cloudCover: number;
 }
 
 export interface HourlyForecast {

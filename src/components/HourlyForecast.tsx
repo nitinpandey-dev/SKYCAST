@@ -3,7 +3,7 @@ import { HourlyForecast } from '../types/weather';
 import { useSettings } from '../contexts/SettingsContext';
 import { cToF, formatHour, getWeatherCondition, getWindDirection, kmhToMph } from '../utils/weatherUtils';
 import { WeatherIcon } from './Icons';
-import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, ReferenceDot } from 'recharts';
+import { Area, AreaChart, Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis, ReferenceDot } from 'recharts';
 import { Eye, Wind, Droplets, CloudRain } from 'lucide-react';
 
 interface HourlyForecastProps {
@@ -15,7 +15,6 @@ export function HourlyForecastComponent({ hourly }: HourlyForecastProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // Sync active index if hourly array changes
   useEffect(() => {
     setActiveIndex(0);
   }, [hourly]);
@@ -23,12 +22,10 @@ export function HourlyForecastComponent({ hourly }: HourlyForecastProps) {
   const activeHour = hourly[activeIndex];
   if (!activeHour) return null;
 
-  // Prepare data for the chart
   const chartData = hourly.map((hour, index) => ({
     time: index === 0 ? 'Now' : formatHour(hour.time),
     temp: Math.round(units === 'imperial' ? cToF(hour.temperature) : hour.temperature),
     index,
-    // extra info for tooltip
     feelsLike: Math.round(units === 'imperial' ? cToF(hour.apparentTemperature) : hour.apparentTemperature),
     humidity: hour.humidity,
     wind: Math.round(units === 'imperial' ? kmhToMph(hour.windSpeed) : hour.windSpeed),
@@ -54,54 +51,54 @@ export function HourlyForecastComponent({ hourly }: HourlyForecastProps) {
   return (
     <div className="glass-card p-6 overflow-hidden transition-all duration-300">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold">Hourly Forecast</h2>
-        <span className="text-xs text-gray-400 dark:text-gray-500 font-medium">Click hours to see details</span>
+        <h2 className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Hourly Forecast</h2>
+        <span className="text-[10px] text-gray-400 dark:text-gray-500">Tap hour to select</span>
       </div>
 
-      {/* Selected Hour Detail Panel */}
-      <div className="bg-black/5 dark:bg-white/5 rounded-2xl p-4 mb-6 flex flex-wrap items-center justify-between gap-4 animate-in fade-in slide-in-from-top-1 duration-300">
+      {/* Selected Hour Details Box */}
+      <div className="bg-black/5 dark:bg-white/5 rounded-2xl p-4 mb-6 flex flex-wrap items-center justify-between gap-4 animate-in fade-in slide-in-from-top-1 duration-200">
         <div className="flex items-center gap-3">
-          <div className="bg-primary/10 dark:bg-primary/20 p-2.5 rounded-xl text-primary">
-            <WeatherIcon name={activeCondition.icon} size={32} />
+          <div className="text-primary bg-primary/10 dark:bg-primary/20 p-2 rounded-xl">
+            <WeatherIcon name={activeCondition.icon} size={28} />
           </div>
           <div>
-            <div className="text-xs text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider">
+            <div className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase">
               {activeIndex === 0 ? 'Currently' : formatHour(activeHour.time)}
             </div>
-            <div className="text-base font-extrabold flex items-center gap-2">
+            <div className="text-sm font-bold flex items-center gap-2">
               <span>{activeCondition.description}</span>
-              <span className="text-gray-400 font-normal">|</span>
+              <span className="text-gray-300 dark:text-gray-700">|</span>
               <span className="text-primary font-black">{activeTemp}°</span>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-2 text-sm flex-1 sm:flex-initial">
-          <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300">
-            <Eye size={14} className="text-gray-400" />
-            <span>Feels like: <strong className="font-semibold text-gray-800 dark:text-gray-100">{activeFeels}°</strong></span>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-1.5 text-xs">
+          <div className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
+            <Eye size={12} className="text-gray-400" />
+            <span>Feels: <strong className="font-semibold text-gray-800 dark:text-gray-200">{activeFeels}°</strong></span>
           </div>
-          <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300">
-            <CloudRain size={14} className="text-blue-500" />
-            <span>Precip: <strong className="font-semibold text-gray-800 dark:text-gray-100">{activeHour.precipitationProbability}%</strong></span>
+          <div className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
+            <CloudRain size={12} className="text-blue-500" />
+            <span>Rain: <strong className="font-semibold text-gray-800 dark:text-gray-200">{activeHour.precipitationProbability}%</strong></span>
           </div>
-          <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300">
-            <Droplets size={14} className="text-teal-500" />
-            <span>Humidity: <strong className="font-semibold text-gray-800 dark:text-gray-100">{activeHour.humidity}%</strong></span>
+          <div className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
+            <Droplets size={12} className="text-teal-500" />
+            <span>Humidity: <strong className="font-semibold text-gray-800 dark:text-gray-200">{activeHour.humidity}%</strong></span>
           </div>
-          <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-300">
-            <Wind size={14} className="text-emerald-500" />
-            <span>Wind: <strong className="font-semibold text-gray-800 dark:text-gray-100">{activeWind} {activeWindUnit}</strong></span>
+          <div className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
+            <Wind size={12} className="text-emerald-500" />
+            <span>Wind: <strong className="font-semibold text-gray-800 dark:text-gray-200">{activeWind} {activeWindUnit}</strong></span>
           </div>
         </div>
       </div>
       
-      {/* Scrollable cards */}
+      {/* Horizontal Cards Selector */}
       <div 
         ref={scrollContainerRef}
         className="relative w-full overflow-x-auto hide-scrollbar pb-2 select-none cursor-grab active:cursor-grabbing"
       >
-        <div className="flex w-max min-w-full gap-2">
+        <div className="flex w-max min-w-full gap-1.5">
           {chartData.map((hour, index) => {
             const condition = getWeatherCondition(hourly[index].conditionCode, hourly[index].isDay);
             const isActive = activeIndex === index;
@@ -109,27 +106,26 @@ export function HourlyForecastComponent({ hourly }: HourlyForecastProps) {
               <button
                 key={index}
                 onClick={() => handleCardClick(index)}
-                className={`flex flex-col items-center justify-between w-20 py-3 rounded-2xl transition-all duration-300 border focus:outline-none focus:ring-2 focus:ring-primary/30 cursor-pointer ${
+                className={`flex flex-col items-center justify-between w-14 py-2.5 rounded-xl transition-all duration-200 border text-center cursor-pointer ${
                   isActive 
-                    ? 'bg-primary text-white border-primary shadow-lg shadow-primary/20 scale-[1.03]' 
-                    : 'bg-black/5 dark:bg-white/5 border-transparent hover:bg-black/10 dark:hover:bg-white/10 text-gray-700 dark:text-gray-300'
+                    ? 'bg-white/10 dark:bg-white/10 border-primary/30 shadow-sm scale-102 font-bold' 
+                    : 'bg-transparent border-transparent hover:bg-black/5 dark:hover:bg-white/5 text-gray-600 dark:text-gray-400'
                 }`}
-                aria-label={`${hour.time}: ${hour.temp} degrees, ${hour.condition}`}
               >
-                <span className={`text-xs font-semibold ${isActive ? 'text-white/80' : 'text-gray-500 dark:text-gray-400'}`}>
+                <span className="text-[10px] font-medium text-gray-400 dark:text-gray-500">
                   {hour.time}
                 </span>
                 
                 <WeatherIcon 
                   name={condition.icon} 
-                  size={22} 
+                  size={16} 
                   animate={isActive}
-                  className={`my-2 ${isActive ? 'text-white' : hour.isDay ? 'text-amber-500' : 'text-blue-400'}`} 
+                  className={`my-1.5 ${isActive ? 'text-primary' : hour.isDay ? 'text-amber-500' : 'text-blue-400'}`} 
                 />
                 
-                <span className="text-base font-extrabold">{hour.temp}°</span>
+                <span className="text-xs font-bold">{hour.temp}°</span>
                 
-                <span className={`text-[10px] font-bold mt-1 ${isActive ? 'text-white/90' : 'text-blue-500 dark:text-blue-400'}`}>
+                <span className={`text-[9px] font-bold mt-1 ${hour.pop > 0 ? 'text-blue-500' : 'text-gray-300 dark:text-gray-700'}`}>
                   {hour.pop > 0 ? `${hour.pop}%` : '•'}
                 </span>
               </button>
@@ -138,85 +134,121 @@ export function HourlyForecastComponent({ hourly }: HourlyForecastProps) {
         </div>
       </div>
 
-      {/* Temperature Trend Chart */}
-      <div className="h-32 w-full mt-6 select-none">
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart 
-            data={chartData} 
-            margin={{ top: 15, right: 10, left: 10, bottom: 5 }}
-            onClick={(state) => {
-              if (state && typeof state.activeTooltipIndex === 'number') {
-                setActiveIndex(state.activeTooltipIndex);
-              }
-            }}
-          >
-            <defs>
-              <linearGradient id="colorTemp" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.25}/>
-                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-              </linearGradient>
-            </defs>
-            
-            <XAxis 
-              dataKey="time" 
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 10, fill: '#888888' }}
-              interval={4}
-            />
-            <YAxis domain={[minTemp - 2, maxTemp + 2]} hide />
-            
-            <Tooltip 
-              cursor={{ stroke: '#3b82f6', strokeWidth: 1, strokeDasharray: '4 4' }}
-              content={({ active, payload }) => {
-                if (active && payload && payload.length) {
-                  const data = payload[0].payload;
-                  return (
-                    <div className="bg-white/95 dark:bg-gray-900/95 border border-gray-100 dark:border-gray-800 p-3 rounded-2xl shadow-xl text-xs max-w-[200px] animate-in fade-in duration-100">
-                      <div className="font-bold text-gray-800 dark:text-gray-100 mb-1">{data.time}</div>
-                      <div className="text-primary font-black text-sm mb-1">{data.temp}°</div>
-                      <div className="text-gray-500 dark:text-gray-400 space-y-0.5">
-                        <div>Feels like: <strong>{data.feelsLike}°</strong></div>
-                        <div>Condition: <strong>{data.condition}</strong></div>
-                        <div>Wind: <strong>{data.wind} {units === 'imperial' ? 'mph' : 'km/h'} {data.windDir}</strong></div>
-                        {data.pop > 0 && <div className="text-blue-500">Rain Prob: <strong>{data.pop}%</strong></div>}
-                      </div>
-                    </div>
-                  );
-                }
-                return null;
-              }}
-            />
-            
-            <Area 
-              type="monotone" 
-              dataKey="temp" 
-              stroke="#3b82f6" 
-              strokeWidth={3}
-              fillOpacity={1} 
-              fill="url(#colorTemp)" 
-              dot={(props) => {
-                const { cx, cy, index } = props;
-                if (index === activeIndex) {
-                  return (
-                    <circle key={`dot-${index}`} cx={cx} cy={cy} r={6} fill="#3b82f6" stroke="#ffffff" strokeWidth={2} />
-                  );
-                }
-                return null;
-              }}
-            />
-            
-            {/* Draw dot on the active hour */}
-            <ReferenceDot 
-              x={chartData[activeIndex].time} 
-              y={chartData[activeIndex].temp} 
-              r={6} 
-              fill="#3b82f6" 
-              stroke="#ffffff" 
-              strokeWidth={2} 
-            />
-          </AreaChart>
-        </ResponsiveContainer>
+      {/* Graphs Grid */}
+      <div className="mt-4 space-y-4">
+        {/* Temperature Trend Area Graph */}
+        <div>
+          <div className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase mb-1">Temperature Trend</div>
+          <div className="h-28 w-full select-none">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart 
+                data={chartData} 
+                margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
+                onClick={(state) => {
+                  if (state && typeof state.activeTooltipIndex === 'number') {
+                    setActiveIndex(state.activeTooltipIndex);
+                  }
+                }}
+              >
+                <defs>
+                  <linearGradient id="colorTempRedesign" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.15}/>
+                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                
+                <XAxis 
+                  dataKey="time" 
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fontSize: 9, fill: '#888888' }}
+                  interval={4}
+                />
+                <YAxis domain={[minTemp - 2, maxTemp + 2]} hide />
+                
+                <Tooltip 
+                  cursor={{ stroke: '#3b82f6', strokeWidth: 1, strokeDasharray: '4 4' }}
+                  content={({ active, payload }) => {
+                    if (active && payload && payload.length) {
+                      const data = payload[0].payload;
+                      return (
+                        <div className="bg-white/95 dark:bg-gray-900/95 border border-gray-100 dark:border-gray-800 p-2.5 rounded-xl shadow-md text-[10px] max-w-[150px]">
+                          <div className="font-bold mb-0.5">{data.time}</div>
+                          <div className="text-primary font-extrabold mb-0.5">{data.temp}°</div>
+                          <div className="text-gray-500 dark:text-gray-400">
+                            Feels: <strong>{data.feelsLike}°</strong>
+                            <br />
+                            Wind: <strong>{data.wind} {units === 'imperial' ? 'mph' : 'km/h'}</strong>
+                          </div>
+                        </div>
+                      );
+                    }
+                    return null;
+                  }}
+                />
+                
+                <Area 
+                  type="monotone" 
+                  dataKey="temp" 
+                  stroke="#3b82f6" 
+                  strokeWidth={2}
+                  fillOpacity={1} 
+                  fill="url(#colorTempRedesign)" 
+                />
+                
+                <ReferenceDot 
+                  x={chartData[activeIndex].time} 
+                  y={chartData[activeIndex].temp} 
+                  r={5} 
+                  fill="#3b82f6" 
+                  stroke="#ffffff" 
+                  strokeWidth={2} 
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Rain Probability Bar Graph */}
+        <div>
+          <div className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase mb-1">Precipitation Probability</div>
+          <div className="h-14 w-full select-none">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart 
+                data={chartData}
+                margin={{ top: 5, right: 10, left: 10, bottom: 5 }}
+                onClick={(state) => {
+                  if (state && typeof state.activeTooltipIndex === 'number') {
+                    setActiveIndex(state.activeTooltipIndex);
+                  }
+                }}
+              >
+                <YAxis domain={[0, 100]} hide />
+                <XAxis dataKey="time" hide />
+                <Tooltip 
+                  cursor={{ fill: 'rgba(59, 130, 246, 0.05)' }}
+                  content={({ active, payload }) => {
+                    if (active && payload && payload.length) {
+                      const data = payload[0].payload;
+                      return (
+                        <div className="bg-white/95 dark:bg-gray-900/95 border border-gray-100 dark:border-gray-800 p-2 rounded-lg shadow-sm text-[10px]">
+                          <span>{data.time}: <strong>{data.pop}% chance</strong></span>
+                        </div>
+                      );
+                    }
+                    return null;
+                  }}
+                />
+                <Bar 
+                  dataKey="pop" 
+                  fill="#60a5fa" 
+                  radius={[3, 3, 0, 0]}
+                  maxBarSize={8}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
       </div>
     </div>
   );
