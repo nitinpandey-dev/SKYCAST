@@ -107,9 +107,7 @@ export function getWindDirection(degrees: number): string {
  * Get dynamic background gradient classes based on weather and time of day.
  * REDESIGNED: extremely subtle, low-contrast atmospheric tones to support the glass UI.
  */
-export function getWeatherBackgroundClass(code: number, isDay: boolean): string {
-  const isDark = document.documentElement.classList.contains('dark');
-  
+export function getWeatherBackgroundClass(code: number, isDay: boolean, isDark: boolean): string {
   if (isDark) {
     // All dark modes use a deep navy weather-app background gradient resembling a dark evening sky
     if (code <= 1) { // Clear Night

@@ -97,21 +97,21 @@ export function CurrentWeather({ data, onRefresh, isLoading, lastUpdated }: Curr
       </div>
 
       {/* Date */}
-      <p className="text-text-muted text-[10px] font-bold uppercase tracking-widest leading-none">
+      <p className="text-text-muted dark:text-[#AAB7C8] text-[10px] font-bold uppercase tracking-widest leading-none">
         {formatDay(new Date().toISOString())}, {format(new Date(), 'MMMM d')}
       </p>
       
       {/* Compact temperature & description row */}
       <div className="flex flex-row items-center justify-center md:justify-start gap-5 mt-2.5">
         {/* Temperature: 96-120px on desktop, 72-96px on mobile */}
-        <span className="text-6xl sm:text-7xl md:text-[6rem] font-extralight tracking-tighter leading-none text-text-primary select-none">
+        <span className="text-6xl sm:text-7xl md:text-[6rem] font-extralight tracking-tighter leading-none text-text-primary dark:text-white select-none">
           {displayTemp}°
         </span>
         <div className="flex items-center justify-center text-accent-custom h-14 w-14">
           <WeatherIcon name={condition.icon} size={48} strokeWidth={1.2} />
         </div>
         <div className="text-left leading-tight hidden sm:block">
-          <div className="text-base sm:text-lg font-semibold text-text-primary tracking-wide leading-tight">
+          <div className="text-base sm:text-lg font-semibold text-text-primary dark:text-[#F1F5F9] tracking-wide leading-tight">
             {condition.description}
           </div>
           <p className="text-[10px] text-text-muted font-bold uppercase tracking-wider mt-0.5">Current Weather</p>
@@ -119,7 +119,7 @@ export function CurrentWeather({ data, onRefresh, isLoading, lastUpdated }: Curr
       </div>
 
       {/* Mobile only condition label */}
-      <div className="text-lg font-semibold text-text-primary sm:hidden mt-2">
+      <div className="text-lg font-semibold text-text-primary dark:text-[#F1F5F9] sm:hidden mt-2">
         {condition.description}
       </div>
       

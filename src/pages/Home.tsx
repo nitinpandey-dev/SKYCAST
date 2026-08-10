@@ -89,7 +89,7 @@ export function Home() {
   const { locationName } = useParams();
   const navigate = useNavigate();
   const { requestLocation, loading: geoLoading } = useGeolocation();
-  const { units } = useSettings();
+  const { units, theme } = useSettings();
   
   const [activeLocation, setActiveLocation] = useState<LocationInfo | null>(null);
   const [initLoading, setInitLoading] = useState(true);
@@ -159,9 +159,12 @@ export function Home() {
   };
 
   // Background style mapping
+  const isSystemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isDark = theme === 'dark' || (theme === 'system' && isSystemDark);
+  
   let bgClass = 'bg-[var(--background)]';
   if (data?.current) {
-    bgClass = getWeatherBackgroundClass(data.current.conditionCode, data.current.isDay);
+    bgClass = getWeatherBackgroundClass(data.current.conditionCode, data.current.isDay, isDark);
   }
 
   if (initLoading) {
