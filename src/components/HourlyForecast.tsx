@@ -91,8 +91,8 @@ export function HourlyForecast({ hourly, activeIndex, onActiveIndexChange }: Hou
                 onClick={() => onActiveIndexChange(index)}
                 className={`flex flex-col items-center justify-between w-[3.25rem] py-2 rounded-xl transition-all duration-200 border text-center cursor-pointer ${
                   isActive 
-                    ? 'bg-accent-custom/15 border-accent-custom/40 shadow-sm font-semibold text-text-primary' 
-                    : 'bg-transparent border-transparent hover:bg-surface-elevated/20 text-text-secondary'
+                    ? 'bg-[#EFF6FF] border-[#BFDBFE] shadow-sm font-semibold text-[#1D4ED8] dark:bg-[rgba(96,165,250,0.15)] dark:border-[rgba(96,165,250,0.40)] dark:text-text-primary' 
+                    : 'bg-transparent border-transparent hover:bg-[#F8FAFC] dark:hover:bg-[rgba(255,255,255,0.04)] text-text-secondary'
                 }`}
               >
                 <span className="text-[9px] font-normal text-text-muted">
@@ -103,7 +103,7 @@ export function HourlyForecast({ hourly, activeIndex, onActiveIndexChange }: Hou
                   name={hour.condition.icon} 
                   size={14} 
                   animate={isActive}
-                  className={`my-1.5 ${isActive ? 'text-accent-custom' : hour.isDay ? 'text-amber-500/80' : 'text-blue-400/80'}`} 
+                  className={`my-1.5 ${isActive ? 'text-[#1D4ED8] dark:text-accent-custom' : 'text-[#3B82F6] dark:text-accent-custom'}`} 
                 />
                 
                 <span className="text-xs font-semibold text-text-primary">{hour.temp}°</span>

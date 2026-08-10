@@ -5,39 +5,34 @@
 @variant dark (&:where(html.dark *, html.dark));
 
 /* ============================================================
-   SKYCAST — CSS Custom Property Design Tokens
+   SKYCAST — Design Token System
 
-   These are the ONLY authoritative color sources.
-   Tailwind utilities referencing these work via CSS var() chains.
+   Light mode:  solid white cards, no glassmorphism
+   Dark mode:   glass + blur + translucent surfaces
 
-   DO NOT add opacity to parent containers to solve contrast.
-   DO NOT add global filters or backdrops.
+   Never use opacity on parent containers.
    ============================================================ */
 
 @layer base {
 
-  /* ── Light Mode defaults ── */
+  /* ── Light Mode — solid, clean, professional ── */
   :root {
-    /* Light page background — bright airy iOS-style blue-white */
-    --bg:               #F2F8FD;
+    --bg:               #F8FAFC;
+    --surface:          #FFFFFF;
+    --surface-elevated: #F8FAFC;
+    --surface-strong:   #FFFFFF;
 
-    /* White glass surfaces — much lighter than before */
-    --surface:          rgba(255, 255, 255, 0.72);
-    --surface-elevated: rgba(255, 255, 255, 0.85);
-    --surface-strong:   rgba(248, 252, 255, 0.97);
+    --text-primary:     #111827;
+    --text-secondary:   #475569;
+    --text-muted:       #64748B;
 
-    --text-primary:     #172033;
-    --text-secondary:   #536174;
-    --text-muted:       #718096;
+    --border:           #E5E7EB;
+    --border-subtle:    #E5E7EB;
 
-    /* Crisp white borders with a hint of blue */
-    --border:           rgba(255, 255, 255, 0.90);
-    --border-subtle:    rgba(100, 130, 160, 0.10);
-
-    --accent:           #3478F6;
+    --accent:           #2563EB;
   }
 
-  /* ── Dark Mode overrides (applied via .dark on <html>) ── */
+  /* ── Dark Mode — glass + translucency ── */
   html.dark {
     --bg:               #07111F;
     --surface:          rgba(255, 255, 255, 0.045);
@@ -54,7 +49,6 @@
     --accent:           #60A5FA;
   }
 
-  /* ── Body ── */
   body {
     background-color: var(--bg);
     color: var(--text-primary);
@@ -65,11 +59,7 @@
   }
 }
 
-/* ── Tailwind @theme bridge ─────────────────────────────────
-   These expose CSS variables as Tailwind utility classes.
-   e.g. text-text-primary → color: var(--color-text-primary)
-   The var() chains are dynamic — .dark overrides propagate.
-   ─────────────────────────────────────────────────────────── */
+/* ── Tailwind @theme bridge ── */
 @theme {
   --color-bg-custom:         var(--bg);
   --color-surface-custom:    var(--surface);
@@ -84,37 +74,39 @@
 }
 
 /* ============================================================
-   Glass component classes
+   Component classes
+
+   IMPORTANT: backdrop-filter is ONLY applied in dark mode.
+   In light mode all surfaces are solid white — no blur needed.
    ============================================================ */
 @layer components {
 
-  /* Standard section card */
+  /* ── Standard card (used by every section panel) ── */
   .glass-card {
-    background: var(--surface);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border: 1px solid var(--border);
+    /* Light mode: solid white, clean border, soft shadow */
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
     border-radius: 20px;
-    /* Light mode: subtle blue-tinted shadow feels airy, not heavy */
-    box-shadow: 0 8px 24px rgba(60, 90, 120, 0.06);
-    transition:
-      background 0.25s ease,
-      border-color 0.25s ease,
-      box-shadow 0.25s ease;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+    transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
   }
 
+  /* Dark mode: translucent glass with blur */
   html.dark .glass-card {
+    background: var(--surface);         /* rgba(255,255,255,0.045) */
+    border-color: var(--border);        /* rgba(255,255,255,0.10)  */
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.30);
-  }
-
-  /* Header — bright white glass in light mode, dark navy in dark mode */
-  .glass-header {
-    background: rgba(255, 255, 255, 0.78);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
-    border: 1px solid rgba(255, 255, 255, 0.90);
+  }
+
+  /* ── Header ── */
+  .glass-header {
+    /* Light mode: solid white header */
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
     border-radius: 20px;
-    box-shadow: 0 4px 20px rgba(60, 90, 120, 0.08);
+    box-shadow: 0 1px 6px rgba(15, 23, 42, 0.06);
     transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
   }
 
@@ -122,28 +114,33 @@
     background: rgba(14, 26, 46, 0.88);
     border-color: rgba(255, 255, 255, 0.12);
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.40);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
   }
 
-  /* Dropdown / overlay — near-opaque for maximum readability */
+  /* ── Dropdown / overlay ── */
   .glass-dropdown {
-    background: var(--surface-strong);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid var(--border);
+    /* Light mode: solid white */
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
     border-radius: 16px;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.16);
+    box-shadow: 0 8px 32px rgba(15, 23, 42, 0.10);
     transition: background 0.25s ease;
   }
 
   html.dark .glass-dropdown {
+    background: var(--surface-strong);
+    border-color: var(--border);
     box-shadow: 0 8px 40px rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
   }
 
-  /* Sub-panel inside a card (e.g. active hour row) */
+  /* ── In-card sub-panel (active hourly row) ── */
   .glass-inset {
-    /* Light mode: near-white with a hint of blue border */
-    background: rgba(255, 255, 255, 0.80);
-    border: 1px solid rgba(220, 230, 240, 0.90);
+    /* Light mode: very light gray, clearly distinct from white card */
+    background: #F8FAFC;
+    border: 1px solid #E5E7EB;
     border-radius: 14px;
     transition: background 0.25s ease, border-color 0.25s ease;
   }
@@ -151,11 +148,12 @@
   html.dark .glass-inset {
     background: rgba(255, 255, 255, 0.055);
     border-color: rgba(255, 255, 255, 0.10);
+    backdrop-filter: none;
   }
 }
 
 /* ============================================================
-   Scrollbar utilities
+   Utilities
    ============================================================ */
 .hide-scrollbar::-webkit-scrollbar { display: none; }
 .hide-scrollbar {
@@ -163,7 +161,6 @@
   scrollbar-width: none;
 }
 
-/* Respect prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

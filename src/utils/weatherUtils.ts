@@ -130,29 +130,11 @@ export function getWeatherBackgroundClass(code: number, isDay: boolean, isDark: 
     }
     return 'bg-gradient-to-b from-[#07111F] via-[#0B1728] to-[#0D1B2D]';
   } else {
-    // Light modes — bright, airy iOS-style sky backgrounds
+    // Light mode: flat clean white — the cards carry the visual weight
     if (!isDay) {
-      return 'bg-gradient-to-b from-[#1E293B] to-[#0F172A]'; // Night stays dark navy
+      return 'bg-gradient-to-b from-[#1E293B] to-[#0F172A]'; // night stays dark
     }
-    if (code <= 1) { // Sunny / Clear
-      return 'bg-gradient-to-b from-[#EBF4FF] via-[#F5FAFF] to-[#FBFDFF]';
-    }
-    if (code === 2) { // Partly Cloudy
-      return 'bg-gradient-to-b from-[#E3EFF9] via-[#EDF5FB] to-[#F5F9FD]';
-    }
-    if (code === 3 || code === 45 || code === 48) { // Cloudy / Fog
-      return 'bg-gradient-to-b from-[#DAE8F3] via-[#E8F1F8] to-[#F0F5FA]';
-    }
-    if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) { // Rain / Drizzle
-      return 'bg-gradient-to-b from-[#D5E5F2] via-[#E3EEF8] to-[#EDF4FA]';
-    }
-    if ((code >= 71 && code <= 77) || code === 85 || code === 86) { // Snow
-      return 'bg-gradient-to-b from-[#EBF5FF] via-[#F3F9FF] to-[#F9FCFF]';
-    }
-    if (code >= 95 && code <= 99) { // Thunderstorm
-      return 'bg-gradient-to-b from-[#D0E0EE] via-[#DDE8F2] to-[#E8EFF6]';
-    }
-    return 'bg-gradient-to-b from-[#EBF4FF] via-[#F5FAFF] to-[#FBFDFF]';
+    return 'bg-[#F8FAFC]';
   }
 }
 
