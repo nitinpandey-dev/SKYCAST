@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSettings } from '../contexts/SettingsContext';
 import { X, Heart, Loader2 } from 'lucide-react';
 import { LocationInfo } from '../types/weather';
-import { getWeatherData, reverseGeocode } from '../services/weatherService';
+import { getWeatherData } from '../services/weatherService';
 import { cToF, getWeatherCondition } from '../utils/weatherUtils';
 
 interface FavoriteLocationsProps {
@@ -20,12 +20,10 @@ export function FavoriteLocations({ onSelect }: FavoriteLocationsProps) {
   const [weatherDataMap, setWeatherDataMap] = useState<Record<string, FavWeatherData>>({});
   const [loadingMap, setLoadingMap] = useState<Record<string, boolean>>({});
 
-  // Background fetch temperatures/conditions for favorites
   useEffect(() => {
     if (favorites.length === 0) return;
 
     const fetchFavoriteWeather = async (loc: LocationInfo) => {
-      // Don't refetch if we already have it loading
       if (loadingMap[loc.id]) return;
 
       setLoadingMap(prev => ({ ...prev, [loc.id]: true }));
@@ -47,7 +45,6 @@ export function FavoriteLocations({ onSelect }: FavoriteLocationsProps) {
     };
 
     favorites.forEach(loc => {
-      // Fetch if not already fetched
       if (!weatherDataMap[loc.id]) {
         fetchFavoriteWeather(loc);
       }
@@ -58,10 +55,11 @@ export function FavoriteLocations({ onSelect }: FavoriteLocationsProps) {
 
   return (
     <div className="glass-card p-6 mt-6 transition-all duration-300">
-      <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-        <Heart size={20} className="text-red-500 fill-red-500" />
-        My Locations
+      <h2 className="text-xs font-bold text-text-muted uppercase tracking-wider mb-4 flex items-center gap-2">
+        <Heart size={14} className="text-red-500 fill-red-500" />
+        Saved Locations
       </h2>
+      
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {favorites.map((loc) => {
           const weather = weatherDataMap[loc.id];
@@ -76,29 +74,29 @@ export function FavoriteLocations({ onSelect }: FavoriteLocationsProps) {
           return (
             <div 
               key={loc.id}
-              className="group relative bg-black/5 dark:bg-white/5 hover:bg-primary/10 dark:hover:bg-primary/20 p-4 rounded-2xl cursor-pointer transition-all duration-300 border border-transparent hover:border-primary/20 flex items-center justify-between overflow-hidden"
+              className="group relative bg-surface hover:bg-surface-strong p-4 rounded-2xl cursor-pointer transition-all duration-300 border border-border-custom hover:border-accent-custom/20 flex items-center justify-between overflow-hidden"
               onClick={() => onSelect(loc)}
             >
-              <div className="truncate pr-6">
-                <h3 className="font-bold text-base truncate">{loc.name}</h3>
-                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+              <div className="truncate pr-6 text-left">
+                <h3 className="font-bold text-sm text-text-primary truncate">{loc.name}</h3>
+                <p className="text-[10px] text-text-secondary truncate mt-0.5">
                   {[loc.admin1, loc.country].filter(Boolean).join(', ')}
                 </p>
                 {condition && (
-                  <span className="text-[10px] font-bold text-primary mt-1 block">
+                  <span className="text-[10px] font-bold text-accent-custom mt-1 block">
                     {condition.description}
                   </span>
                 )}
               </div>
 
               {/* Temperature display or loader */}
-              <div className="shrink-0 flex items-center gap-2">
+              <div className="shrink-0 flex items-center gap-2 text-text-primary">
                 {isLoading ? (
-                  <Loader2 size={16} className="animate-spin text-gray-400" />
+                  <Loader2 size={14} className="animate-spin text-text-muted" />
                 ) : displayTemp !== null ? (
-                  <span className="text-xl font-black">{displayTemp}°</span>
+                  <span className="text-lg font-black">{displayTemp}°</span>
                 ) : (
-                  <span className="text-xs text-gray-400">—</span>
+                  <span className="text-xs text-text-muted">—</span>
                 )}
               </div>
               
@@ -107,10 +105,10 @@ export function FavoriteLocations({ onSelect }: FavoriteLocationsProps) {
                   e.stopPropagation();
                   removeFavorite(loc.id);
                 }}
-                className="absolute top-2 right-2 p-1 rounded-full bg-white/60 dark:bg-black/50 text-gray-400 hover:text-red-500 hover:bg-white dark:hover:bg-gray-800 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-all shadow-sm"
+                className="absolute top-2 right-2 p-1 rounded-full bg-surface-strong hover:bg-red-500/10 hover:text-red-500 text-text-muted hover:scale-105 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-all border border-border-custom"
                 title={`Remove ${loc.name} from favorites`}
               >
-                <X size={12} />
+                <X size={10} />
               </button>
             </div>
           );

@@ -24,11 +24,11 @@ export function WeatherDetails({ current }: WeatherDetailsProps) {
 
   const displayDewPoint = Math.round(units === 'imperial' ? cToF(current.dewPoint) : current.dewPoint);
 
-  // Dynamic explanations (derived)
+  // Dynamic explanations
   let uvLevel = 'Low';
   if (current.uvIndex >= 3 && current.uvIndex <= 5) uvLevel = 'Mod';
   else if (current.uvIndex >= 6 && current.uvIndex <= 7) uvLevel = 'High';
-  else if (current.uvIndex >= 8 && current.uvIndex <= 10) uvLevel = 'Very High';
+  else if (current.uvIndex >= 8 && current.uvIndex <= 10) uvLevel = 'V. High';
   else if (current.uvIndex >= 11) uvLevel = 'Extreme';
 
   let humidityDesc = 'Comfortable';
@@ -41,7 +41,7 @@ export function WeatherDetails({ current }: WeatherDetailsProps) {
   else if (current.windSpeed > 28) windDesc = 'Windy';
 
   let cloudDesc = 'Clear';
-  if (current.cloudCover > 20 && current.cloudCover <= 50) cloudDesc = 'Partly Cloudy';
+  if (current.cloudCover > 20 && current.cloudCover <= 50) cloudDesc = 'Partly';
   else if (current.cloudCover > 50 && current.cloudCover <= 80) cloudDesc = 'Cloudy';
   else if (current.cloudCover > 80) cloudDesc = 'Overcast';
 
@@ -59,7 +59,7 @@ export function WeatherDetails({ current }: WeatherDetailsProps) {
   return (
     <div className="glass-card p-6 transition-all duration-300">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Weather Details</h2>
+        <h2 className="text-xs font-bold text-text-muted uppercase tracking-wider">Weather Details</h2>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -68,18 +68,18 @@ export function WeatherDetails({ current }: WeatherDetailsProps) {
           return (
             <div 
               key={index} 
-              className="bg-black/5 dark:bg-white/5 p-3 rounded-2xl flex items-center justify-between hover:bg-white dark:hover:bg-gray-800 transition-all duration-200 border border-transparent hover:border-primary/10 select-default"
+              className="bg-surface hover:bg-surface-strong p-3 rounded-2xl flex items-center justify-between transition-all duration-200 border border-border-custom select-default"
             >
               <div className="flex items-center gap-2.5 truncate">
                 <div className={`p-1.5 rounded-xl shrink-0 ${detail.color}`}>
                   <Icon size={14} />
                 </div>
                 <div className="truncate text-left">
-                  <div className="text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase leading-none mb-1">{detail.title}</div>
-                  <div className="text-sm font-extrabold text-gray-900 dark:text-white leading-none">{detail.value}</div>
+                  <div className="text-[10px] font-bold text-text-muted uppercase leading-none mb-1">{detail.title}</div>
+                  <div className="text-sm font-extrabold text-text-primary leading-none">{detail.value}</div>
                 </div>
               </div>
-              <span className="text-[10px] text-gray-400 dark:text-gray-500 font-semibold ml-2 text-right shrink-0">
+              <span className="text-[10px] text-text-secondary font-semibold ml-2 text-right shrink-0">
                 {detail.sub}
               </span>
             </div>

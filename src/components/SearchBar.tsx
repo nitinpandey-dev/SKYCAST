@@ -103,7 +103,7 @@ export function SearchBar({ onLocationSelect }: SearchBarProps) {
         aria-haspopup="listbox"
         aria-owns="search-results-list"
       >
-        <Search className="absolute left-4 w-5 h-5 text-gray-400" />
+        <Search className="absolute left-4 w-4 h-4 text-text-muted pointer-events-none" />
         <input
           ref={inputRef}
           type="text"
@@ -111,44 +111,44 @@ export function SearchBar({ onLocationSelect }: SearchBarProps) {
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setIsOpen(true)}
           onKeyDown={handleKeyDown}
-          placeholder="Search city..."
+          placeholder="Search city or location..."
           aria-autocomplete="list"
           aria-controls="search-results-list"
           aria-activedescendant={activeIndex >= 0 ? `option-${activeIndex}` : undefined}
-          className="w-full bg-black/5 dark:bg-white/10 border border-transparent outline-none py-3 pl-12 pr-10 rounded-full text-gray-900 dark:text-gray-100 placeholder-gray-500 focus:bg-white dark:focus:bg-gray-800 focus:border-primary/30 focus:ring-4 focus:ring-primary/10 transition-all duration-300"
+          className="w-full bg-surface border border-border-custom outline-none py-2.5 pl-11 pr-10 rounded-full text-xs font-semibold text-text-primary placeholder:text-text-muted focus:bg-surface-strong focus:border-accent-custom/40 transition-all duration-300"
         />
         {query && (
           <button 
             onClick={() => { setQuery(''); setIsOpen(false); inputRef.current?.focus(); }}
-            className="absolute right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+            className="absolute right-4 text-text-muted hover:text-text-primary transition-colors cursor-pointer"
             aria-label="Clear search query"
           >
-            <X className="w-4 h-4" />
+            <X className="w-3.5 h-3.5" />
           </button>
         )}
       </div>
 
-      {/* Dropdown listbox */}
+      {/* Dropdown listbox (Using highly opaque background + blur for perfect contrast overlays) */}
       {isOpen && (query.length >= 2 || showRecents) && (
         <div 
           id="search-results-list"
           role="listbox"
-          className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-900 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 overflow-hidden max-h-80 overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200"
+          className="absolute top-full left-0 right-0 mt-2 bg-white/95 dark:bg-[#07101f]/95 backdrop-blur-xl rounded-2xl shadow-xl border border-border-custom overflow-hidden max-h-80 overflow-y-auto animate-in fade-in slide-in-from-top-2 duration-200"
         >
           {loading && (
-            <div className="p-4 flex items-center justify-center text-gray-500">
-              <Loader2 className="w-5 h-5 animate-spin mr-2" />
-              <span className="text-sm font-medium">Searching...</span>
+            <div className="p-4 flex items-center justify-center text-text-secondary">
+              <Loader2 className="w-4 h-4 animate-spin mr-2 text-accent-custom" />
+              <span className="text-xs font-semibold">Searching...</span>
             </div>
           )}
 
           {!loading && showRecents && !query && (
             <div>
-              <div className="px-4 py-2 text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider flex items-center justify-between">
+              <div className="px-4 py-2.5 text-[10px] font-bold text-text-muted uppercase tracking-wider flex items-center justify-between border-b border-border-custom/50">
                 <span>Recent Searches</span>
                 <button 
                   onClick={(e) => { e.stopPropagation(); clearRecentSearches(); }}
-                  className="text-gray-400 hover:text-red-500 flex items-center gap-1 transition-colors text-[10px] normal-case"
+                  className="text-text-muted hover:text-red-500 flex items-center gap-1 transition-colors normal-case cursor-pointer font-bold"
                   title="Clear all search history"
                 >
                   <Trash2 className="w-3 h-3" />
@@ -162,15 +162,17 @@ export function SearchBar({ onLocationSelect }: SearchBarProps) {
                   role="option"
                   aria-selected={activeIndex === idx}
                   className={`w-full px-4 py-3 flex items-center justify-between group transition-colors cursor-pointer ${
-                    activeIndex === idx ? 'bg-primary/10 dark:bg-primary/20' : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                    activeIndex === idx 
+                      ? 'bg-accent-custom/10' 
+                      : 'hover:bg-black/5 dark:hover:bg-white/5'
                   }`}
                   onClick={() => handleSelect(loc)}
                 >
                   <div className="flex items-center truncate mr-3">
-                    <Clock className="w-4 h-4 text-gray-400 mr-3 shrink-0" />
+                    <Clock className="w-3.5 h-3.5 text-text-muted mr-3 shrink-0" />
                     <div className="truncate text-left">
-                      <div className="font-semibold text-gray-800 dark:text-gray-200 text-sm">{loc.name}</div>
-                      <div className="text-xs text-gray-500">
+                      <div className="font-bold text-text-primary text-xs">{loc.name}</div>
+                      <div className="text-[10px] text-text-secondary mt-0.5">
                         {[loc.admin1, loc.country].filter(Boolean).join(', ')}
                       </div>
                     </div>
@@ -181,10 +183,10 @@ export function SearchBar({ onLocationSelect }: SearchBarProps) {
                       removeRecentSearch(loc.id);
                       if (recentSearches.length <= 1) setIsOpen(false);
                     }}
-                    className="p-1 rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity"
+                    className="p-1 rounded-full text-text-muted hover:text-red-500 hover:bg-red-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity border border-border-custom cursor-pointer"
                     aria-label={`Remove ${loc.name} from search history`}
                   >
-                    <X className="w-3.5 h-3.5" />
+                    <X className="w-3 h-3" />
                   </button>
                 </div>
               ))}
@@ -200,14 +202,16 @@ export function SearchBar({ onLocationSelect }: SearchBarProps) {
                   role="option"
                   aria-selected={activeIndex === idx}
                   onClick={() => handleSelect(loc)}
-                  className={`w-full text-left px-4 py-3 flex items-center transition-colors border-none outline-none ${
-                    activeIndex === idx ? 'bg-primary/10 dark:bg-primary/20' : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                  className={`w-full text-left px-4 py-3 flex items-center transition-colors border-none outline-none cursor-pointer ${
+                    activeIndex === idx 
+                      ? 'bg-accent-custom/10' 
+                      : 'hover:bg-black/5 dark:hover:bg-white/5'
                   }`}
                 >
-                  <MapPin className="w-4 h-4 text-primary mr-3 shrink-0" />
+                  <MapPin className="w-3.5 h-3.5 text-accent-custom mr-3 shrink-0" />
                   <div className="truncate">
-                    <div className="font-semibold text-gray-800 dark:text-gray-200 text-sm">{loc.name}</div>
-                    <div className="text-xs text-gray-500">
+                    <div className="font-bold text-text-primary text-xs">{loc.name}</div>
+                    <div className="text-[10px] text-text-secondary mt-0.5">
                       {[loc.admin1, loc.country].filter(Boolean).join(', ')}
                     </div>
                   </div>
@@ -217,7 +221,7 @@ export function SearchBar({ onLocationSelect }: SearchBarProps) {
           )}
 
           {!loading && query.length >= 2 && results.length === 0 && (
-            <div className="p-4 text-center text-sm text-gray-500 dark:text-gray-400">
+            <div className="p-4 text-center text-xs text-text-secondary font-semibold">
               Couldn't find "{query}". Try a different city.
             </div>
           )}

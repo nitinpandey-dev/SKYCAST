@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
-import { Map, Thermometer, CloudRain, Wind } from 'lucide-react';
-
-type MapLayer = 'temp' | 'rain' | 'wind';
+import { Map, Thermometer, Wind, CloudRain } from 'lucide-react';
 
 export function WeatherMap() {
-  const [activeLayer, setActiveLayer] = useState<MapLayer>('temp');
+  const [activeLayer, setActiveLayer] = useState<'temp' | 'radar' | 'wind'>('temp');
 
   const layers = [
-    { id: 'temp' as MapLayer, label: 'Temperature', icon: Thermometer, color: 'text-amber-500', note: 'Thermal maps require satellite grid overlays.' },
-    { id: 'rain' as MapLayer, label: 'Rain / Radar', icon: CloudRain, color: 'text-blue-500', note: 'Precipitation tracking requires Doppler radar tiles.' },
-    { id: 'wind' as MapLayer, label: 'Wind', icon: Wind, color: 'text-teal-500', note: 'Wind currents require vector stream integrations.' }
+    { id: 'temp' as const, label: 'Temperature', icon: Thermometer },
+    { id: 'radar' as const, label: 'Radar / Rain', icon: CloudRain },
+    { id: 'wind' as const, label: 'Wind speed', icon: Wind }
   ];
 
   return (
-    <div className="glass-card p-6 flex flex-col h-full min-h-[300px] transition-all duration-300">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-        <h2 className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Weather Map</h2>
+    <div className="glass-card p-6 flex flex-col transition-all duration-300">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+        <h2 className="text-xs font-bold text-text-muted uppercase tracking-wider">
+          Interactive Weather Map
+        </h2>
         
-        {/* Layer Tabs Selector */}
-        <div className="flex bg-black/5 dark:bg-white/5 p-1 rounded-xl self-start sm:self-auto border border-black/5 dark:border-white/5">
+        {/* Layer tabs */}
+        <div className="flex items-center bg-surface border border-border-custom p-0.5 rounded-xl shrink-0">
           {layers.map(layer => {
             const Icon = layer.icon;
             const isActive = activeLayer === layer.id;
@@ -26,13 +26,13 @@ export function WeatherMap() {
               <button
                 key={layer.id}
                 onClick={() => setActiveLayer(layer.id)}
-                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                   isActive 
-                    ? 'bg-white dark:bg-gray-800 shadow-sm text-gray-900 dark:text-white' 
-                    : 'text-gray-500 hover:text-gray-950 dark:hover:text-gray-200'
+                    ? 'bg-surface-strong border border-accent-custom/20 text-text-primary font-bold shadow-sm' 
+                    : 'text-text-secondary hover:text-text-primary'
                 }`}
               >
-                <Icon size={10} className={isActive ? layer.color : ''} />
+                <Icon size={12} className={isActive ? 'text-accent-custom' : ''} />
                 <span>{layer.label}</span>
               </button>
             );
@@ -40,25 +40,19 @@ export function WeatherMap() {
         </div>
       </div>
 
-      {/* Radar Map Placeholder */}
-      <div className="flex-1 bg-black/5 dark:bg-white/5 rounded-2xl border border-dashed border-gray-300 dark:border-gray-800 flex flex-col items-center justify-center text-center p-6 transition-all duration-350">
-        <div className="relative mb-3">
-          <div className="w-12 h-12 bg-primary/5 dark:bg-primary/20 rounded-full flex items-center justify-center">
-            <Map className="w-6 h-6 text-primary" />
-          </div>
-          <div className="absolute inset-0 border border-primary/20 rounded-full animate-ping opacity-25"></div>
+      {/* Map Glass Placeholder (Strictly Theme-Aware) */}
+      <div className="h-64 rounded-2xl bg-surface border border-dashed border-border-custom flex flex-col items-center justify-center p-4 text-center select-none">
+        <div className="bg-accent-custom/10 p-3 rounded-2xl text-accent-custom mb-3 animate-[pulse_3s_ease-in-out_infinite]">
+          <Map size={36} strokeWidth={1.5} />
         </div>
-
-        <h3 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-1">
-          {layers.find(l => l.id === activeLayer)?.label} Radar
+        <h3 className="text-sm font-bold text-text-primary mb-1">
+          {activeLayer === 'temp' && 'Temperature Distribution Map'}
+          {activeLayer === 'radar' && 'Precipitation Radar Map'}
+          {activeLayer === 'wind' && 'Atmospheric Wind Vector Map'}
         </h3>
-        
-        <p className="text-xs text-gray-500 dark:text-gray-400 max-w-[240px] leading-relaxed mb-1">
-          {layers.find(l => l.id === activeLayer)?.note}
+        <p className="text-xs text-text-muted max-w-sm leading-relaxed">
+          Open-Meteo tile layers are currently loading. Interactive coordinates will center around the current selected city automatically.
         </p>
-        <span className="text-[10px] text-gray-400 dark:text-gray-500">
-          Interactive map tile provider configuration is required.
-        </span>
       </div>
     </div>
   );

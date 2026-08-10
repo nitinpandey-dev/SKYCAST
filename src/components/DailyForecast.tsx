@@ -32,17 +32,17 @@ export function DailyForecastComponent({ daily }: DailyForecastProps) {
   return (
     <div className="glass-card p-5 sm:p-6 transition-all duration-300">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+        <h2 className="text-xs font-bold text-text-muted uppercase tracking-wider">
           {daily.length}-Day Forecast
         </h2>
-        <span className="text-[9px] text-gray-400 dark:text-gray-500 font-semibold uppercase">Details on click</span>
+        <span className="text-[9px] text-text-muted font-semibold uppercase">Details on click</span>
       </div>
       
       <div className="flex flex-col gap-1">
         {daily.map((day, index) => {
           const condition = getWeatherCondition(day.conditionCode, true);
           const isToday = index === 0;
-          const label = isToday ? 'Today' : formatDay(day.date).slice(0, 3); // Short day names for iOS feel
+          const label = isToday ? 'Today' : formatDay(day.date).slice(0, 3);
           const temps = getConvertedTemps(day);
           const isExpanded = expandedIndex === index;
           
@@ -64,35 +64,35 @@ export function DailyForecastComponent({ daily }: DailyForecastProps) {
               key={day.date} 
               className={`rounded-xl transition-all duration-200 border ${
                 isExpanded 
-                  ? 'bg-black/5 dark:bg-white/5 border-primary/10 p-3.5' 
-                  : 'border-transparent hover:bg-black/5 dark:hover:bg-white/5 py-2.5 px-3'
+                  ? 'bg-surface border-border-custom p-3.5' 
+                  : 'border-transparent hover:bg-surface py-2.5 px-3'
               }`}
             >
               {/* Row Header */}
               <button
                 onClick={() => toggleExpand(index)}
-                className="w-full flex items-center justify-between text-left focus:outline-none cursor-pointer text-xs sm:text-sm"
+                className="w-full flex items-center justify-between text-left focus:outline-none cursor-pointer text-xs sm:text-sm text-text-primary"
                 aria-expanded={isExpanded}
               >
-                <span className={`w-12 sm:w-16 font-semibold truncate ${isToday ? 'text-primary' : ''}`}>
+                <span className={`w-12 sm:w-16 font-semibold truncate ${isToday ? 'text-accent-custom' : ''}`}>
                   {isToday ? 'Today' : label}
                 </span>
                 
                 <div className="flex items-center gap-2 w-20 justify-start shrink-0">
-                  <WeatherIcon name={condition.icon} size={14} className="text-gray-500 dark:text-gray-400" />
-                  <span className="text-[9px] text-blue-500 font-bold">
+                  <WeatherIcon name={condition.icon} size={14} className="text-text-secondary" />
+                  <span className="text-[9px] text-accent-custom font-bold">
                     {day.precipitationProbability > 0 ? `${day.precipitationProbability}%` : ''}
                   </span>
                 </div>
 
                 {/* Range Bar tracking */}
                 <div className="flex items-center gap-3 flex-1 justify-end">
-                  <span className="text-gray-400 dark:text-gray-500 w-6 text-right font-medium">{temps.low}°</span>
+                  <span className="text-text-secondary w-6 text-right font-medium">{temps.low}°</span>
                   
                   {/* Range indicator track */}
-                  <div className="w-14 sm:w-28 h-1 bg-black/10 dark:bg-white/10 rounded-full relative overflow-hidden shrink-0">
+                  <div className="w-14 sm:w-28 h-1 bg-surface-strong rounded-full relative overflow-hidden shrink-0">
                     <div 
-                      className="absolute h-full bg-gradient-to-r from-blue-400 to-amber-400 rounded-full"
+                      className="absolute h-full bg-gradient-to-r from-accent-custom/60 to-amber-500/60 rounded-full"
                       style={{
                         left: `${leftPercent}%`,
                         width: `${Math.max(barWidth, 5)}%`
@@ -100,29 +100,29 @@ export function DailyForecastComponent({ daily }: DailyForecastProps) {
                     />
                   </div>
                   
-                  <span className="text-gray-900 dark:text-gray-100 w-6 text-right font-semibold">{temps.high}°</span>
-                  <ChevronDown size={10} className={`text-gray-400 transition-transform duration-200 ${isExpanded ? 'rotate-180 text-primary' : ''}`} />
+                  <span className="text-text-primary w-6 text-right font-semibold">{temps.high}°</span>
+                  <ChevronDown size={10} className={`text-text-muted transition-transform duration-200 ${isExpanded ? 'rotate-180 text-accent-custom' : ''}`} />
                 </div>
               </button>
 
               {/* Detail panel */}
               {isExpanded && (
-                <div className="mt-3 pt-3 border-t border-[var(--border)] grid grid-cols-2 gap-y-3 gap-x-4 text-[10px] sm:text-xs animate-in fade-in slide-in-from-top-1 duration-200">
-                  <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-400">
-                    <Sunrise size={12} className="text-orange-400" />
-                    <span>Sunrise: <strong className="font-semibold text-gray-800 dark:text-gray-200">{formatTime(day.sunrise)}</strong></span>
+                <div className="mt-3 pt-3 border-t border-border-custom grid grid-cols-2 gap-y-3 gap-x-4 text-[10px] sm:text-xs text-text-secondary animate-in fade-in duration-200">
+                  <div className="flex items-center gap-1.5">
+                    <Sunrise size={12} className="text-orange-400 shrink-0" />
+                    <span>Sunrise: <strong className="font-semibold text-text-primary">{formatTime(day.sunrise)}</strong></span>
                   </div>
-                  <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-400">
-                    <Sunset size={12} className="text-red-400" />
-                    <span>Sunset: <strong className="font-semibold text-gray-800 dark:text-gray-200">{formatTime(day.sunset)}</strong></span>
+                  <div className="flex items-center gap-1.5">
+                    <Sunset size={12} className="text-red-400 shrink-0" />
+                    <span>Sunset: <strong className="font-semibold text-text-primary">{formatTime(day.sunset)}</strong></span>
                   </div>
-                  <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-400">
-                    <Sun size={12} className="text-amber-500" />
-                    <span>UV Index: <strong className="font-semibold text-gray-800 dark:text-gray-200">{day.uvIndex} ({uvLevel})</strong></span>
+                  <div className="flex items-center gap-1.5">
+                    <Sun size={12} className="text-amber-500 shrink-0" />
+                    <span>UV Index: <strong className="font-semibold text-text-primary">{day.uvIndex} ({uvLevel})</strong></span>
                   </div>
-                  <div className="flex items-center gap-1.5 text-gray-600 dark:text-gray-400">
-                    <Wind size={12} className="text-teal-500" />
-                    <span>Wind Max: <strong className="font-semibold text-gray-800 dark:text-gray-200">{displayWindMax} {windUnit}</strong></span>
+                  <div className="flex items-center gap-1.5">
+                    <Wind size={12} className="text-emerald-500 shrink-0" />
+                    <span>Wind Max: <strong className="font-semibold text-text-primary">{displayWindMax} {windUnit}</strong></span>
                   </div>
                 </div>
               )}

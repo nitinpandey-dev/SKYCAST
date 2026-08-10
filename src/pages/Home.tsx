@@ -231,8 +231,8 @@ export function Home() {
                       {/* iPhone-style Weather Summary Panel */}
                       {summaryText && (
                         <div className="glass-card p-4 flex gap-3 items-start">
-                          <Info size={16} className="text-primary shrink-0 mt-0.5" />
-                          <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed font-semibold">
+                          <Info size={16} className="text-accent-custom shrink-0 mt-0.5" />
+                          <p className="text-xs text-text-secondary leading-relaxed font-semibold">
                             {summaryText}
                           </p>
                         </div>
@@ -284,8 +284,8 @@ export function Home() {
                     {/* Integrated Summary */}
                     {summaryText && (
                       <div className="glass-card p-4 flex gap-3 items-start">
-                        <Info size={16} className="text-primary shrink-0 mt-0.5" />
-                        <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed font-semibold">
+                        <Info size={16} className="text-accent-custom shrink-0 mt-0.5" />
+                        <p className="text-xs text-text-secondary leading-relaxed font-semibold">
                           {summaryText}
                         </p>
                       </div>

@@ -49,46 +49,46 @@ export function HourlyForecastComponent({ hourly }: HourlyForecastProps) {
   };
 
   return (
-    <div className="glass-card p-6 overflow-hidden transition-all duration-300">
+    <div className="glass-card p-5 sm:p-6 overflow-hidden transition-all duration-300">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Hourly Forecast</h2>
-        <span className="text-[10px] text-gray-400 dark:text-gray-500">Tap hour to select</span>
+        <h2 className="text-xs font-bold text-text-muted uppercase tracking-wider">Hourly Forecast</h2>
+        <span className="text-[10px] text-text-muted font-semibold">Tap hour to select</span>
       </div>
 
       {/* Selected Hour Details Box */}
-      <div className="bg-black/5 dark:bg-white/5 rounded-2xl p-4 mb-6 flex flex-wrap items-center justify-between gap-4 animate-in fade-in slide-in-from-top-1 duration-200">
+      <div className="bg-surface border border-border-custom rounded-2xl p-4 mb-6 flex flex-wrap items-center justify-between gap-4 animate-in fade-in duration-200">
         <div className="flex items-center gap-3">
-          <div className="text-primary bg-primary/10 dark:bg-primary/20 p-2 rounded-xl">
+          <div className="text-accent-custom bg-accent-custom/10 p-2 rounded-xl">
             <WeatherIcon name={activeCondition.icon} size={28} />
           </div>
           <div>
-            <div className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase">
+            <div className="text-[10px] text-text-muted font-bold uppercase">
               {activeIndex === 0 ? 'Currently' : formatHour(activeHour.time)}
             </div>
-            <div className="text-sm font-bold flex items-center gap-2">
+            <div className="text-sm font-bold flex items-center gap-2 text-text-primary">
               <span>{activeCondition.description}</span>
-              <span className="text-gray-300 dark:text-gray-700">|</span>
-              <span className="text-primary font-black">{activeTemp}°</span>
+              <span className="text-border-custom">|</span>
+              <span className="text-accent-custom font-black">{activeTemp}°</span>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-1.5 text-xs">
-          <div className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
-            <Eye size={12} className="text-gray-400" />
-            <span>Feels: <strong className="font-semibold text-gray-800 dark:text-gray-200">{activeFeels}°</strong></span>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-1.5 text-xs text-text-secondary">
+          <div className="flex items-center gap-1">
+            <Eye size={12} className="text-text-muted" />
+            <span>Feels: <strong className="font-semibold text-text-primary">{activeFeels}°</strong></span>
           </div>
-          <div className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
-            <CloudRain size={12} className="text-blue-500" />
-            <span>Rain: <strong className="font-semibold text-gray-800 dark:text-gray-200">{activeHour.precipitationProbability}%</strong></span>
+          <div className="flex items-center gap-1">
+            <CloudRain size={12} className="text-accent-custom" />
+            <span>Rain: <strong className="font-semibold text-text-primary">{activeHour.precipitationProbability}%</strong></span>
           </div>
-          <div className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
+          <div className="flex items-center gap-1">
             <Droplets size={12} className="text-teal-500" />
-            <span>Humidity: <strong className="font-semibold text-gray-800 dark:text-gray-200">{activeHour.humidity}%</strong></span>
+            <span>Humidity: <strong className="font-semibold text-text-primary">{activeHour.humidity}%</strong></span>
           </div>
-          <div className="flex items-center gap-1 text-gray-600 dark:text-gray-400">
+          <div className="flex items-center gap-1">
             <Wind size={12} className="text-emerald-500" />
-            <span>Wind: <strong className="font-semibold text-gray-800 dark:text-gray-200">{activeWind} {activeWindUnit}</strong></span>
+            <span>Wind: <strong className="font-semibold text-text-primary">{activeWind} {activeWindUnit}</strong></span>
           </div>
         </div>
       </div>
@@ -108,11 +108,11 @@ export function HourlyForecastComponent({ hourly }: HourlyForecastProps) {
                 onClick={() => handleCardClick(index)}
                 className={`flex flex-col items-center justify-between w-14 py-2.5 rounded-xl transition-all duration-200 border text-center cursor-pointer ${
                   isActive 
-                    ? 'bg-white/10 dark:bg-white/10 border-primary/30 shadow-sm scale-102 font-bold' 
-                    : 'bg-transparent border-transparent hover:bg-black/5 dark:hover:bg-white/5 text-gray-600 dark:text-gray-400'
+                    ? 'bg-surface-strong border-accent-custom/40 shadow-sm scale-102 font-bold text-text-primary' 
+                    : 'bg-transparent border-transparent hover:bg-surface/50 text-text-secondary'
                 }`}
               >
-                <span className="text-[10px] font-medium text-gray-400 dark:text-gray-500">
+                <span className="text-[10px] font-semibold text-text-muted">
                   {hour.time}
                 </span>
                 
@@ -120,12 +120,12 @@ export function HourlyForecastComponent({ hourly }: HourlyForecastProps) {
                   name={condition.icon} 
                   size={16} 
                   animate={isActive}
-                  className={`my-1.5 ${isActive ? 'text-primary' : hour.isDay ? 'text-amber-500' : 'text-blue-400'}`} 
+                  className={`my-1.5 ${isActive ? 'text-accent-custom' : hour.isDay ? 'text-amber-500' : 'text-blue-400'}`} 
                 />
                 
-                <span className="text-xs font-bold">{hour.temp}°</span>
+                <span className="text-xs font-bold text-text-primary">{hour.temp}°</span>
                 
-                <span className={`text-[9px] font-bold mt-1 ${hour.pop > 0 ? 'text-blue-500' : 'text-gray-300 dark:text-gray-700'}`}>
+                <span className={`text-[9px] font-bold mt-1 ${hour.pop > 0 ? 'text-accent-custom' : 'text-text-muted opacity-50'}`}>
                   {hour.pop > 0 ? `${hour.pop}%` : '•'}
                 </span>
               </button>
@@ -138,7 +138,7 @@ export function HourlyForecastComponent({ hourly }: HourlyForecastProps) {
       <div className="mt-4 space-y-4">
         {/* Temperature Trend Area Graph */}
         <div>
-          <div className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase mb-1">Temperature Trend</div>
+          <div className="text-[10px] text-text-muted font-bold uppercase mb-1">Temperature Trend</div>
           <div className="h-28 w-full select-none">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart 
@@ -152,8 +152,8 @@ export function HourlyForecastComponent({ hourly }: HourlyForecastProps) {
               >
                 <defs>
                   <linearGradient id="colorTempRedesign" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.15}/>
-                    <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="var(--accent-custom)" stopOpacity={0.15}/>
+                    <stop offset="95%" stopColor="var(--accent-custom)" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
                 
@@ -161,21 +161,21 @@ export function HourlyForecastComponent({ hourly }: HourlyForecastProps) {
                   dataKey="time" 
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fontSize: 9, fill: '#888888' }}
+                  tick={{ fontSize: 9, fill: 'var(--text-muted)' }}
                   interval={4}
                 />
                 <YAxis domain={[minTemp - 2, maxTemp + 2]} hide />
                 
                 <Tooltip 
-                  cursor={{ stroke: '#3b82f6', strokeWidth: 1, strokeDasharray: '4 4' }}
+                  cursor={{ stroke: 'var(--accent-custom)', strokeWidth: 1, strokeDasharray: '4 4' }}
                   content={({ active, payload }) => {
                     if (active && payload && payload.length) {
                       const data = payload[0].payload;
                       return (
-                        <div className="bg-white/95 dark:bg-gray-900/95 border border-gray-100 dark:border-gray-800 p-2.5 rounded-xl shadow-md text-[10px] max-w-[150px]">
+                        <div className="bg-surface-strong border border-border-custom p-2.5 rounded-xl shadow-md text-[10px] max-w-[150px] text-text-primary">
                           <div className="font-bold mb-0.5">{data.time}</div>
-                          <div className="text-primary font-extrabold mb-0.5">{data.temp}°</div>
-                          <div className="text-gray-500 dark:text-gray-400">
+                          <div className="text-accent-custom font-extrabold mb-0.5">{data.temp}°</div>
+                          <div className="text-text-secondary">
                             Feels: <strong>{data.feelsLike}°</strong>
                             <br />
                             Wind: <strong>{data.wind} {units === 'imperial' ? 'mph' : 'km/h'}</strong>
@@ -190,7 +190,7 @@ export function HourlyForecastComponent({ hourly }: HourlyForecastProps) {
                 <Area 
                   type="monotone" 
                   dataKey="temp" 
-                  stroke="#3b82f6" 
+                  stroke="var(--accent-custom)" 
                   strokeWidth={2}
                   fillOpacity={1} 
                   fill="url(#colorTempRedesign)" 
@@ -200,8 +200,8 @@ export function HourlyForecastComponent({ hourly }: HourlyForecastProps) {
                   x={chartData[activeIndex].time} 
                   y={chartData[activeIndex].temp} 
                   r={5} 
-                  fill="#3b82f6" 
-                  stroke="#ffffff" 
+                  fill="var(--accent-custom)" 
+                  stroke="var(--bg-primary)" 
                   strokeWidth={2} 
                 />
               </AreaChart>
@@ -211,7 +211,7 @@ export function HourlyForecastComponent({ hourly }: HourlyForecastProps) {
 
         {/* Rain Probability Bar Graph */}
         <div>
-          <div className="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase mb-1">Precipitation Probability</div>
+          <div className="text-[10px] text-text-muted font-bold uppercase mb-1">Precipitation Probability</div>
           <div className="h-14 w-full select-none">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart 
@@ -226,12 +226,12 @@ export function HourlyForecastComponent({ hourly }: HourlyForecastProps) {
                 <YAxis domain={[0, 100]} hide />
                 <XAxis dataKey="time" hide />
                 <Tooltip 
-                  cursor={{ fill: 'rgba(59, 130, 246, 0.05)' }}
+                  cursor={{ fill: 'var(--surface-strong)', opacity: 0.1 }}
                   content={({ active, payload }) => {
                     if (active && payload && payload.length) {
                       const data = payload[0].payload;
                       return (
-                        <div className="bg-white/95 dark:bg-gray-900/95 border border-gray-100 dark:border-gray-800 p-2 rounded-lg shadow-sm text-[10px]">
+                        <div className="bg-surface-strong border border-border-custom p-2 rounded-lg shadow-sm text-[10px] text-text-primary">
                           <span>{data.time}: <strong>{data.pop}% chance</strong></span>
                         </div>
                       );
@@ -241,7 +241,8 @@ export function HourlyForecastComponent({ hourly }: HourlyForecastProps) {
                 />
                 <Bar 
                   dataKey="pop" 
-                  fill="#60a5fa" 
+                  fill="var(--accent-custom)" 
+                  opacity={0.6}
                   radius={[3, 3, 0, 0]}
                   maxBarSize={8}
                 />

@@ -12,12 +12,11 @@ export function WeatherInsights({ data }: WeatherInsightsProps) {
   const { units } = useSettings();
   const { hourly, current } = data;
 
-  // Calculate insights deterministically
   const insights: string[] = [];
   const icons: React.ComponentType<any>[] = [];
   const iconColors: string[] = [];
 
-  // 1. Temperature Range Insight
+  // 1. Temp Range
   const high = Math.round(units === 'imperial' ? cToF(current.high) : current.high);
   const low = Math.round(units === 'imperial' ? cToF(current.low) : current.low);
   const tempRange = high - low;
@@ -25,7 +24,7 @@ export function WeatherInsights({ data }: WeatherInsightsProps) {
   icons.push(Thermometer);
   iconColors.push('text-rose-500 bg-rose-500/10');
 
-  // 2. Warmest part of the day
+  // 2. Warmest part of day
   let maxTemp = -999;
   let warmestHour = '';
   hourly.forEach(hour => {
@@ -40,7 +39,7 @@ export function WeatherInsights({ data }: WeatherInsightsProps) {
     iconColors.push('text-amber-500 bg-amber-500/10');
   }
 
-  // 3. Rain Probabilities
+  // 3. Precipitation Window
   let peakRainProb = 0;
   let rainHours: string[] = [];
   hourly.forEach(hour => {
@@ -69,8 +68,7 @@ export function WeatherInsights({ data }: WeatherInsightsProps) {
     iconColors.push('text-emerald-500 bg-emerald-500/10');
   }
 
-  // 4. Wind increase
-  // Let's divide 24 hours into day (first 12 hours) and night (next 12 hours)
+  // 4. Wind speed
   const firstHalfWind = hourly.slice(0, 12).reduce((acc, h) => acc + h.windSpeed, 0) / 12;
   const secondHalfWind = hourly.slice(12, 24).reduce((acc, h) => acc + h.windSpeed, 0) / 12;
   
@@ -86,19 +84,19 @@ export function WeatherInsights({ data }: WeatherInsightsProps) {
 
   return (
     <div className="glass-card p-6 transition-all duration-300">
-      <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-        <Sparkles size={20} className="text-primary animate-pulse" />
+      <h2 className="text-xs font-bold text-text-muted uppercase tracking-wider mb-4 flex items-center gap-2">
+        <Sparkles size={14} className="text-accent-custom animate-pulse" />
         Weather Insights
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {insights.map((insight, idx) => {
           const Icon = icons[idx];
           return (
-            <div key={idx} className="flex gap-3 bg-black/5 dark:bg-white/5 p-4 rounded-2xl items-start transition-all hover:bg-white dark:hover:bg-gray-800 border border-transparent hover:border-primary/5">
+            <div key={idx} className="flex gap-3 bg-surface border border-border-custom p-4 rounded-2xl items-start transition-all hover:bg-surface-strong">
               <div className={`p-2 rounded-xl shrink-0 ${iconColors[idx]}`}>
-                <Icon size={18} />
+                <Icon size={16} />
               </div>
-              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed font-medium">
+              <p className="text-xs text-text-secondary leading-relaxed font-semibold">
                 {insight}
               </p>
             </div>
