@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { WeatherData, HourlyForecast } from '../types/weather';
 
 /**
  * Open-Meteo WMO Weather interpretation codes
@@ -137,3 +138,61 @@ export function getWeatherBackgroundClass(code: number, isDay: boolean): string 
     return 'bg-gradient-to-b from-[#f4f4f5] to-[#fafafa] text-gray-800';
   }
 }
+
+/**
+ * Generates a dynamic summary based on real API weather data
+ */
+export function generateWeatherSummary(data: WeatherData, units: 'metric' | 'imperial'): string {
+  const { current, hourly } = data;
+  const condition = getWeatherCondition(current.conditionCode, current.isDay).description.toLowerCase();
+  
+  const sentences: string[] = [];
+  
+  // 1. Condition
+  sentences.push(`${condition.charAt(0).toUpperCase() + condition.slice(1)} conditions are observed currently.`);
+
+  // 2. High Temp Hour
+  let maxTemp = -999;
+  let maxHourStr = '';
+  hourly.slice(0, 12).forEach((hour: HourlyForecast) => {
+    if (hour.temperature > maxTemp) {
+      maxTemp = hour.temperature;
+      maxHourStr = formatHour(hour.time);
+    }
+  });
+  
+  if (maxHourStr) {
+    const displayMax = Math.round(units === 'imperial' ? cToF(maxTemp) : maxTemp);
+    sentences.push(`Temperatures will reach a high of ${displayMax}° around ${maxHourStr}.`);
+  }
+
+  // 3. Precipitation Probability
+  let peakRainProb = 0;
+  let peakRainHour = '';
+  hourly.slice(0, 12).forEach((hour: HourlyForecast) => {
+    if (hour.precipitationProbability > peakRainProb) {
+      peakRainProb = hour.precipitationProbability;
+      peakRainHour = formatHour(hour.time);
+    }
+  });
+
+  if (peakRainProb >= 50 && peakRainHour) {
+    sentences.push(`Rain probability peaks at ${peakRainProb}% around ${peakRainHour}.`);
+  } else if (peakRainProb > 15) {
+    sentences.push(`There is a light ${peakRainProb}% chance of rain expected today.`);
+  } else {
+    sentences.push(`Expect dry and stable conditions throughout the day.`);
+  }
+
+  // 4. Winds
+  const displayWind = Math.round(units === 'imperial' ? kmhToMph(current.windSpeed) : current.windSpeed);
+  const windUnit = units === 'imperial' ? 'mph' : 'km/h';
+  if (current.windSpeed > 20) {
+    sentences.push(`Winds will remain brisk at ${displayWind} ${windUnit}.`);
+  } else {
+    sentences.push(`Winds will remain light and gentle.`);
+  }
+
+  return sentences.join(' ');
+}
+

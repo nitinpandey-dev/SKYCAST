@@ -64,6 +64,7 @@ export async function getWeatherData(lat: number, lon: number): Promise<WeatherD
       current: 'temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation_probability,precipitation,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m,dew_point_2m,cloud_cover',
       hourly: 'temperature_2m,apparent_temperature,precipitation_probability,relative_humidity_2m,weather_code,wind_speed_10m,wind_direction_10m,is_day',
       daily: 'weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max,uv_index_max,wind_speed_10m_max',
+      forecast_days: '10',
       timezone: 'auto'
     });
 
