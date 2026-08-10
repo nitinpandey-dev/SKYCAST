@@ -12,6 +12,7 @@ interface SettingsContextType {
   isFavorite: (id: string) => boolean;
   recentSearches: LocationInfo[];
   addRecentSearch: (loc: LocationInfo) => void;
+  removeRecentSearch: (id: string) => void;
   clearRecentSearches: () => void;
 }
 
@@ -105,6 +106,14 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
+  const removeRecentSearch = (id: string) => {
+    setRecentSearchesState(prev => {
+      const newRecents = prev.filter(r => r.id !== id);
+      localStorage.setItem('recentSearches', JSON.stringify(newRecents));
+      return newRecents;
+    });
+  };
+
   const clearRecentSearches = () => {
     setRecentSearchesState([]);
     localStorage.removeItem('recentSearches');
@@ -123,6 +132,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
         isFavorite,
         recentSearches,
         addRecentSearch,
+        removeRecentSearch,
         clearRecentSearches
       }}
     >

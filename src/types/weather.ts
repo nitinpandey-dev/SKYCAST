@@ -4,11 +4,11 @@ export interface Coordinates {
 }
 
 export interface LocationInfo {
-  id: string; // Used as a unique identifier, could be lat,lon
+  id: string;
   name: string;
   country: string;
   countryCode: string;
-  admin1?: string; // State / Region
+  admin1?: string;
   lat: number;
   lon: number;
 }
@@ -34,9 +34,13 @@ export interface CurrentWeather {
 export interface HourlyForecast {
   time: string;
   temperature: number;
+  apparentTemperature: number;
   conditionCode: number;
   precipitationProbability: number;
   isDay: boolean;
+  humidity: number;
+  windSpeed: number;
+  windDirection: number;
 }
 
 export interface DailyForecast {
@@ -45,13 +49,17 @@ export interface DailyForecast {
   low: number;
   conditionCode: number;
   precipitationProbability: number;
+  sunrise: string;
+  sunset: string;
+  uvIndex: number;
+  windSpeedMax: number;
 }
 
 export interface WeatherData {
   current: CurrentWeather;
   hourly: HourlyForecast[];
   daily: DailyForecast[];
-  location?: LocationInfo; // For when reverse geocoded
+  location?: LocationInfo;
 }
 
 export interface WeatherAlert {
@@ -63,6 +71,5 @@ export interface WeatherAlert {
   expires: string;
 }
 
-// Preference types
 export type UnitSystem = 'metric' | 'imperial';
 export type Theme = 'light' | 'dark' | 'system';

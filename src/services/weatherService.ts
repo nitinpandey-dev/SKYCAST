@@ -30,7 +30,6 @@ export async function searchLocations(query: string): Promise<LocationInfo[]> {
 
 export async function reverseGeocode(lat: number, lon: number): Promise<LocationInfo | null> {
   try {
-    // Using bigdatacloud for free reverse geocoding without API key
     const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`);
     if (!response.ok) throw new Error('Failed to reverse geocode');
     
@@ -63,8 +62,8 @@ export async function getWeatherData(lat: number, lon: number): Promise<WeatherD
       latitude: lat.toString(),
       longitude: lon.toString(),
       current: 'temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation_probability,precipitation,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m',
-      hourly: 'temperature_2m,precipitation_probability,weather_code,is_day',
-      daily: 'weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max,uv_index_max',
+      hourly: 'temperature_2m,apparent_temperature,precipitation_probability,relative_humidity_2m,weather_code,wind_speed_10m,wind_direction_10m,is_day',
+      daily: 'weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max,uv_index_max,wind_speed_10m_max',
       timezone: 'auto'
     });
 
@@ -86,7 +85,7 @@ export async function getWeatherData(lat: number, lon: number): Promise<WeatherD
       windSpeed: data.current.wind_speed_10m,
       windDirection: data.current.wind_direction_10m,
       pressure: data.current.surface_pressure,
-      visibility: 10, // Not perfectly provided in this endpoint without extra params, using a default or we could add visibility
+      visibility: 10, // Default visibility mapping
       uvIndex: data.daily.uv_index_max[0] || 0,
       sunrise: data.daily.sunrise[0],
       sunset: data.daily.sunset[0],
@@ -103,9 +102,13 @@ export async function getWeatherData(lat: number, lon: number): Promise<WeatherD
       hourly.push({
         time: data.hourly.time[i],
         temperature: data.hourly.temperature_2m[i],
+        apparentTemperature: data.hourly.apparent_temperature[i],
         conditionCode: data.hourly.weather_code[i],
         precipitationProbability: data.hourly.precipitation_probability[i],
-        isDay: data.hourly.is_day[i] === 1
+        isDay: data.hourly.is_day[i] === 1,
+        humidity: data.hourly.relative_humidity_2m[i],
+        windSpeed: data.hourly.wind_speed_10m[i],
+        windDirection: data.hourly.wind_direction_10m[i]
       });
     }
 
@@ -117,7 +120,11 @@ export async function getWeatherData(lat: number, lon: number): Promise<WeatherD
         high: data.daily.temperature_2m_max[i],
         low: data.daily.temperature_2m_min[i],
         conditionCode: data.daily.weather_code[i],
-        precipitationProbability: data.daily.precipitation_probability_max[i]
+        precipitationProbability: data.daily.precipitation_probability_max[i],
+        sunrise: data.daily.sunrise[i],
+        sunset: data.daily.sunset[i],
+        uvIndex: data.daily.uv_index_max[i] || 0,
+        windSpeedMax: data.daily.wind_speed_10m_max[i] || 0
       });
     }
 
