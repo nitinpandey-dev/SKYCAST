@@ -40,7 +40,7 @@ export function HourlyForecast({ hourly, activeIndex, onActiveIndexChange }: Hou
       </div>
 
       {/* Selected Hour Details (Floating Glass Pill) */}
-      <div className="bg-surface-elevated/40 border border-border-custom/40 rounded-2xl p-3 flex flex-wrap items-center justify-between gap-3.5 mb-4 transition-all duration-300">
+      <div className="glass-inset p-3 flex flex-wrap items-center justify-between gap-3.5 mb-4 transition-all duration-300">
         <div className="flex items-center gap-2.5">
           <div className="text-accent-custom bg-accent-custom/8 p-1.5 rounded-xl">
             <WeatherIcon name={activeCondition.icon} size={16} />
@@ -60,19 +60,19 @@ export function HourlyForecast({ hourly, activeIndex, onActiveIndexChange }: Hou
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-1.5 text-[10px] text-text-secondary">
           <div className="flex items-center gap-1">
             <Eye size={11} className="text-text-muted" />
-            <span>Feels: <strong className="font-semibold text-text-primary">{activeFeels}°</strong></span>
+            <span>Feels: <strong className="font-semibold text-text-primary dark:text-[#E8EEF6]">{activeFeels}°</strong></span>
           </div>
           <div className="flex items-center gap-1">
             <CloudRain size={11} className="text-accent-custom" />
-            <span>Rain: <strong className="font-semibold text-text-primary">{activeHour.precipitationProbability}%</strong></span>
+            <span>Rain: <strong className="font-semibold text-accent-custom">{activeHour.precipitationProbability}%</strong></span>
           </div>
           <div className="flex items-center gap-1">
             <Droplets size={11} className="text-teal-500" />
-            <span>Humidity: <strong className="font-semibold text-text-primary">{activeHour.humidity}%</strong></span>
+            <span>Humidity: <strong className="font-semibold text-text-primary dark:text-[#34D399]">{activeHour.humidity}%</strong></span>
           </div>
           <div className="flex items-center gap-1">
             <Wind size={11} className="text-emerald-500" />
-            <span>Wind: <strong className="font-semibold text-text-primary">{Math.round(activeWind)} {activeWindUnit}</strong></span>
+            <span>Wind: <strong className="font-semibold text-text-primary dark:text-[#E8EEF6]">{Math.round(activeWind)} {activeWindUnit}</strong></span>
           </div>
         </div>
       </div>

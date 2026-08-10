@@ -1,185 +1,165 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-@variant dark (&:where(.dark, .dark *));
+/* ── Tailwind v4 dark-mode variant — matches .dark on <html> ── */
+@custom-variant dark (&:where(html.dark *, html.dark));
+@variant dark (&:where(html.dark *, html.dark));
 
 /* ============================================================
-   SKYCAST — Design Token System
-   All theme-aware values live here as CSS custom properties.
-   Components consume these variables — never hardcode colors.
+   SKYCAST — CSS Custom Property Design Tokens
+
+   These are the ONLY authoritative color sources.
+   Tailwind utilities referencing these work via CSS var() chains.
+
+   DO NOT add opacity to parent containers to solve contrast.
+   DO NOT add global filters or backdrops.
    ============================================================ */
 
 @layer base {
-  /* ── Light Mode ── */
+
+  /* ── Light Mode defaults ── */
   :root {
-    /* Page background — soft atmospheric blue-gray */
-    --bg: #EAF3FB;
+    --bg:               #EAF3FB;
+    --surface:          rgba(255, 255, 255, 0.55);
+    --surface-elevated: rgba(255, 255, 255, 0.78);
+    --surface-strong:   rgba(244, 248, 253, 0.97);
 
-    /* Glass surfaces */
-    --surface: rgba(255, 255, 255, 0.52);
-    --surface-elevated: rgba(255, 255, 255, 0.72);
-    /* Solid-enough for dropdowns & overlays — must stay readable */
-    --surface-strong: rgba(245, 248, 252, 0.97);
+    --text-primary:     #172033;
+    --text-secondary:   #536174;
+    --text-muted:       #718096;
 
-    /* Text hierarchy */
-    --text-primary: #172033;
-    --text-secondary: #536174;
-    --text-muted: #718096;
+    --border:           rgba(255, 255, 255, 0.68);
+    --border-subtle:    rgba(0, 0, 0, 0.07);
 
-    /* Borders */
-    --border: rgba(255, 255, 255, 0.65);
-    --border-subtle: rgba(0, 0, 0, 0.07);
-
-    /* Accent */
-    --accent: #3478F6;
-
-    /* Charts */
-    --chart-line: #3478F6;
-    --chart-area-start: rgba(52, 120, 246, 0.18);
-    --chart-area-end: rgba(52, 120, 246, 0);
-    --chart-bar: rgba(52, 120, 246, 0.45);
-    --chart-bar-active: #3478F6;
-    --chart-grid: rgba(0, 0, 0, 0.05);
-    --chart-tick: #718096;
+    --accent:           #3478F6;
   }
 
-  /* ── Dark Mode ── */
-  .dark {
-    /* Page background — deep navy */
-    --bg: #07111F;
+  /* ── Dark Mode overrides (applied via .dark on <html>) ── */
+  html.dark {
+    --bg:               #07111F;
+    --surface:          rgba(255, 255, 255, 0.045);
+    --surface-elevated: rgba(255, 255, 255, 0.07);
+    --surface-strong:   rgba(7, 17, 31, 0.97);
 
-    /* Glass surfaces */
-    --surface: rgba(255, 255, 255, 0.06);
-    --surface-elevated: rgba(255, 255, 255, 0.10);
-    /* Solid-enough for dropdowns & overlays in dark */
-    --surface-strong: rgba(8, 18, 36, 0.97);
+    --text-primary:     #F8FAFC;
+    --text-secondary:   #AAB7C8;
+    --text-muted:       #7F8DA1;
 
-    /* Text hierarchy */
-    --text-primary: #F5F7FA;
-    --text-secondary: #AAB7C8;
-    --text-muted: #7F8DA1;
+    --border:           rgba(255, 255, 255, 0.10);
+    --border-subtle:    rgba(255, 255, 255, 0.05);
 
-    /* Borders */
-    --border: rgba(255, 255, 255, 0.11);
-    --border-subtle: rgba(255, 255, 255, 0.05);
-
-    /* Accent */
-    --accent: #60A5FA;
-
-    /* Charts */
-    --chart-line: #60A5FA;
-    --chart-area-start: rgba(96, 165, 250, 0.20);
-    --chart-area-end: rgba(96, 165, 250, 0);
-    --chart-bar: rgba(96, 165, 250, 0.35);
-    --chart-bar-active: #60A5FA;
-    --chart-grid: rgba(255, 255, 255, 0.04);
-    --chart-tick: #7F8DA1;
+    --accent:           #60A5FA;
   }
-}
 
-/* ── Tailwind @theme bridge ── */
-@theme {
-  --color-bg-custom: var(--bg);
-  --color-surface-custom: var(--surface);
-  --color-surface-elevated: var(--surface-elevated);
-  --color-surface-strong: var(--surface-strong);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-muted: var(--text-muted);
-  --color-border-custom: var(--border);
-  --color-border-subtle: var(--border-subtle);
-  --color-accent-custom: var(--accent);
-}
-
-/* ── Base body ── */
-@layer base {
+  /* ── Body ── */
   body {
     background-color: var(--bg);
     color: var(--text-primary);
     @apply antialiased min-h-screen;
-    /* Smooth color transitions on theme switch — applied to body,
-       propagates via inheritance. Never put opacity here. */
     transition: background-color 0.25s ease, color 0.25s ease;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
-                 "Inter", system-ui, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+                 "SF Pro Text", "Inter", system-ui, sans-serif;
   }
 }
 
+/* ── Tailwind @theme bridge ─────────────────────────────────
+   These expose CSS variables as Tailwind utility classes.
+   e.g. text-text-primary → color: var(--color-text-primary)
+   The var() chains are dynamic — .dark overrides propagate.
+   ─────────────────────────────────────────────────────────── */
+@theme {
+  --color-bg-custom:         var(--bg);
+  --color-surface-custom:    var(--surface);
+  --color-surface-elevated:  var(--surface-elevated);
+  --color-surface-strong:    var(--surface-strong);
+  --color-text-primary:      var(--text-primary);
+  --color-text-secondary:    var(--text-secondary);
+  --color-text-muted:        var(--text-muted);
+  --color-border-custom:     var(--border);
+  --color-border-subtle:     var(--border-subtle);
+  --color-accent-custom:     var(--accent);
+}
+
 /* ============================================================
-   Component utilities
+   Glass component classes
    ============================================================ */
 @layer components {
-  /* Standard glass card — used by most section panels */
+
+  /* Standard section card */
   .glass-card {
     background: var(--surface);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
     border: 1px solid var(--border);
     border-radius: 20px;
-    /* Subtle inner-top highlight gives depth without opacity hacks */
-    box-shadow:
-      0 1px 0 0 rgba(255, 255, 255, 0.08) inset,
-      0 4px 24px rgba(0, 0, 0, 0.04);
-    transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+    transition:
+      background 0.25s ease,
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
   }
 
-  .dark .glass-card {
-    box-shadow:
-      0 1px 0 0 rgba(255, 255, 255, 0.06) inset,
-      0 4px 24px rgba(0, 0, 0, 0.20);
+  html.dark .glass-card {
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.30);
   }
 
-  /* Stronger glass — for summary text blocks, insights */
-  .glass-card-strong {
-    background: var(--surface-elevated);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--border);
+  /* Header — slightly stronger than a normal card */
+  .glass-header {
+    background: rgba(255, 255, 255, 0.60);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.68);
     border-radius: 20px;
-    box-shadow:
-      0 1px 0 0 rgba(255, 255, 255, 0.10) inset,
-      0 4px 24px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
     transition: background 0.25s ease, border-color 0.25s ease;
   }
 
-  .dark .glass-card-strong {
-    box-shadow:
-      0 1px 0 0 rgba(255, 255, 255, 0.06) inset,
-      0 4px 24px rgba(0, 0, 0, 0.25);
+  html.dark .glass-header {
+    background: rgba(14, 26, 46, 0.88);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.40);
   }
 
-  /* Dropdown / overlay surface — must always be highly legible */
+  /* Dropdown / overlay — near-opaque for maximum readability */
   .glass-dropdown {
     background: var(--surface-strong);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border: 1px solid var(--border);
     border-radius: 16px;
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.14);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.16);
     transition: background 0.25s ease;
   }
 
-  .dark .glass-dropdown {
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.45);
+  html.dark .glass-dropdown {
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.55);
+  }
+
+  /* Sub-panel inside a card (e.g. active hour row) */
+  .glass-inset {
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 14px;
+    transition: background 0.25s ease;
+  }
+
+  html.dark .glass-inset {
+    background: rgba(255, 255, 255, 0.055);
+    border-color: rgba(255, 255, 255, 0.10);
   }
 }
 
 /* ============================================================
-   Utilities
+   Scrollbar utilities
    ============================================================ */
-
-/* Hide scrollbar for horizontal forecast strips */
 .hide-scrollbar::-webkit-scrollbar { display: none; }
 .hide-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
-/* Respect user motion preferences */
+/* Respect prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

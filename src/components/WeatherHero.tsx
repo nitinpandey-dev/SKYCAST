@@ -100,9 +100,14 @@ export function WeatherHero({ data, onRefresh, isLoading, lastUpdated }: Weather
         {/* Favorite capsule */}
         <button 
           onClick={toggleFavorite}
-          className={`flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-custom hover:bg-surface-elevated text-[11px] font-semibold text-text-primary border border-border-custom/80 shadow-sm active:scale-95 transition-all cursor-pointer ${
-            fav ? 'bg-amber-400/10 dark:bg-amber-400/5 border-amber-400/30' : ''
-          }`}
+          className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold border shadow-sm active:scale-95 transition-all cursor-pointer
+            bg-surface-custom hover:bg-surface-elevated
+            text-text-primary
+            border-border-custom/80
+            dark:bg-[rgba(255,255,255,0.07)] dark:hover:bg-[rgba(96,165,250,0.14)]
+            dark:text-[#E5EAF2] dark:border-[rgba(255,255,255,0.14)]
+            ${fav ? 'bg-amber-400/10 dark:bg-amber-400/8 border-amber-400/30' : ''}
+          `}
         >
           <Star 
             size={11} 
@@ -119,7 +124,10 @@ export function WeatherHero({ data, onRefresh, isLoading, lastUpdated }: Weather
           <button 
             onClick={onRefresh}
             disabled={isLoading}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold text-text-primary bg-surface-custom hover:bg-surface-elevated border border-border-custom/80 active:scale-95 transition-all cursor-pointer shadow-sm"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold active:scale-95 transition-all cursor-pointer shadow-sm border
+              bg-surface-custom hover:bg-surface-elevated text-text-primary border-border-custom/80
+              dark:bg-[rgba(255,255,255,0.07)] dark:hover:bg-[rgba(96,165,250,0.14)]
+              dark:text-[#E5EAF2] dark:border-[rgba(255,255,255,0.14)]"
           >
             <RefreshCw size={10} className={isLoading ? 'animate-spin' : ''} />
             <span>Refresh</span>

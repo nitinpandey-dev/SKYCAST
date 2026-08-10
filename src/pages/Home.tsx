@@ -102,7 +102,7 @@ export function Home() {
 
   if (initLoading) {
     return (
-      <div className={`min-h-screen ${isDark ? 'dark' : ''} ${bgClass}`}>
+      <div className={`min-h-screen ${bgClass}`}>
         <WeatherHeader 
           onLocationSelect={handleLocationSelect}
           onUseLocation={handleUseLocation}
@@ -117,7 +117,7 @@ export function Home() {
   const summaryText = data ? generateWeatherSummary(data, units) : '';
 
   return (
-    <div className={`min-h-screen ${isDark ? 'dark' : ''} ${bgClass} pb-12 transition-colors duration-200 relative overflow-x-hidden`}>
+    <div className={`min-h-screen ${bgClass} pb-12 transition-colors duration-200 relative overflow-x-hidden`}>
       <WeatherHeader 
         onLocationSelect={handleLocationSelect}
         onUseLocation={handleUseLocation}

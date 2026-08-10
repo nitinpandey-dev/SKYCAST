@@ -41,7 +41,7 @@ export function WeatherHeader({
 
   return (
     <header className="w-full px-4 pt-3 sticky top-0 z-40 select-none">
-      <div className="max-w-7xl mx-auto glass-card h-[58px] md:h-[66px] px-3 sm:px-4 flex items-center justify-between gap-2.5 sm:gap-4 shadow-sm border border-border-custom/40">
+      <div className="max-w-7xl mx-auto glass-header h-[58px] md:h-[66px] px-3 sm:px-4 flex items-center justify-between gap-2.5 sm:gap-4 shadow-sm">
         
         {/* Left Side: Logo & Location Switcher */}
         <div className="flex items-center gap-3 shrink-0">
