@@ -18,7 +18,7 @@ import { useSettings } from '../contexts/SettingsContext';
 import { LocationInfo } from '../types/weather';
 import { searchLocations } from '../services/weatherService';
 import { getWeatherBackgroundClass, generateWeatherSummary } from '../utils/weatherUtils';
-import { CloudOff, Search, Info } from 'lucide-react';
+import { CloudOff, Info } from 'lucide-react';
 
 const DEFAULT_LOCATION: LocationInfo = {
   id: 'default',
@@ -178,11 +178,10 @@ export function Home() {
     );
   }
 
-  // Generate real data summary
   const summaryText = data ? generateWeatherSummary(data, units) : '';
 
   return (
-    <div className={`min-h-screen ${bgClass} pb-20 md:pb-12 transition-[background-color,color,border-color,box-shadow] duration-300 relative overflow-x-hidden`}>
+    <div className={`min-h-screen ${bgClass} pb-20 md:pb-8 transition-[background-color,color,border-color,box-shadow] duration-300 relative overflow-x-hidden`}>
       {/* Dynamic weather overlay */}
       {data?.current && (
         <WeatherEffectsOverlay code={data.current.conditionCode} isDay={data.current.isDay} />
@@ -196,11 +195,11 @@ export function Home() {
           activeLocation={activeLocation}
         />
         
-        <main className="w-full max-w-7xl mx-auto p-4 md:p-6">
+        <main className="w-full max-w-7xl mx-auto p-3 sm:p-4 md:p-6">
           
           {error && (
-            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 p-3.5 rounded-2xl mb-6 flex items-center gap-2.5 text-xs">
-              <CloudOff size={20} className="shrink-0" />
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 p-3 rounded-2xl mb-4 flex items-center gap-2 text-xs">
+              <CloudOff size={16} className="shrink-0" />
               <div>
                 <h3 className="font-bold">Weather data unavailable</h3>
                 <p className="text-gray-500 dark:text-gray-400">{error}</p>
@@ -214,13 +213,13 @@ export function Home() {
             </div>
           ) : data ? (
             <div>
-              {/* MOBILE LAYOUT (Tab-based, single column) */}
+              {/* MOBILE LAYOUT (Tab-based scrolling stack, tight gaps) */}
               {isMobile ? (
-                <div className="space-y-5 animate-in fade-in duration-300">
+                <div className="space-y-4 animate-in fade-in duration-300">
                   
                   {activeMobileTab === 'weather' && (
                     <>
-                      {/* Weather display sitting directly on background */}
+                      {/* Weather display directly on sky background */}
                       <CurrentWeather 
                         data={data} 
                         onRefresh={refreshWeather} 
@@ -228,89 +227,102 @@ export function Home() {
                         lastUpdated={lastUpdated}
                       />
 
-                      {/* iPhone-style Weather Summary Panel */}
+                      {/* Compact Weather Summary Panel */}
                       {summaryText && (
-                        <div className="glass-card p-4 flex gap-3 items-start">
-                          <Info size={16} className="text-accent-custom shrink-0 mt-0.5" />
+                        <div className="glass-card p-3.5 flex gap-2.5 items-start">
+                          <Info size={14} className="text-accent-custom shrink-0 mt-0.5" />
                           <p className="text-xs text-text-secondary dark:text-[#DCE5F0] leading-relaxed font-semibold">
                             {summaryText}
                           </p>
                         </div>
                       )}
                       
-                      {/* Compact Hourly Scroll & timeline info */}
+                      {/* Compact Hourly (strip + embedded graph details) */}
                       <HourlyForecastComponent hourly={data.hourly} />
-                      <WeatherTimeline hourly={data.hourly} />
-                      <WeatherInsights data={data} />
                       
-                      {/* Accordion daily list */}
+                      {/* 10-day forecast accordion */}
                       <DailyForecastComponent daily={data.daily} />
+                      
+                      {/* Complete Current Weather variables grid */}
+                      <WeatherDetails current={data.current} />
+
+                      {/* Astronomy details */}
                       <SunriseSunset sunrise={data.current.sunrise} sunset={data.current.sunset} />
                       
-                      {/* Dense detail grid */}
-                      <WeatherDetails current={data.current} />
+                      {/* Timeline */}
+                      <WeatherTimeline hourly={data.hourly} />
+
+                      {/* Insights */}
+                      <WeatherInsights data={data} />
                     </>
                   )}
 
                   {activeMobileTab === 'map' && (
-                    <div className="h-[450px]">
+                    <div className="h-[380px] sm:h-[450px]">
                       <WeatherMap activeLocation={activeLocation} currentWeatherData={data} />
                     </div>
                   )}
 
                   {activeMobileTab === 'locations' && (
                     <div className="space-y-4">
-                      {/* Search history & Favorites */}
                       <FavoriteLocations onSelect={handleLocationSelect} />
                     </div>
                   )}
 
-                  {/* Translucent glass bottom tab navigation */}
+                  {/* Translucent bottom tab navigation */}
                   <MobileBottomNav activeTab={activeMobileTab} onTabChange={setActiveMobileTab} />
                 </div>
               ) : (
-                /* DESKTOP LAYOUT (3-Column Premium Dashboard) */
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start animate-in fade-in duration-300">
+                /* DESKTOP LAYOUT (Clean Grid, High Information Density) */
+                <div className="space-y-5 animate-in fade-in duration-300">
                   
-                  {/* Left Column (Focus & Timeline/Graphs) */}
-                  <div className="lg:col-span-2 space-y-6">
-                    <CurrentWeather 
-                      data={data} 
-                      onRefresh={refreshWeather} 
-                      isLoading={weatherLoading}
-                      lastUpdated={lastUpdated}
-                    />
+                  {/* Hero Row: Current Weather Details */}
+                  <CurrentWeather 
+                    data={data} 
+                    onRefresh={refreshWeather} 
+                    isLoading={weatherLoading}
+                    lastUpdated={lastUpdated}
+                  />
 
-                    {/* Integrated Summary */}
-                    {summaryText && (
-                      <div className="glass-card p-4 flex gap-3 items-start">
-                        <Info size={16} className="text-accent-custom shrink-0 mt-0.5" />
-                        <p className="text-xs text-text-secondary dark:text-[#DCE5F0] leading-relaxed font-semibold">
-                          {summaryText}
-                        </p>
-                      </div>
-                    )}
-                    
-                    <HourlyForecastComponent hourly={data.hourly} />
+                  {/* Summary row */}
+                  {summaryText && (
+                    <div className="glass-card p-3 flex gap-2.5 items-start max-w-4xl">
+                      <Info size={14} className="text-accent-custom shrink-0 mt-0.5" />
+                      <p className="text-xs text-text-secondary dark:text-[#DCE5F0] leading-relaxed font-semibold">
+                        {summaryText}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Hourly forecast & temperature trend graphs */}
+                  <HourlyForecastComponent hourly={data.hourly} />
+
+                  {/* Row 2: 10-Day Forecast & Weather Details side-by-side */}
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
+                    <DailyForecastComponent daily={data.daily} />
+                    <WeatherDetails current={data.current} />
+                  </div>
+
+                  {/* Row 3: Sun Position, Timeline, and Insights in a 3-column grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start">
+                    <SunriseSunset sunrise={data.current.sunrise} sunset={data.current.sunset} />
                     <WeatherTimeline hourly={data.hourly} />
                     <WeatherInsights data={data} />
                   </div>
 
-                  {/* Right Column (Accordion lists, sun path, details, map) */}
-                  <div className="space-y-6">
-                    <DailyForecastComponent daily={data.daily} />
-                    <SunriseSunset sunrise={data.current.sunrise} sunset={data.current.sunset} />
-                    <WeatherDetails current={data.current} />
-                    <WeatherMap activeLocation={activeLocation} currentWeatherData={data} />
-                  </div>
+                  {/* Row 4: Weather Map */}
+                  <WeatherMap activeLocation={activeLocation} currentWeatherData={data} />
 
-                  {/* Standalone Favorites bottom bar */}
-                  <div className="lg:col-span-3">
-                    <FavoriteLocations onSelect={handleLocationSelect} />
-                  </div>
+                  {/* Row 5: Saved Locations / Favorites */}
+                  <FavoriteLocations onSelect={handleLocationSelect} />
 
                 </div>
               )}
+
+              {/* Muted Open-Meteo Attribution Footer */}
+              <div className="w-full text-center mt-8 pb-4 text-[9px] font-bold text-text-muted uppercase tracking-wider select-none">
+                Weather data provided by <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer" className="hover:text-accent-custom transition-colors">Open-Meteo</a>
+              </div>
             </div>
           ) : null}
           
@@ -319,3 +331,4 @@ export function Home() {
     </div>
   );
 }
+export default Home;

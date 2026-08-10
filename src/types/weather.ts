@@ -31,6 +31,8 @@ export interface CurrentWeather {
   low: number;
   dewPoint: number;
   cloudCover: number;
+  precipitation: number;
+  windGusts: number;
 }
 
 export interface HourlyForecast {
@@ -55,6 +57,12 @@ export interface DailyForecast {
   sunset: string;
   uvIndex: number;
   windSpeedMax: number;
+  precipitationSum: number;
+  windDirectionDominant: number;
+  windGustsMax: number;
+  humidityAvg: number;
+  cloudCoverAvg: number;
+  pressureAvg: number;
 }
 
 export interface WeatherData {

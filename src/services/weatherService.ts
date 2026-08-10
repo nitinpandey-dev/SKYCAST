@@ -61,9 +61,9 @@ export async function getWeatherData(lat: number, lon: number): Promise<WeatherD
     const params = new URLSearchParams({
       latitude: lat.toString(),
       longitude: lon.toString(),
-      current: 'temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation_probability,precipitation,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m,dew_point_2m,cloud_cover',
-      hourly: 'temperature_2m,apparent_temperature,precipitation_probability,relative_humidity_2m,weather_code,wind_speed_10m,wind_direction_10m,is_day',
-      daily: 'weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max,uv_index_max,wind_speed_10m_max',
+      current: 'temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation_probability,precipitation,weather_code,surface_pressure,wind_speed_10m,wind_direction_10m,dew_point_2m,cloud_cover,wind_gusts_10m,visibility',
+      hourly: 'temperature_2m,apparent_temperature,precipitation_probability,relative_humidity_2m,weather_code,wind_speed_10m,wind_direction_10m,is_day,cloud_cover,surface_pressure',
+      daily: 'weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset,precipitation_probability_max,uv_index_max,wind_speed_10m_max,precipitation_sum,wind_direction_10m_dominant,wind_gusts_10m_max',
       forecast_days: '10',
       timezone: 'auto'
     });
@@ -86,14 +86,16 @@ export async function getWeatherData(lat: number, lon: number): Promise<WeatherD
       windSpeed: data.current.wind_speed_10m,
       windDirection: data.current.wind_direction_10m,
       pressure: data.current.surface_pressure,
-      visibility: 10, // Default mapping
+      visibility: data.current.visibility ? data.current.visibility / 1000 : 10,
       uvIndex: data.daily.uv_index_max[0] || 0,
       sunrise: data.daily.sunrise[0],
       sunset: data.daily.sunset[0],
       high: data.daily.temperature_2m_max[0],
       low: data.daily.temperature_2m_min[0],
       dewPoint: data.current.dew_point_2m,
-      cloudCover: data.current.cloud_cover
+      cloudCover: data.current.cloud_cover,
+      precipitation: data.current.precipitation || 0,
+      windGusts: data.current.wind_gusts_10m || 0
     };
 
     // Parse hourly forecast (next 24 hours)
@@ -115,9 +117,23 @@ export async function getWeatherData(lat: number, lon: number): Promise<WeatherD
       });
     }
 
-    // Parse daily forecast (7 days)
+    // Parse daily forecast (10 days)
     const daily: DailyForecast[] = [];
     for (let i = 0; i < data.daily.time.length; i++) {
+      const hourlyStart = i * 24;
+      const hourlyEnd = Math.min((i + 1) * 24, data.hourly.time.length);
+      const hourlyCount = hourlyEnd - hourlyStart || 1;
+      
+      let humiditySum = 0;
+      let cloudCoverSum = 0;
+      let pressureSum = 0;
+      
+      for (let h = hourlyStart; h < hourlyEnd; h++) {
+        humiditySum += data.hourly.relative_humidity_2m[h] || 0;
+        cloudCoverSum += data.hourly.cloud_cover[h] || 0;
+        pressureSum += data.hourly.surface_pressure[h] || 1013;
+      }
+
       daily.push({
         date: data.daily.time[i],
         high: data.daily.temperature_2m_max[i],
@@ -127,7 +143,13 @@ export async function getWeatherData(lat: number, lon: number): Promise<WeatherD
         sunrise: data.daily.sunrise[i],
         sunset: data.daily.sunset[i],
         uvIndex: data.daily.uv_index_max[i] || 0,
-        windSpeedMax: data.daily.wind_speed_10m_max[i] || 0
+        windSpeedMax: data.daily.wind_speed_10m_max[i] || 0,
+        precipitationSum: data.daily.precipitation_sum[i] || 0,
+        windDirectionDominant: data.daily.wind_direction_10m_dominant[i] || 0,
+        windGustsMax: data.daily.wind_gusts_10m_max[i] || 0,
+        humidityAvg: Math.round(humiditySum / hourlyCount),
+        cloudCoverAvg: Math.round(cloudCoverSum / hourlyCount),
+        pressureAvg: Math.round(pressureSum / hourlyCount)
       });
     }
 

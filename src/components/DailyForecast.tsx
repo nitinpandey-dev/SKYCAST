@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { DailyForecast } from '../types/weather';
 import { useSettings } from '../contexts/SettingsContext';
-import { cToF, formatDay, getWeatherCondition, kmhToMph, formatTime } from '../utils/weatherUtils';
+import { cToF, formatDay, getWeatherCondition, kmhToMph, formatTime, getWindDirection } from '../utils/weatherUtils';
 import { WeatherIcon } from './Icons';
-import { ChevronDown, Sunrise, Sunset, Sun, Wind } from 'lucide-react';
+import { ChevronDown, Sunrise, Sunset, Sun, Wind, CloudRain, Droplets, Cloud, Gauge } from 'lucide-react';
 
 interface DailyForecastProps {
   daily: DailyForecast[];
@@ -32,18 +32,18 @@ export function DailyForecastComponent({ daily }: DailyForecastProps) {
   // Theme-aware setup
   const isDark = document.documentElement.classList.contains('dark');
   const barGradStart = isDark ? 'var(--accent-custom)' : '#3478F6';
-  const barGradEnd = '#f59e0b'; // Muted amber for high temps
+  const barGradEnd = '#f59e0b'; // Warm accent
 
   return (
-    <div className="glass-card p-5 sm:p-6 transition-all duration-300">
-      <div className="flex items-center justify-between mb-4">
+    <div className="glass-card p-4 sm:p-5 transition-all duration-300 w-full">
+      <div className="flex items-center justify-between mb-3 border-b border-border-custom/25 pb-2">
         <h2 className="text-xs font-bold text-text-muted uppercase tracking-wider">
           {daily.length}-Day Forecast
         </h2>
-        <span className="text-[9px] text-text-muted font-semibold uppercase">Details on click</span>
+        <span className="text-[10px] text-text-muted font-semibold">Click row to expand details</span>
       </div>
       
-      {/* Unified List Panel (No individual card borders, rows have subtle separators) */}
+      {/* Unified List Panel */}
       <div className="flex flex-col">
         {daily.map((day, index) => {
           const condition = getWeatherCondition(day.conditionCode, true);
@@ -53,12 +53,18 @@ export function DailyForecastComponent({ daily }: DailyForecastProps) {
           const isExpanded = expandedIndex === index;
           
           const displayWindMax = Math.round(units === 'imperial' ? kmhToMph(day.windSpeedMax) : day.windSpeedMax);
+          const displayWindGust = Math.round(units === 'imperial' ? kmhToMph(day.windGustsMax) : day.windGustsMax);
           const windUnit = units === 'imperial' ? 'mph' : 'km/h';
+          const windDirStr = getWindDirection(day.windDirectionDominant);
+
+          const displayPrecipSum = units === 'imperial'
+            ? (day.precipitationSum * 0.03937).toFixed(2) + ' in'
+            : day.precipitationSum.toFixed(1) + ' mm';
 
           let uvLevel = 'Low';
           if (day.uvIndex >= 3 && day.uvIndex <= 5) uvLevel = 'Mod';
           else if (day.uvIndex >= 6 && day.uvIndex <= 7) uvLevel = 'High';
-          else if (day.uvIndex >= 8 && day.uvIndex <= 10) uvLevel = 'Very High';
+          else if (day.uvIndex >= 8 && day.uvIndex <= 10) uvLevel = 'V. High';
           else if (day.uvIndex >= 11) uvLevel = 'Extreme';
 
           const leftPercent = ((temps.low - absoluteMin) / absoluteDiff) * 100;
@@ -78,23 +84,29 @@ export function DailyForecastComponent({ daily }: DailyForecastProps) {
                 className="w-full flex items-center justify-between text-left focus:outline-none cursor-pointer text-xs sm:text-sm text-text-primary font-medium"
                 aria-expanded={isExpanded}
               >
-                <span className={`w-12 sm:w-16 font-semibold truncate ${isToday ? 'text-accent-custom' : ''}`}>
+                {/* Day column (Today / Mon / Tue) */}
+                <span className={`w-12 sm:w-16 font-semibold truncate shrink-0 ${isToday ? 'text-accent-custom' : ''}`}>
                   {isToday ? 'Today' : label}
                 </span>
                 
-                <div className="flex items-center gap-2.5 w-16 justify-start shrink-0">
+                {/* Condition Icon & Rain probability */}
+                <div className="flex items-center gap-2 w-14 sm:w-16 justify-start shrink-0">
                   <WeatherIcon name={condition.icon} size={14} className="text-text-secondary" />
-                  <span className="text-[9px] text-accent-custom font-bold">
+                  <span className="text-[9px] text-accent-custom font-extrabold">
                     {day.precipitationProbability > 0 ? `${day.precipitationProbability}%` : ''}
                   </span>
                 </div>
 
-                {/* Range Bar tracking */}
-                <div className="flex items-center gap-3 flex-1 justify-end">
+                {/* Condition Text (Desktop/Tablet only) */}
+                <span className="text-xs text-text-secondary font-medium w-28 truncate hidden sm:block">
+                  {condition.description}
+                </span>
+
+                {/* Range Bar Indicator */}
+                <div className="flex items-center gap-2.5 flex-1 justify-end">
                   <span className="text-text-secondary w-6 text-right font-medium">{temps.low}°</span>
                   
-                  {/* Range indicator track */}
-                  <div className="w-14 sm:w-28 h-1.5 bg-surface-strong rounded-full relative overflow-hidden shrink-0">
+                  <div className="w-12 sm:w-24 h-1.5 bg-surface-strong rounded-full relative overflow-hidden shrink-0">
                     <div 
                       className="absolute h-full rounded-full"
                       style={{
@@ -106,28 +118,65 @@ export function DailyForecastComponent({ daily }: DailyForecastProps) {
                   </div>
                   
                   <span className="text-text-primary w-6 text-right font-semibold">{temps.high}°</span>
-                  <ChevronDown size={10} className={`text-text-muted transition-transform duration-250 ${isExpanded ? 'rotate-180 text-accent-custom' : ''}`} />
                 </div>
+
+                {/* Wind & Wind direction (Desktop/Tablet only) */}
+                <span className="text-xs text-text-secondary font-medium w-24 text-right truncate hidden md:block shrink-0">
+                  {displayWindMax} {windUnit} {windDirStr}
+                </span>
+
+                <ChevronDown size={10} className={`text-text-muted transition-transform duration-250 ml-2 shrink-0 ${isExpanded ? 'rotate-180 text-accent-custom' : ''}`} />
               </button>
 
-              {/* Detail panel */}
+              {/* Accordion Detail Panel (Displays ALL daily variables) */}
               {isExpanded && (
-                <div className="mt-3 pt-3 border-t border-border-custom/40 grid grid-cols-2 gap-y-3 gap-x-4 text-[10px] sm:text-xs text-text-secondary animate-in fade-in duration-200">
-                  <div className="flex items-center gap-1.5">
-                    <Sunrise size={12} className="text-orange-400 shrink-0" />
-                    <span>Sunrise: <strong className="font-semibold text-text-primary">{formatTime(day.sunrise)}</strong></span>
+                <div className="mt-3 pt-3 border-t border-border-custom/40 grid grid-cols-2 sm:grid-cols-3 gap-y-3.5 gap-x-4 text-[10px] sm:text-xs text-text-secondary animate-in fade-in duration-200">
+                  <div className="flex items-center gap-2 text-left">
+                    <WeatherIcon name="Thermometer" size={14} className="text-rose-500 shrink-0" />
+                    <div>
+                      <div className="text-[8px] font-bold text-text-muted uppercase leading-none mb-0.5">Temperature</div>
+                      <div>H: <strong>{temps.high}°</strong> &bull; L: <strong>{temps.low}°</strong></div>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <Sunset size={12} className="text-red-400 shrink-0" />
-                    <span>Sunset: <strong className="font-semibold text-text-primary">{formatTime(day.sunset)}</strong></span>
+
+                  <div className="flex items-center gap-2 text-left">
+                    <CloudRain size={14} className="text-accent-custom shrink-0" />
+                    <div>
+                      <div className="text-[8px] font-bold text-text-muted uppercase leading-none mb-0.5">Precipitation</div>
+                      <div>Prob: <strong>{day.precipitationProbability}%</strong> &bull; Sum: <strong>{displayPrecipSum}</strong></div>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <Sun size={12} className="text-amber-500 shrink-0" />
-                    <span>UV Index: <strong className="font-semibold text-text-primary">{day.uvIndex} ({uvLevel})</strong></span>
+
+                  <div className="flex items-center gap-2 text-left">
+                    <Wind size={14} className="text-emerald-500 shrink-0" />
+                    <div>
+                      <div className="text-[8px] font-bold text-text-muted uppercase leading-none mb-0.5">Wind Details</div>
+                      <div>Max: <strong>{displayWindMax} {windUnit}</strong> &bull; Gusts: <strong>{displayWindGust} {windUnit}</strong></div>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <Wind size={12} className="text-emerald-500 shrink-0" />
-                    <span>Wind Max: <strong className="font-semibold text-text-primary">{displayWindMax} {windUnit}</strong></span>
+
+                  <div className="flex items-center gap-2 text-left">
+                    <Sunrise size={14} className="text-orange-400 shrink-0" />
+                    <div>
+                      <div className="text-[8px] font-bold text-text-muted uppercase leading-none mb-0.5">Astronomy</div>
+                      <div>Rise: <strong>{formatTime(day.sunrise)}</strong> &bull; Set: <strong>{formatTime(day.sunset)}</strong></div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-left">
+                    <Sun size={14} className="text-amber-500 shrink-0" />
+                    <div>
+                      <div className="text-[8px] font-bold text-text-muted uppercase leading-none mb-0.5">UV index</div>
+                      <div>Value: <strong>{day.uvIndex} ({uvLevel})</strong></div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-left">
+                    <Droplets size={14} className="text-teal-500 shrink-0" />
+                    <div>
+                      <div className="text-[8px] font-bold text-text-muted uppercase leading-none mb-0.5">Atmosphere</div>
+                      <div>Hum: <strong>{day.humidityAvg}%</strong> &bull; Cloud: <strong>{day.cloudCoverAvg}%</strong></div>
+                    </div>
                   </div>
                 </div>
               )}
