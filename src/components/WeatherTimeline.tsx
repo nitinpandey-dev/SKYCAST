@@ -27,12 +27,14 @@ export function WeatherTimeline({ hourly }: WeatherTimelineProps) {
   ];
 
   return (
-    <div className="glass-card p-4 sm:p-5 transition-all duration-300 w-full">
-      <h2 className="text-xs font-bold text-text-muted uppercase tracking-wider mb-4">Today's Timeline</h2>
+    <div className="glass-card p-6 transition-all duration-300">
+      <h2 className="text-xs font-bold text-text-muted uppercase tracking-wider mb-6">Today's Timeline</h2>
       
-      <div className="relative flex flex-row items-center justify-between gap-1 w-full select-none">
-        {/* Connecting line */}
-        <div className="absolute top-[18px] left-[15px] right-[15px] h-[1px] bg-border-custom/50 -z-10 rounded-full"></div>
+      <div className="relative flex flex-col sm:flex-row items-stretch justify-between gap-6 sm:gap-4">
+        {/* Connecting line for desktop */}
+        <div className="absolute top-[28px] left-[40px] right-[40px] h-[2px] bg-border-custom hidden sm:block -z-10 rounded-full"></div>
+        {/* Connecting line for mobile */}
+        <div className="absolute left-[28px] top-[28px] bottom-[28px] w-[2px] bg-border-custom sm:hidden -z-10 rounded-full"></div>
 
         {periods.map((period, index) => {
           const data = getPeriodData(period.targetHour);
@@ -44,27 +46,29 @@ export function WeatherTimeline({ hourly }: WeatherTimelineProps) {
           return (
             <div 
               key={index} 
-              className="flex flex-col items-center gap-1.5 flex-1 relative z-10 text-center"
+              className="flex sm:flex-col items-center gap-4 sm:gap-2 flex-1 relative z-10 bg-surface sm:bg-transparent p-3 sm:p-0 rounded-2xl sm:rounded-none border border-border-custom sm:border-none shadow-sm sm:shadow-none"
             >
-              {/* Softer circular icon container */}
-              <div className={`w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-105 bg-surface border border-border-custom/40 shadow-sm ${
-                data.isDay ? 'text-amber-500' : 'text-blue-400'
+              {/* Icon circle */}
+              <div className={`w-12 h-12 rounded-full flex items-center justify-center border-4 border-bg-primary shadow-sm transition-all hover:scale-110 ${
+                data.isDay 
+                  ? 'bg-amber-50 dark:bg-amber-950/20 text-amber-500' 
+                  : 'bg-indigo-50 dark:bg-indigo-950/20 text-blue-400'
               }`}>
-                <WeatherIcon name={condition.icon} size={15} />
+                <WeatherIcon name={condition.icon} size={20} />
               </div>
 
               {/* Text info */}
-              <div className="leading-tight mt-0.5">
-                <div className="font-extrabold text-[11px] text-text-primary leading-tight">{period.label}</div>
-                <div className="text-[8px] font-bold text-text-muted uppercase tracking-wider mt-0.5">{period.timeLabel}</div>
-                <div className="text-[9px] text-text-secondary mt-0.5 font-semibold truncate max-w-[70px] mx-auto hidden sm:block">
+              <div className="text-left sm:text-center flex-1 sm:flex-initial">
+                <div className="font-extrabold text-sm text-text-primary leading-tight">{period.label}</div>
+                <div className="text-[9px] font-bold text-text-muted uppercase tracking-wider mt-0.5">{period.timeLabel}</div>
+                <div className="text-[10px] text-text-secondary mt-1 font-semibold truncate max-w-[120px] sm:mx-auto">
                   {condition.description}
                 </div>
               </div>
 
               {/* Temperature */}
-              <div className="shrink-0 mt-0.5">
-                <span className="text-xs font-black text-text-primary">{temp}°</span>
+              <div className="text-right sm:text-center shrink-0">
+                <span className="text-base font-black text-text-primary">{temp}°</span>
               </div>
             </div>
           );
@@ -73,4 +77,3 @@ export function WeatherTimeline({ hourly }: WeatherTimelineProps) {
     </div>
   );
 }
-export default WeatherTimeline;

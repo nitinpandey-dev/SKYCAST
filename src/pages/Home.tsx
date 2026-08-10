@@ -91,8 +91,18 @@ export function Home() {
   
   const [activeLocation, setActiveLocation] = useState<LocationInfo | null>(null);
   const [initLoading, setInitLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   
   const { data, loading: weatherLoading, error, refreshWeather, lastUpdated } = useWeather(activeLocation);
+
+  // Responsive tracker
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Initial load logic
   useEffect(() => {
@@ -182,7 +192,7 @@ export function Home() {
           activeLocation={activeLocation}
         />
         
-        <main className="w-full max-w-[1400px] mx-auto p-3 sm:p-4 md:p-6">
+        <main className="w-full max-w-7xl mx-auto p-3 sm:p-4 md:p-6">
           
           {error && (
             <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 p-3 rounded-2xl mb-4 flex items-center gap-2 text-xs">
@@ -200,52 +210,77 @@ export function Home() {
             </div>
           ) : data ? (
             <div>
-              {/* SEQUENTIAL PROGRESSIVE CONTENT FLOW */}
-              <div className="space-y-4 md:space-y-5 animate-in fade-in duration-300">
-                
-                {/* 1. Hero: Current Weather Details */}
-                <CurrentWeather 
-                  data={data} 
-                  onRefresh={refreshWeather} 
-                  isLoading={weatherLoading}
-                  lastUpdated={lastUpdated}
-                />
+              {/* MOBILE LAYOUT (Sequential scrolling list, no navigation tabs) */}
+              {isMobile ? (
+                <div className="space-y-4 animate-in fade-in duration-300">
+                  <CurrentWeather 
+                    data={data} 
+                    onRefresh={refreshWeather} 
+                    isLoading={weatherLoading}
+                    lastUpdated={lastUpdated}
+                  />
 
-                {/* 2. Compact Weather Summary Panel */}
-                {summaryText && (
-                  <div className="glass-card p-3 flex gap-2.5 items-start max-w-4xl">
-                    <Info size={14} className="text-accent-custom shrink-0 mt-0.5" />
-                    <p className="text-xs text-text-secondary dark:text-[#DCE5F0] leading-relaxed font-semibold">
-                      {summaryText}
-                    </p>
-                  </div>
-                )}
-
-                {/* 3. Cohesive Hourly Forecast (horizontal list + graphs embedded) */}
-                <HourlyForecastComponent hourly={data.hourly} />
-
-                {/* 4. Complete 10-Day Forecast List */}
-                <DailyForecastComponent daily={data.daily} />
-
-                {/* 5. Complete Weather Details Grid */}
-                <WeatherDetails current={data.current} />
-
-                {/* 6. Sun Position & Today's Timeline (2-column layout side-by-side on desktop, stacked on mobile) */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
+                  {summaryText && (
+                    <div className="glass-card p-3.5 flex gap-2.5 items-start">
+                      <Info size={14} className="text-accent-custom shrink-0 mt-0.5" />
+                      <p className="text-xs text-text-secondary dark:text-[#DCE5F0] leading-relaxed font-semibold">
+                        {summaryText}
+                      </p>
+                    </div>
+                  )}
+                  
+                  <HourlyForecastComponent hourly={data.hourly} />
+                  <DailyForecastComponent daily={data.daily} />
+                  <WeatherDetails current={data.current} />
                   <SunriseSunset sunrise={data.current.sunrise} sunset={data.current.sunset} />
                   <WeatherTimeline hourly={data.hourly} />
+                  <WeatherInsights data={data} />
+                  <FavoriteLocations onSelect={handleLocationSelect} />
                 </div>
+              ) : (
+                /* DESKTOP LAYOUT (Restore Good Columns Dashboard layout before sequential change, no map) */
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start animate-in fade-in duration-300">
+                  
+                  {/* Left Column (Focus & Timeline/Graphs) */}
+                  <div className="lg:col-span-2 space-y-6">
+                    <CurrentWeather 
+                      data={data} 
+                      onRefresh={refreshWeather} 
+                      isLoading={weatherLoading}
+                      lastUpdated={lastUpdated}
+                    />
 
-                {/* 7. Weather Insights Panel */}
-                <WeatherInsights data={data} />
+                    {summaryText && (
+                      <div className="glass-card p-4 flex gap-3 items-start">
+                        <Info size={16} className="text-accent-custom shrink-0 mt-0.5" />
+                        <p className="text-xs text-text-secondary dark:text-[#DCE5F0] leading-relaxed font-semibold">
+                          {summaryText}
+                        </p>
+                      </div>
+                    )}
+                    
+                    <HourlyForecastComponent hourly={data.hourly} />
+                    <WeatherTimeline hourly={data.hourly} />
+                    <WeatherInsights data={data} />
+                  </div>
 
-                {/* 8. Saved Locations / Favorites */}
-                <FavoriteLocations onSelect={handleLocationSelect} />
+                  {/* Right Column (Accordion lists, sun path, details) */}
+                  <div className="space-y-6">
+                    <DailyForecastComponent daily={data.daily} />
+                    <SunriseSunset sunrise={data.current.sunrise} sunset={data.current.sunset} />
+                    <WeatherDetails current={data.current} />
+                  </div>
 
-              </div>
+                  {/* Saved Locations bottom bar */}
+                  <div className="lg:col-span-3">
+                    <FavoriteLocations onSelect={handleLocationSelect} />
+                  </div>
 
-              {/* 9. Muted Open-Meteo Attribution Footer */}
-              <div className="w-full text-center mt-8 text-[9px] font-bold text-text-muted uppercase tracking-wider select-none">
+                </div>
+              )}
+
+              {/* Muted Open-Meteo Attribution Footer */}
+              <div className="w-full text-center mt-8 pb-4 text-[9px] font-bold text-text-muted uppercase tracking-wider select-none">
                 Weather data provided by <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer" className="hover:text-accent-custom transition-colors">Open-Meteo</a>
               </div>
             </div>

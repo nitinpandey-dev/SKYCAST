@@ -54,8 +54,8 @@ export function SunriseSunset({ sunrise, sunset }: SunriseSunsetProps) {
   }, [sunrise, sunset]);
 
   return (
-    <div className="glass-card p-4 sm:p-5 transition-all duration-300">
-      <div className="flex items-center justify-between mb-3">
+    <div className="glass-card p-6 transition-all duration-300">
+      <div className="flex items-center justify-between mb-4">
         <h2 className="text-xs font-bold text-text-muted uppercase tracking-wider">Sun Position</h2>
         {daylightDuration && (
           <span className="text-[10px] text-text-muted font-bold">
@@ -65,8 +65,8 @@ export function SunriseSunset({ sunrise, sunset }: SunriseSunsetProps) {
       </div>
 
       {/* Sun curve visualization */}
-      <div className="relative w-full h-12 flex items-center justify-center mb-2.5">
-        <svg viewBox="0 0 100 40" className="w-full max-w-[240px] h-full overflow-visible">
+      <div className="relative w-full h-16 flex items-center justify-center mb-6">
+        <svg viewBox="0 0 100 40" className="w-full max-w-[280px] h-full overflow-visible">
           {/* Baseline horizon */}
           <line x1="5" y1="35" x2="95" y2="35" stroke="var(--border-custom)" strokeWidth="0.8" />
           
