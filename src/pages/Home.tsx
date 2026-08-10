@@ -253,8 +253,8 @@ export function Home() {
                   )}
 
                   {activeMobileTab === 'map' && (
-                    <div className="min-h-[450px]">
-                      <WeatherMap />
+                    <div className="h-[450px]">
+                      <WeatherMap activeLocation={activeLocation} currentWeatherData={data} />
                     </div>
                   )}
 
@@ -301,7 +301,7 @@ export function Home() {
                     <DailyForecastComponent daily={data.daily} />
                     <SunriseSunset sunrise={data.current.sunrise} sunset={data.current.sunset} />
                     <WeatherDetails current={data.current} />
-                    <WeatherMap />
+                    <WeatherMap activeLocation={activeLocation} currentWeatherData={data} />
                   </div>
 
                   {/* Standalone Favorites bottom bar */}
