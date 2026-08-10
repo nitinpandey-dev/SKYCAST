@@ -111,17 +111,26 @@ export function getWeatherBackgroundClass(code: number, isDay: boolean): string 
   const isDark = document.documentElement.classList.contains('dark');
   
   if (isDark) {
-    // All dark modes use a very deep charcoal/black base with a tiny color tint
-    if (code <= 1) { // Sunny / Clear Night
-      return 'bg-gradient-to-b from-[#0b0f19] to-[#030712]';
+    // All dark modes use a deep navy weather-app background gradient resembling a dark evening sky
+    if (code <= 1) { // Clear Night
+      return 'bg-gradient-to-b from-[#07111F] via-[#0B1728] to-[#0D1B2D]';
     }
-    if (code <= 3 || code === 45 || code === 48) { // Cloudy
-      return 'bg-gradient-to-b from-[#0f1115] to-[#030712]';
+    if (code === 2) { // Partly Cloudy Night
+      return 'bg-gradient-to-b from-[#060F1D] via-[#0A1525] to-[#0C1728]';
     }
-    if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) { // Rain
-      return 'bg-gradient-to-b from-[#080d1a] to-[#030712]';
+    if (code === 3 || code === 45 || code === 48) { // Cloudy / Fog
+      return 'bg-gradient-to-b from-[#050D19] via-[#091220] to-[#0A1523]';
     }
-    return 'bg-gradient-to-b from-[#0f0f10] to-[#020204]';
+    if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) { // Rain / Drizzle
+      return 'bg-gradient-to-b from-[#040A15] via-[#07101E] to-[#081221]';
+    }
+    if ((code >= 71 && code <= 77) || code === 85 || code === 86) { // Snow
+      return 'bg-gradient-to-b from-[#060E1A] via-[#091523] to-[#0B1A2A]';
+    }
+    if (code >= 95 && code <= 99) { // Thunderstorm
+      return 'bg-gradient-to-b from-[#03070E] via-[#060D19] to-[#07101F]';
+    }
+    return 'bg-gradient-to-b from-[#07111F] via-[#0B1728] to-[#0D1B2D]';
   } else {
     // Light modes use a soft sky-like base reflecting actual daytime weather
     if (!isDay) {

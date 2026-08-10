@@ -85,7 +85,7 @@ export function SunriseSunset({ sunrise, sunset }: SunriseSunsetProps) {
             <path 
               d="M 10 35 Q 50 5 90 35" 
               fill="none" 
-              stroke="var(--accent-custom)" 
+              stroke="#F59E0B" 
               strokeWidth="1.2"
               strokeDasharray="100"
               style={{
@@ -99,8 +99,8 @@ export function SunriseSunset({ sunrise, sunset }: SunriseSunsetProps) {
             cx={sunPos.x} 
             cy={sunPos.y} 
             r="3.5" 
-            fill="#f59e0b" 
-            stroke="#ffffff"
+            fill="#FBBF24" 
+            stroke="var(--surface-strong)"
             strokeWidth="1"
             className={`${isDaylight ? 'animate-pulse' : 'opacity-40'}`} 
             style={{ filter: isDaylight ? 'drop-shadow(0px 0px 3px rgba(245, 158, 11, 0.6))' : 'none' }}

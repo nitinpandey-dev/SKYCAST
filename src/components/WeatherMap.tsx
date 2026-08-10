@@ -223,13 +223,13 @@ export function WeatherMap({ activeLocation, currentWeatherData }: WeatherMapPro
         </div>
         
         {/* Layer tabs */}
-        <div className="flex items-center bg-surface border border-border-custom p-0.5 rounded-xl shrink-0">
+        <div className="flex items-center bg-map-bg border border-border-custom p-0.5 rounded-xl shrink-0">
           <button
             onClick={() => setActiveLayer('temp')}
             className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer border border-transparent ${
               activeLayer === 'temp' 
-                ? 'bg-surface-strong border-accent-custom/20 text-text-primary font-bold shadow-sm' 
-                : 'text-text-secondary hover:text-text-primary'
+                ? 'bg-map-active-bg border-border-custom text-map-active-text font-bold shadow-sm' 
+                : 'text-map-text hover:text-map-active-text'
             }`}
           >
             <Thermometer size={12} className={activeLayer === 'temp' ? 'text-accent-custom' : ''} />
@@ -240,8 +240,8 @@ export function WeatherMap({ activeLocation, currentWeatherData }: WeatherMapPro
             onClick={() => setActiveLayer('radar')}
             className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer border border-transparent ${
               activeLayer === 'radar' 
-                ? 'bg-surface-strong border-accent-custom/20 text-text-primary font-bold shadow-sm' 
-                : 'text-text-secondary hover:text-text-primary'
+                ? 'bg-map-active-bg border-border-custom text-map-active-text font-bold shadow-sm' 
+                : 'text-map-text hover:text-map-active-text'
             }`}
           >
             <CloudRain size={12} className={activeLayer === 'radar' ? 'text-accent-custom' : ''} />
@@ -252,8 +252,8 @@ export function WeatherMap({ activeLocation, currentWeatherData }: WeatherMapPro
             onClick={() => setActiveLayer('wind')}
             className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer border border-transparent ${
               activeLayer === 'wind' 
-                ? 'bg-surface-strong border-accent-custom/20 text-text-primary font-bold shadow-sm' 
-                : 'text-text-secondary hover:text-text-primary'
+                ? 'bg-map-active-bg border-border-custom text-map-active-text font-bold shadow-sm' 
+                : 'text-map-text hover:text-map-active-text'
             }`}
           >
             <Wind size={12} className={activeLayer === 'wind' ? 'text-accent-custom' : ''} />
@@ -355,7 +355,7 @@ export function WeatherMap({ activeLocation, currentWeatherData }: WeatherMapPro
         <div className="absolute top-3 right-3 flex flex-col gap-2 z-20">
           <button 
             onClick={handleZoomIn}
-            className="w-8 h-8 rounded-full bg-surface-strong border border-border-custom hover:bg-surface flex items-center justify-center text-text-primary hover:text-accent-custom transition-all shadow-md cursor-pointer"
+            className="w-8 h-8 rounded-full bg-map-bg border border-border-custom hover:bg-map-active-bg flex items-center justify-center text-map-text hover:text-map-active-text transition-all shadow-md cursor-pointer"
             title="Zoom In"
           >
             <Plus size={16} />
@@ -363,7 +363,7 @@ export function WeatherMap({ activeLocation, currentWeatherData }: WeatherMapPro
           
           <button 
             onClick={handleZoomOut}
-            className="w-8 h-8 rounded-full bg-surface-strong border border-border-custom hover:bg-surface flex items-center justify-center text-text-primary hover:text-accent-custom transition-all shadow-md cursor-pointer"
+            className="w-8 h-8 rounded-full bg-map-bg border border-border-custom hover:bg-map-active-bg flex items-center justify-center text-map-text hover:text-map-active-text transition-all shadow-md cursor-pointer"
             title="Zoom Out"
           >
             <Minus size={16} />
@@ -371,7 +371,7 @@ export function WeatherMap({ activeLocation, currentWeatherData }: WeatherMapPro
 
           <button 
             onClick={handleCenter}
-            className="w-8 h-8 rounded-full bg-surface-strong border border-border-custom hover:bg-surface flex items-center justify-center text-text-primary hover:text-accent-custom transition-all shadow-md cursor-pointer"
+            className="w-8 h-8 rounded-full bg-map-bg border border-border-custom hover:bg-map-active-bg flex items-center justify-center text-map-text hover:text-map-active-text transition-all shadow-md cursor-pointer"
             title="Center on Location"
           >
             <Crosshair size={14} />
@@ -379,7 +379,7 @@ export function WeatherMap({ activeLocation, currentWeatherData }: WeatherMapPro
         </div>
 
         {/* Dynamic Legend Overlays (Bottom Right) */}
-        <div className="absolute bottom-3 right-3 bg-surface-strong border border-border-custom px-3 py-2 rounded-2xl shadow-md z-20 select-none animate-in fade-in duration-200">
+        <div className="absolute bottom-3 right-3 bg-map-bg border border-border-custom px-3 py-2 rounded-2xl shadow-md z-20 select-none animate-in fade-in duration-200">
           {activeLayer === 'temp' && (
             <div className="flex flex-col text-left">
               <span className="text-[8px] font-bold text-text-muted uppercase tracking-wider mb-1">Temperature</span>

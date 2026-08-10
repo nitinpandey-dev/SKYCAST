@@ -68,7 +68,7 @@ export function DailyForecastComponent({ daily }: DailyForecastProps) {
           return (
             <div 
               key={day.date} 
-              className={`border-b border-border-custom/25 last:border-none py-2.5 transition-all duration-200 ${
+              className={`border-b border-border-custom/70 last:border-none py-2.5 transition-all duration-200 ${
                 isExpanded ? 'bg-surface/30 px-3 rounded-2xl my-1 border-none' : ''
               }`}
             >

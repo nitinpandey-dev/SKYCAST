@@ -3,7 +3,7 @@ import { HourlyForecast } from '../types/weather';
 import { useSettings } from '../contexts/SettingsContext';
 import { cToF, formatHour, getWeatherCondition, getWindDirection, kmhToMph } from '../utils/weatherUtils';
 import { WeatherIcon } from './Icons';
-import { Area, AreaChart, Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis, ReferenceDot } from 'recharts';
+import { Area, AreaChart, Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis, ReferenceDot, CartesianGrid } from 'recharts';
 import { Eye, Wind, Droplets, CloudRain } from 'lucide-react';
 
 interface HourlyForecastProps {
@@ -113,7 +113,7 @@ export function HourlyForecastComponent({ hourly }: HourlyForecastProps) {
                 onClick={() => handleCardClick(index)}
                 className={`flex flex-col items-center justify-between w-14 py-3 rounded-2xl transition-all duration-200 border text-center cursor-pointer ${
                   isActive 
-                    ? 'bg-surface-strong border-accent-custom/30 shadow-sm scale-102 font-bold text-text-primary' 
+                    ? 'bg-surface-strong border-accent-custom/30 dark:bg-[#60a5fa]/14 dark:border-[#60a5fa]/35 shadow-sm scale-102 font-bold text-text-primary' 
                     : 'bg-transparent border-transparent hover:bg-surface/30 text-text-secondary'
                 }`}
               >
@@ -161,6 +161,7 @@ export function HourlyForecastComponent({ hourly }: HourlyForecastProps) {
                     <stop offset="95%" stopColor={accentColor} stopOpacity={0}/>
                   </linearGradient>
                 </defs>
+                <CartesianGrid stroke={gridColor} strokeDasharray="3 3" vertical={false} />
                 
                 <XAxis 
                   dataKey="time" 
@@ -177,7 +178,7 @@ export function HourlyForecastComponent({ hourly }: HourlyForecastProps) {
                     if (active && payload && payload.length) {
                       const data = payload[0].payload;
                       return (
-                        <div className="bg-white/95 dark:bg-[#07101f]/95 backdrop-blur-md border border-border-custom p-2.5 rounded-xl shadow-md text-[10px] max-w-[150px] text-text-primary text-left">
+                        <div className="bg-white/95 dark:bg-[#101D2E]/95 backdrop-blur-md border border-border-custom dark:border-white/12 p-2.5 rounded-xl shadow-md text-[10px] max-w-[150px] text-text-primary text-left">
                           <div className="font-bold mb-0.5">{data.time}</div>
                           <div className="font-extrabold mb-0.5" style={{ color: accentColor }}>{data.temp}°</div>
                           <div className="text-text-secondary leading-normal">
@@ -236,7 +237,7 @@ export function HourlyForecastComponent({ hourly }: HourlyForecastProps) {
                     if (active && payload && payload.length) {
                       const data = payload[0].payload;
                       return (
-                        <div className="bg-white/95 dark:bg-[#07101f]/95 backdrop-blur-md border border-border-custom p-2 rounded-lg shadow-sm text-[10px] text-text-primary">
+                        <div className="bg-white/95 dark:bg-[#101D2E]/95 backdrop-blur-md border border-border-custom dark:border-white/12 p-2 rounded-lg shadow-sm text-[10px] text-text-primary">
                           <span>{data.time}: <strong>{data.pop}%</strong></span>
                         </div>
                       );

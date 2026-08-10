@@ -9,11 +9,19 @@
   --color-surface-strong: var(--surface-strong);
   --color-border-custom: var(--border-custom);
   --color-accent-custom: var(--accent-custom);
+  
+  --color-header-bg: var(--header-bg);
+  --color-bottom-nav-bg: var(--bottom-nav-bg);
+  
+  --color-map-bg: var(--map-bg);
+  --color-map-text: var(--map-text);
+  --color-map-active-bg: var(--map-active-bg);
+  --color-map-active-text: var(--map-active-text);
 }
 
 @layer base {
   :root {
-    --bg-primary: #EAF3FB; /* Will be overwritten dynamically by weather backgrounds */
+    --bg-primary: #EAF3FB;
     --text-primary: #172033;
     --text-secondary: #526174;
     --text-muted: #718096;
@@ -21,17 +29,33 @@
     --surface-strong: rgba(255, 255, 255, 0.65);
     --border-custom: rgba(255, 255, 255, 0.45);
     --accent-custom: #3478F6;
+    
+    --header-bg: rgba(255, 255, 255, 0.45);
+    --bottom-nav-bg: rgba(255, 255, 255, 0.50);
+    
+    --map-bg: rgba(255, 255, 255, 0.65);
+    --map-text: #172033;
+    --map-active-bg: rgba(255, 255, 255, 0.85);
+    --map-active-text: #3478F6;
   }
   
   .dark {
-    --bg-primary: #07101F;
-    --text-primary: #F7F9FC;
-    --text-secondary: #AAB6C8;
-    --text-muted: #7F8CA0;
-    --surface: rgba(255, 255, 255, 0.08);
-    --surface-strong: rgba(255, 255, 255, 0.12);
-    --border-custom: rgba(255, 255, 255, 0.10);
-    --accent-custom: #60a5fa;
+    --bg-primary: #07111F;
+    --text-primary: #F8FAFC;
+    --text-secondary: #B8C4D6;
+    --text-muted: #8492A6;
+    --surface: rgba(255, 255, 255, 0.07);
+    --surface-strong: rgba(255, 255, 255, 0.11);
+    --border-custom: rgba(255, 255, 255, 0.12);
+    --accent-custom: #60A5FA;
+    
+    --header-bg: rgba(8, 18, 32, 0.72);
+    --bottom-nav-bg: rgba(7, 17, 31, 0.78);
+    
+    --map-bg: rgba(10, 20, 35, 0.78);
+    --map-text: #B8C4D6;
+    --map-active-bg: rgba(96, 165, 250, 0.18);
+    --map-active-text: #F8FAFC;
   }
 }
 
@@ -48,7 +72,7 @@
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--border-custom);
-    border-radius: 1.25rem; /* ~20px rounded corners */
+    border-radius: 1.25rem;
     box-shadow: 0 8px 30px rgba(50, 80, 110, 0.06);
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }

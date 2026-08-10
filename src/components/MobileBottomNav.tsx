@@ -16,7 +16,7 @@ export function MobileBottomNav({ activeTab, onTabChange }: MobileBottomNavProps
   ];
 
   return (
-    <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[90%] max-w-[360px] bg-surface-strong backdrop-blur-xl border border-border-custom rounded-full px-6 py-2.5 flex items-center justify-between shadow-lg shadow-black/5 dark:shadow-none z-50 md:hidden animate-in slide-in-from-bottom-6 duration-300 select-none">
+    <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[90%] max-w-[360px] bg-bottom-nav-bg backdrop-blur-xl border border-border-custom rounded-full px-6 py-2.5 flex items-center justify-between shadow-lg shadow-black/5 dark:shadow-none z-50 md:hidden animate-in slide-in-from-bottom-6 duration-300 select-none">
       {tabs.map(tab => {
         const Icon = tab.icon;
         const isActive = activeTab === tab.id;
