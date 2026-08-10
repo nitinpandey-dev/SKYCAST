@@ -48,7 +48,7 @@ export function WeatherDetails({ current }: WeatherDetailsProps) {
           return (
             <div 
               key={index} 
-              className="flex gap-3 bg-surface-elevated/20 border border-border-custom/40 p-3.5 rounded-2xl items-center hover:bg-surface-elevated/40 transition-colors text-left"
+              className="weather-detail-tile flex gap-3 p-3.5 rounded-2xl items-center transition-colors text-left"
             >
               <div className={`p-2 rounded-xl shrink-0 ${detail.color}`}>
                 <Icon size={14} />

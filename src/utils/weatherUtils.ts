@@ -130,11 +130,11 @@ export function getWeatherBackgroundClass(code: number, isDay: boolean, isDark: 
     }
     return 'bg-gradient-to-b from-[#07111F] via-[#0B1728] to-[#0D1B2D]';
   } else {
-    // Light mode: flat clean white — the cards carry the visual weight
+    // Light mode: soft sky-blue gradient — .sky-bg is defined in index.css
     if (!isDay) {
       return 'bg-gradient-to-b from-[#1E293B] to-[#0F172A]'; // night stays dark
     }
-    return 'bg-[#F8FAFC]';
+    return 'sky-bg';
   }
 }
 

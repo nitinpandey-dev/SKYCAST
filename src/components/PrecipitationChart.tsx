@@ -43,7 +43,7 @@ export function PrecipitationChart({ hourly, activeIndex, onActiveIndexChange }:
   const barColorDefault = isDark ? 'rgba(96,165,250,0.35)' : 'rgba(52,120,246,0.40)';
   const barColorActive  = isDark ? '#60A5FA' : '#3478F6';
   const gridColor       = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.05)';
-  const tickColor       = isDark ? '#7F8DA1' : '#718096';
+  const tickColor       = isDark ? '#7F8DA1' : '#64748B';
 
   return (
     <div className="glass-card p-4 sm:p-5 w-full select-none">

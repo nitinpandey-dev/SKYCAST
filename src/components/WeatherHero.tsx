@@ -63,7 +63,7 @@ export function WeatherHero({ data, onRefresh, isLoading, lastUpdated }: Weather
         <h1 className="text-3xl md:text-[38px] font-medium tracking-tight text-text-primary">
           {location.name}
         </h1>
-        <p className="text-xs font-normal text-text-secondary mt-0.5">
+        <p className="text-xs font-normal text-text-muted mt-0.5">
           {formatDay(new Date().toISOString())}, {format(new Date(), 'MMMM d')}
         </p>
 
@@ -73,24 +73,24 @@ export function WeatherHero({ data, onRefresh, isLoading, lastUpdated }: Weather
             {displayTemp}°
           </span>
           <div className="flex flex-col items-center md:items-start leading-none justify-center">
-            <div className="text-accent-custom shrink-0">
+            <div className="text-[#3478F6] dark:text-accent-custom shrink-0">
               <WeatherIcon name={condition.icon} size={54} strokeWidth={1} />
             </div>
-            <span className="text-xl md:text-2xl font-medium text-text-secondary tracking-wide mt-1.5 block">
+            <span className="text-xl md:text-2xl font-medium text-[#334155] dark:text-text-secondary tracking-wide mt-1.5 block">
               {condition.description}
             </span>
           </div>
         </div>
 
         {/* Feels like / Highs / Lows / Precipitation details */}
-        <div className="mt-3 text-xs md:text-sm font-medium text-text-secondary flex flex-wrap items-center justify-center md:justify-start gap-x-2 gap-y-1">
+        <div className="mt-3 text-xs md:text-sm font-medium text-text-muted flex flex-wrap items-center justify-center md:justify-start gap-x-2 gap-y-1">
           <span>Feels like <strong className="font-semibold text-text-primary">{displayFeelsLike}°</strong></span>
-          <span className="opacity-40">·</span>
+          <span className="text-text-muted">·</span>
           <span>H: <strong className="font-semibold text-text-primary">{displayHigh}°</strong></span>
-          <span className="opacity-40">·</span>
+          <span className="text-text-muted">·</span>
           <span>L: <strong className="font-semibold text-text-primary">{displayLow}°</strong></span>
-          <span className="opacity-40">·</span>
-          <span>{current.precipitationProbability}% Rain</span>
+          <span className="text-text-muted">·</span>
+          <span className="text-accent-custom">{current.precipitationProbability}% Rain</span>
         </div>
       </div>
 
@@ -101,9 +101,9 @@ export function WeatherHero({ data, onRefresh, isLoading, lastUpdated }: Weather
         <button 
           onClick={toggleFavorite}
           className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold border shadow-sm active:scale-95 transition-all cursor-pointer
-            bg-white hover:bg-[#F3F4F6]
-            text-[#374151]
-            border-[#D1D5DB]
+            bg-surface hover:bg-surface-elevated
+            text-text-secondary
+            border-border-custom
             dark:bg-[rgba(255,255,255,0.07)] dark:hover:bg-[rgba(96,165,250,0.14)]
             dark:text-[#E5EAF2] dark:border-[rgba(255,255,255,0.14)]
             ${fav ? 'border-amber-400/50' : ''}
@@ -111,7 +111,7 @@ export function WeatherHero({ data, onRefresh, isLoading, lastUpdated }: Weather
         >
           <Star 
             size={11} 
-            className={fav ? "fill-amber-400 text-amber-400" : "text-[#9CA3AF] dark:text-text-muted"} 
+            className={fav ? "fill-amber-400 text-amber-400" : "text-text-muted"}
           />
           <span>{fav ? 'Favorited' : 'Favorite'}</span>
         </button>
@@ -125,7 +125,7 @@ export function WeatherHero({ data, onRefresh, isLoading, lastUpdated }: Weather
             onClick={onRefresh}
             disabled={isLoading}
             className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold active:scale-95 transition-all cursor-pointer shadow-sm border
-              bg-white hover:bg-[#F3F4F6] text-[#374151] border-[#D1D5DB]
+              bg-surface hover:bg-surface-elevated text-text-secondary border-border-custom
               dark:bg-[rgba(255,255,255,0.07)] dark:hover:bg-[rgba(96,165,250,0.14)]
               dark:text-[#E5EAF2] dark:border-[rgba(255,255,255,0.14)]"
           >

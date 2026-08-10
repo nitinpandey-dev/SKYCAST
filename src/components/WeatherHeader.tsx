@@ -41,7 +41,7 @@ export function WeatherHeader({
 
   return (
     <header className="w-full px-4 pt-3 sticky top-0 z-40 select-none">
-      <div className="max-w-7xl mx-auto glass-header h-[58px] md:h-[66px] px-3 sm:px-4 flex items-center justify-between gap-2.5 sm:gap-4 shadow-sm">
+      <div className="max-w-7xl mx-auto glass-header h-[58px] md:h-[66px] px-3 sm:px-4 flex items-center justify-between gap-2.5 sm:gap-4">
         
         {/* Left Side: Logo & Location Switcher */}
         <div className="flex items-center gap-3 shrink-0">
@@ -59,7 +59,7 @@ export function WeatherHeader({
             <div className="relative" ref={switcherRef}>
               <button
                 onClick={() => setSwitcherOpen(!switcherOpen)}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-elevated/10 hover:bg-surface-elevated/35 text-[11px] font-medium text-text-primary border border-border-custom/30 transition-all cursor-pointer"
+                className="glass-location-control flex items-center gap-1 px-2.5 py-1 rounded-full hover:bg-white/70 dark:hover:bg-white/10 text-[11px] font-medium transition-all cursor-pointer"
                 aria-label="Toggle location switcher"
               >
                 <MapPin size={11} className="text-accent-custom" />

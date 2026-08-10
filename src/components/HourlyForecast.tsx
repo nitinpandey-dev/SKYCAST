@@ -33,7 +33,7 @@ export function HourlyForecast({ hourly, activeIndex, onActiveIndexChange }: Hou
   }));
 
   return (
-    <div className="glass-card p-4 sm:p-5 transition-all duration-300 w-full select-none">
+    <div className="glass-card hourly-forecast-card p-4 sm:p-5 transition-all duration-300 w-full select-none">
       <div className="flex items-center justify-between mb-4 border-b border-border-custom/25 pb-2">
         <h2 className="text-xs font-semibold text-text-primary tracking-wider">Hourly forecast</h2>
         <span className="text-[10px] text-text-muted font-medium">Next 24 hours</span>
@@ -51,7 +51,7 @@ export function HourlyForecast({ hourly, activeIndex, onActiveIndexChange }: Hou
             </span>
             <div className="text-xs font-semibold flex items-center gap-1.5 text-text-primary">
               <span>{activeCondition.description}</span>
-              <span className="opacity-40">•</span>
+              <span className="text-text-muted">•</span>
               <span className="text-accent-custom font-bold">{activeTemp}°</span>
             </div>
           </div>
@@ -91,7 +91,7 @@ export function HourlyForecast({ hourly, activeIndex, onActiveIndexChange }: Hou
                 onClick={() => onActiveIndexChange(index)}
                 className={`flex flex-col items-center justify-between w-[3.25rem] py-2 rounded-xl transition-all duration-200 border text-center cursor-pointer ${
                   isActive 
-                    ? 'bg-[#EFF6FF] border-[#BFDBFE] shadow-sm font-semibold text-[#1D4ED8] dark:bg-[rgba(96,165,250,0.15)] dark:border-[rgba(96,165,250,0.40)] dark:text-text-primary' 
+                    ? 'hourly-cell-current font-semibold dark:text-text-primary'
                     : 'bg-transparent border-transparent hover:bg-[#F8FAFC] dark:hover:bg-[rgba(255,255,255,0.04)] text-text-secondary'
                 }`}
               >
@@ -108,7 +108,7 @@ export function HourlyForecast({ hourly, activeIndex, onActiveIndexChange }: Hou
                 
                 <span className="text-xs font-semibold text-text-primary">{hour.temp}°</span>
                 
-                <span className={`text-[8px] font-semibold mt-0.5 ${hour.pop > 0 ? 'text-accent-custom' : 'text-text-muted opacity-40'}`}>
+                <span className={`text-[8px] font-semibold mt-0.5 ${hour.pop > 0 ? 'text-accent-custom' : 'text-text-muted'}`}>
                   {hour.pop > 0 ? `${hour.pop}%` : '•'}
                 </span>
               </button>

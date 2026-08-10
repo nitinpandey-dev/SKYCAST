@@ -92,7 +92,7 @@ export function WeatherInsights({ data }: WeatherInsightsProps) {
           return (
             <div 
               key={idx} 
-              className="flex gap-4 bg-surface-elevated/20 border border-border-custom/40 p-4 rounded-2xl items-start hover:bg-surface-elevated/40 transition-colors text-left"
+              className="weather-detail-tile flex gap-4 p-4 rounded-2xl items-start transition-colors text-left"
             >
               <div className={`p-2 rounded-xl shrink-0 ${card.color}`}>
                 <Icon size={14} />

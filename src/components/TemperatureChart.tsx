@@ -86,7 +86,7 @@ export function TemperatureChart({ hourly, activeIndex, onActiveIndexChange }: T
               dataKey="time"
               axisLine={false}
               tickLine={false}
-              tick={{ fontSize: 9, fill: isDark ? '#7F8DA1' : '#718096', fontWeight: 500 }}
+              tick={{ fontSize: 9, fill: isDark ? '#7F8DA1' : '#64748B', fontWeight: 500 }}
               interval={4}
             />
             <YAxis domain={[minTemp - 2, maxTemp + 2]} hide />

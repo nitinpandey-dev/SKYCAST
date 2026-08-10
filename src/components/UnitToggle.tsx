@@ -5,7 +5,7 @@ export function UnitToggle() {
   const { units, setUnits } = useSettings();
 
   const baseButtonClass = "px-3 py-1 rounded-full text-xs font-bold transition-all duration-200 cursor-pointer select-none";
-  const activeClass = "bg-accent-custom text-white dark:bg-accent-custom/18 dark:text-white shadow-sm";
+  const activeClass = "bg-[#3478F6] text-white dark:bg-accent-custom/18 dark:text-white shadow-sm";
   const inactiveClass = "text-text-muted hover:text-text-primary";
 
   return (
