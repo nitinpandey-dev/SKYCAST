@@ -1,7 +1,7 @@
 import React from 'react';
 import { WeatherData } from '../types/weather';
 import { useSettings } from '../contexts/SettingsContext';
-import { formatHour, cToF, kmhToMph } from '../utils/weatherUtils';
+import { formatHour, cToF, kmhToMph, getWindDirection } from '../utils/weatherUtils';
 import { Sparkles, Sun, CloudRain, Wind, Thermometer } from 'lucide-react';
 
 interface WeatherInsightsProps {
@@ -12,17 +12,10 @@ export function WeatherInsights({ data }: WeatherInsightsProps) {
   const { units } = useSettings();
   const { hourly, current } = data;
 
-  const insights: string[] = [];
-  const icons: React.ComponentType<any>[] = [];
-  const iconColors: string[] = [];
-
   // 1. Temp Range
   const high = Math.round(units === 'imperial' ? cToF(current.high) : current.high);
   const low = Math.round(units === 'imperial' ? cToF(current.low) : current.low);
   const tempRange = high - low;
-  insights.push(`Today's temperature range is ${tempRange}°${units === 'metric' ? 'C' : 'F'}. Expect a low of ${low}° and high of ${high}°.`);
-  icons.push(Thermometer);
-  iconColors.push('text-rose-500 bg-rose-500/10');
 
   // 2. Warmest part of day
   let maxTemp = -999;
@@ -33,72 +26,85 @@ export function WeatherInsights({ data }: WeatherInsightsProps) {
       warmestHour = formatHour(hour.time);
     }
   });
-  if (warmestHour) {
-    insights.push(`The warmest part of the day is expected around ${warmestHour} at ${Math.round(units === 'imperial' ? cToF(maxTemp) : maxTemp)}°.`);
-    icons.push(Sun);
-    iconColors.push('text-amber-500 bg-amber-500/10');
-  }
 
   // 3. Precipitation Window
   let peakRainProb = 0;
-  let rainHours: string[] = [];
+  let peakRainHour = '';
   hourly.forEach(hour => {
     if (hour.precipitationProbability > peakRainProb) {
       peakRainProb = hour.precipitationProbability;
-    }
-    if (hour.precipitationProbability >= 30) {
-      rainHours.push(formatHour(hour.time));
+      peakRainHour = formatHour(hour.time);
     }
   });
 
-  if (peakRainProb >= 50 && rainHours.length > 0) {
-    const timeString = rainHours.length > 3 
-      ? `between ${rainHours[0]} and ${rainHours[rainHours.length - 1]}` 
-      : `around ${rainHours.join(', ')}`;
-    insights.push(`Precipitation is likely ${timeString}, peaking at ${peakRainProb}% probability.`);
-    icons.push(CloudRain);
-    iconColors.push('text-blue-500 bg-blue-500/10');
-  } else if (peakRainProb > 0 && peakRainProb < 50) {
-    insights.push(`There is a minor chance of light rain today, peaking at ${peakRainProb}% probability.`);
-    icons.push(CloudRain);
-    iconColors.push('text-blue-400 bg-blue-400/10');
-  } else {
-    insights.push("No rain is expected today. Enjoy the clear conditions!");
-    icons.push(Sun);
-    iconColors.push('text-emerald-500 bg-emerald-500/10');
-  }
-
   // 4. Wind speed
-  const firstHalfWind = hourly.slice(0, 12).reduce((acc, h) => acc + h.windSpeed, 0) / 12;
-  const secondHalfWind = hourly.slice(12, 24).reduce((acc, h) => acc + h.windSpeed, 0) / 12;
+  const displayWind = Math.round(units === 'imperial' ? kmhToMph(current.windSpeed) : current.windSpeed);
+  const windUnit = units === 'imperial' ? 'mph' : 'km/h';
+  const windDir = getWindDirection(current.windDirection);
   
-  if (secondHalfWind > firstHalfWind + 5) {
-    insights.push("Winds are projected to increase later this evening.");
-    icons.push(Wind);
-    iconColors.push('text-teal-500 bg-teal-500/10');
-  } else if (current.windSpeed > 25) {
-    insights.push(`Brace for gusty conditions today. Winds are averaging ${Math.round(units === 'imperial' ? kmhToMph(current.windSpeed) : current.windSpeed)} ${units === 'imperial' ? 'mph' : 'km/h'}.`);
-    icons.push(Wind);
-    iconColors.push('text-teal-500 bg-teal-500/10');
-  }
+  let windSpeedDesc = 'Light';
+  if (current.windSpeed > 11 && current.windSpeed <= 28) windSpeedDesc = 'Moderate';
+  else if (current.windSpeed > 28) windSpeedDesc = 'Strong';
+
+  const cards = [
+    {
+      title: "Today's Range",
+      value: `${low}° – ${high}°`,
+      description: `The temperature range is ${tempRange}°${units === 'metric' ? 'C' : 'F'} today.`,
+      icon: Thermometer,
+      color: 'text-rose-500 bg-rose-500/10'
+    },
+    {
+      title: "Warmest Period",
+      value: warmestHour ? `Around ${warmestHour} · ${Math.round(units === 'imperial' ? cToF(maxTemp) : maxTemp)}°` : '—',
+      description: 'Expected peak temperature of the day.',
+      icon: Sun,
+      color: 'text-amber-500 bg-amber-500/10'
+    },
+    {
+      title: "Rain Peak",
+      value: peakRainProb > 0 ? `Around ${peakRainHour} · ${peakRainProb}%` : 'No rain expected',
+      description: peakRainProb > 0 ? 'Peak precipitation probability period.' : 'No rainfall forecasted today.',
+      icon: CloudRain,
+      color: 'text-blue-500 bg-blue-500/10'
+    },
+    {
+      title: "Wind Conditions",
+      value: `${displayWind} ${windUnit} · ${windDir}`,
+      description: `${windSpeedDesc} winds throughout the day.`,
+      icon: Wind,
+      color: 'text-teal-500 bg-teal-500/10'
+    }
+  ];
 
   return (
-    <div className="glass-card p-6 transition-all duration-300">
-      <h2 className="text-xs font-bold text-text-muted uppercase tracking-wider mb-4 flex items-center gap-2">
-        <Sparkles size={14} className="text-accent-custom animate-pulse" />
+    <div className="glass-card p-4 sm:p-5 transition-all duration-300 w-full">
+      <h2 className="text-xs font-bold text-text-muted uppercase tracking-wider mb-3.5 flex items-center gap-1.5">
+        <Sparkles size={13} className="text-accent-custom animate-pulse" />
         Weather Insights
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {insights.map((insight, idx) => {
-          const Icon = icons[idx];
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+        {cards.map((card, idx) => {
+          const Icon = card.icon;
           return (
-            <div key={idx} className="flex gap-3 bg-surface border border-border-custom p-4 rounded-2xl items-start transition-all hover:bg-surface-strong">
-              <div className={`p-2 rounded-xl shrink-0 ${iconColors[idx]}`}>
-                <Icon size={16} />
+            <div 
+              key={idx} 
+              className="flex gap-4 bg-white/[0.04] dark:bg-white/[0.05] border border-border-custom/50 dark:border-white/8 p-[18px] rounded-[18px] items-start transition-all hover:bg-white/[0.08] dark:hover:bg-white/[0.08] text-left leading-normal"
+            >
+              <div className={`p-2 rounded-xl shrink-0 ${card.color}`}>
+                <Icon size={14} />
               </div>
-              <p className="text-xs text-text-secondary leading-relaxed font-semibold">
-                {insight}
-              </p>
+              <div>
+                <h3 className="text-sm font-semibold text-text-secondary leading-none">
+                  {card.title}
+                </h3>
+                <div className="text-base sm:text-lg font-semibold text-text-primary mt-1 leading-none">
+                  {card.value}
+                </div>
+                <p className="text-xs text-text-muted mt-1 leading-snug">
+                  {card.description}
+                </p>
+              </div>
             </div>
           );
         })}
@@ -106,3 +112,4 @@ export function WeatherInsights({ data }: WeatherInsightsProps) {
     </div>
   );
 }
+export default WeatherInsights;
