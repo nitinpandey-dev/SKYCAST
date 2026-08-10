@@ -28,61 +28,6 @@ const DEFAULT_LOCATION: LocationInfo = {
   lon: -74.00597
 };
 
-// Subtle weather overlay animations
-function WeatherEffectsOverlay({ code, isDay }: { code: number; isDay: boolean }) {
-  if (code <= 1 && isDay) {
-    return (
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-10%] right-[-10%] w-[35%] aspect-square rounded-full bg-amber-400/[0.03] dark:bg-amber-400/[0.01] blur-3xl animate-[pulse_10s_ease-in-out_infinite]"></div>
-      </div>
-    );
-  }
-
-  if (code <= 1 && !isDay) {
-    return (
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="stars-container absolute inset-0 opacity-15">
-          <div className="absolute top-[10%] left-[15%] w-0.5 h-0.5 bg-white rounded-full animate-pulse [animation-duration:4s]"></div>
-          <div className="absolute top-[30%] left-[70%] w-0.5 h-0.5 bg-white rounded-full animate-pulse [animation-duration:6s]"></div>
-          <div className="absolute top-[60%] left-[45%] w-0.5 h-0.5 bg-white rounded-full animate-pulse [animation-duration:5s]"></div>
-        </div>
-      </div>
-    );
-  }
-
-  if (code <= 3 || code === 45 || code === 48) {
-    return (
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 opacity-10 dark:opacity-5">
-        <div className="absolute top-[12%] w-32 h-6 bg-white rounded-full blur-xl animate-[cloudDrift_50s_linear_infinite]"></div>
-        <div className="absolute top-[40%] w-40 h-8 bg-white rounded-full blur-xl animate-[cloudDrift_70s_linear_infinite] [animation-delay:-20s]"></div>
-      </div>
-    );
-  }
-
-  if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) {
-    return (
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 opacity-15">
-        <div className="rain-container absolute inset-0">
-          {[...Array(4)].map((_, i) => (
-            <div 
-              key={i} 
-              className="absolute bg-blue-300 w-px h-3 rounded-full animate-[rainDrop_2.2s_linear_infinite]"
-              style={{
-                left: `${25 + i * 20}%`,
-                top: `-20px`,
-                animationDelay: `${i * 0.5}s`,
-                animationDuration: `${1.2 + Math.random() * 0.4}s`
-              }}
-            />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  return null;
-}
-
 export function Home() {
   const { locationName } = useParams();
   const navigate = useNavigate();
@@ -179,11 +124,6 @@ export function Home() {
 
   return (
     <div className={`min-h-screen ${isDark ? 'dark' : ''} ${bgClass} pb-12 transition-[background-color,color,border-color,box-shadow] duration-300 relative overflow-x-hidden`}>
-      {/* Dynamic weather overlay */}
-      {data?.current && (
-        <WeatherEffectsOverlay code={data.current.conditionCode} isDay={data.current.isDay} />
-      )}
-
       <div className="relative z-10">
         <Header 
           onLocationSelect={handleLocationSelect}
