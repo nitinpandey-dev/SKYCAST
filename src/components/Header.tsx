@@ -35,8 +35,8 @@ export function Header({ onLocationSelect, onUseLocation, locationLoading, activ
   };
 
   return (
-    <header className="w-full py-3 px-4 sm:px-6 sticky top-0 z-40 bg-surface/85 backdrop-blur-lg border-b border-border-custom transition-all duration-300">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 md:gap-4">
+    <header className="w-full px-4 pt-4 sticky top-0 z-40 select-none">
+      <div className="max-w-7xl mx-auto bg-surface/85 backdrop-blur-lg border border-border-custom px-4 py-2.5 rounded-2xl shadow-sm transition-all duration-300 flex flex-col md:flex-row items-center justify-between gap-3 md:gap-4">
         
         {/* Brand & Location (Hidden on mobile to keep header minimal) */}
         <div className="hidden md:flex items-center justify-between w-full md:w-auto gap-4 shrink-0">

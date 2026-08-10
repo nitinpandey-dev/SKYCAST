@@ -3,7 +3,7 @@ import { DailyForecast } from '../types/weather';
 import { useSettings } from '../contexts/SettingsContext';
 import { cToF, formatDay, getWeatherCondition, kmhToMph, formatTime } from '../utils/weatherUtils';
 import { WeatherIcon } from './Icons';
-import { ChevronDown, Sunrise, Sunset, Sun, Wind, CloudRain } from 'lucide-react';
+import { ChevronDown, Sunrise, Sunset, Sun, Wind } from 'lucide-react';
 
 interface DailyForecastProps {
   daily: DailyForecast[];
@@ -29,6 +29,11 @@ export function DailyForecastComponent({ daily }: DailyForecastProps) {
   const absoluteMax = Math.max(...convertedList.map(d => d.high));
   const absoluteDiff = absoluteMax - absoluteMin || 1;
 
+  // Theme-aware setup
+  const isDark = document.documentElement.classList.contains('dark');
+  const barGradStart = isDark ? 'var(--accent-custom)' : '#3478F6';
+  const barGradEnd = '#f59e0b'; // Muted amber for high temps
+
   return (
     <div className="glass-card p-5 sm:p-6 transition-all duration-300">
       <div className="flex items-center justify-between mb-4">
@@ -38,7 +43,8 @@ export function DailyForecastComponent({ daily }: DailyForecastProps) {
         <span className="text-[9px] text-text-muted font-semibold uppercase">Details on click</span>
       </div>
       
-      <div className="flex flex-col gap-1">
+      {/* Unified List Panel (No individual card borders, rows have subtle separators) */}
+      <div className="flex flex-col">
         {daily.map((day, index) => {
           const condition = getWeatherCondition(day.conditionCode, true);
           const isToday = index === 0;
@@ -62,23 +68,21 @@ export function DailyForecastComponent({ daily }: DailyForecastProps) {
           return (
             <div 
               key={day.date} 
-              className={`rounded-xl transition-all duration-200 border ${
-                isExpanded 
-                  ? 'bg-surface border-border-custom p-3.5' 
-                  : 'border-transparent hover:bg-surface py-2.5 px-3'
+              className={`border-b border-border-custom/25 last:border-none py-2.5 transition-all duration-200 ${
+                isExpanded ? 'bg-surface/30 px-3 rounded-2xl my-1 border-none' : ''
               }`}
             >
               {/* Row Header */}
               <button
                 onClick={() => toggleExpand(index)}
-                className="w-full flex items-center justify-between text-left focus:outline-none cursor-pointer text-xs sm:text-sm text-text-primary"
+                className="w-full flex items-center justify-between text-left focus:outline-none cursor-pointer text-xs sm:text-sm text-text-primary font-medium"
                 aria-expanded={isExpanded}
               >
                 <span className={`w-12 sm:w-16 font-semibold truncate ${isToday ? 'text-accent-custom' : ''}`}>
                   {isToday ? 'Today' : label}
                 </span>
                 
-                <div className="flex items-center gap-2 w-20 justify-start shrink-0">
+                <div className="flex items-center gap-2.5 w-16 justify-start shrink-0">
                   <WeatherIcon name={condition.icon} size={14} className="text-text-secondary" />
                   <span className="text-[9px] text-accent-custom font-bold">
                     {day.precipitationProbability > 0 ? `${day.precipitationProbability}%` : ''}
@@ -90,24 +94,25 @@ export function DailyForecastComponent({ daily }: DailyForecastProps) {
                   <span className="text-text-secondary w-6 text-right font-medium">{temps.low}°</span>
                   
                   {/* Range indicator track */}
-                  <div className="w-14 sm:w-28 h-1 bg-surface-strong rounded-full relative overflow-hidden shrink-0">
+                  <div className="w-14 sm:w-28 h-1.5 bg-surface-strong rounded-full relative overflow-hidden shrink-0">
                     <div 
-                      className="absolute h-full bg-gradient-to-r from-accent-custom/60 to-amber-500/60 rounded-full"
+                      className="absolute h-full rounded-full"
                       style={{
                         left: `${leftPercent}%`,
-                        width: `${Math.max(barWidth, 5)}%`
+                        width: `${Math.max(barWidth, 5)}%`,
+                        background: `linear-gradient(90deg, ${barGradStart} 0%, ${barGradEnd} 100%)`
                       }}
                     />
                   </div>
                   
                   <span className="text-text-primary w-6 text-right font-semibold">{temps.high}°</span>
-                  <ChevronDown size={10} className={`text-text-muted transition-transform duration-200 ${isExpanded ? 'rotate-180 text-accent-custom' : ''}`} />
+                  <ChevronDown size={10} className={`text-text-muted transition-transform duration-250 ${isExpanded ? 'rotate-180 text-accent-custom' : ''}`} />
                 </div>
               </button>
 
               {/* Detail panel */}
               {isExpanded && (
-                <div className="mt-3 pt-3 border-t border-border-custom grid grid-cols-2 gap-y-3 gap-x-4 text-[10px] sm:text-xs text-text-secondary animate-in fade-in duration-200">
+                <div className="mt-3 pt-3 border-t border-border-custom/40 grid grid-cols-2 gap-y-3 gap-x-4 text-[10px] sm:text-xs text-text-secondary animate-in fade-in duration-200">
                   <div className="flex items-center gap-1.5">
                     <Sunrise size={12} className="text-orange-400 shrink-0" />
                     <span>Sunrise: <strong className="font-semibold text-text-primary">{formatTime(day.sunrise)}</strong></span>
@@ -133,3 +138,4 @@ export function DailyForecastComponent({ daily }: DailyForecastProps) {
     </div>
   );
 }
+export default DailyForecastComponent;

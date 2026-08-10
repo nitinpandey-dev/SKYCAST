@@ -115,7 +115,7 @@ export function SearchBar({ onLocationSelect }: SearchBarProps) {
           aria-autocomplete="list"
           aria-controls="search-results-list"
           aria-activedescendant={activeIndex >= 0 ? `option-${activeIndex}` : undefined}
-          className="w-full bg-surface border border-border-custom outline-none py-2.5 pl-11 pr-10 rounded-full text-xs font-semibold text-text-primary placeholder:text-text-muted focus:bg-surface-strong focus:border-accent-custom/40 transition-all duration-300"
+          className="w-full bg-surface border border-border-custom outline-none py-2.5 pl-11 pr-10 rounded-full text-xs font-semibold text-text-primary placeholder:text-text-muted focus:bg-surface-strong focus:border-accent-custom/30 focus:ring-2 focus:ring-accent-custom/20 transition-all duration-300"
         />
         {query && (
           <button 

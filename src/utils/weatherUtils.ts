@@ -123,19 +123,29 @@ export function getWeatherBackgroundClass(code: number, isDay: boolean): string 
     }
     return 'bg-gradient-to-b from-[#0f0f10] to-[#020204]';
   } else {
-    // Light modes use a soft off-white/zinc base with very gentle sky tints
-    if (code <= 1) { // Sunny
-      return isDay 
-        ? 'bg-gradient-to-b from-[#f0f5ff] to-[#f8fafc]' 
-        : 'bg-gradient-to-b from-[#e8ecf5] to-[#f1f5f9]';
+    // Light modes use a soft sky-like base reflecting actual daytime weather
+    if (!isDay) {
+      return 'bg-gradient-to-b from-[#1E293B] to-[#0F172A]'; // Night uses a dark navy sky
     }
-    if (code <= 3 || code === 45 || code === 48) { // Cloudy
-      return 'bg-gradient-to-b from-[#f1f5f9] to-[#f8fafc]';
+    if (code <= 1) { // Sunny / Clear
+      return 'bg-gradient-to-b from-[#DCEBF7] via-[#EAF3FB] to-[#F3F7FA]';
     }
-    if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) { // Rain
-      return 'bg-gradient-to-b from-[#eaf2ff] to-[#f8fafc]';
+    if (code === 2) { // Partly Cloudy
+      return 'bg-gradient-to-b from-[#CFE1F0] via-[#E6F0F8] to-[#EDF3F7]';
     }
-    return 'bg-gradient-to-b from-[#f4f4f5] to-[#fafafa]';
+    if (code === 3 || code === 45 || code === 48) { // Cloudy / Fog
+      return 'bg-gradient-to-b from-[#C4D5E5] via-[#DEE7F0] to-[#E8EEF3]';
+    }
+    if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) { // Rain / Drizzle
+      return 'bg-gradient-to-b from-[#B8C9D9] via-[#D2DCE6] to-[#DCE2EA]';
+    }
+    if ((code >= 71 && code <= 77) || code === 85 || code === 86) { // Snow
+      return 'bg-gradient-to-b from-[#E2F0FC] via-[#F1F6FC] to-[#F7FAFC]';
+    }
+    if (code >= 95 && code <= 99) { // Thunderstorm
+      return 'bg-gradient-to-b from-[#AABBCB] via-[#C3CFDB] to-[#CED7DF]';
+    }
+    return 'bg-gradient-to-b from-[#DCEBF7] via-[#EAF3FB] to-[#F3F7FA]';
   }
 }
 
