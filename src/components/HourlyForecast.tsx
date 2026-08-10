@@ -56,7 +56,7 @@ export function HourlyForecastComponent({ hourly }: HourlyForecastProps) {
   return (
     <div className="glass-card p-4 sm:p-5 transition-all duration-300 w-full">
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-xs font-bold text-text-muted uppercase tracking-wider">Hourly Forecast</h2>
+        <h2 className="text-xs font-bold text-text-primary uppercase tracking-wider">Hourly Forecast</h2>
         <span className="text-[10px] text-text-muted font-semibold">Tap hour to select</span>
       </div>
 
@@ -113,7 +113,7 @@ export function HourlyForecastComponent({ hourly }: HourlyForecastProps) {
                 onClick={() => handleCardClick(index)}
                 className={`flex flex-col items-center justify-between w-[3.25rem] py-2 rounded-xl transition-all duration-200 border text-center cursor-pointer ${
                   isActive 
-                    ? 'bg-surface-strong border-accent-custom/30 dark:bg-[#60a5fa]/14 dark:border-[#60a5fa]/35 shadow-sm font-bold text-text-primary' 
+                    ? 'bg-[#3478F6]/12 border-[#3478F6]/35 dark:bg-[#60a5fa]/12 dark:border-[#60a5fa]/35 shadow-sm font-bold text-text-primary' 
                     : 'bg-transparent border-transparent hover:bg-surface/30 text-text-secondary'
                 }`}
               >

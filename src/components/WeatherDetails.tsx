@@ -74,7 +74,7 @@ export function WeatherDetails({ current }: WeatherDetailsProps) {
   return (
     <div className="glass-card p-4 sm:p-5 transition-all duration-300 w-full">
       <div className="flex items-center justify-between mb-3 border-b border-border-custom/25 pb-2">
-        <h2 className="text-xs font-bold text-text-muted uppercase tracking-wider">Weather Details</h2>
+        <h2 className="text-xs font-bold text-text-primary uppercase tracking-wider">Weather Details</h2>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5">

@@ -37,7 +37,7 @@ export function DailyForecastComponent({ daily }: DailyForecastProps) {
   return (
     <div className="glass-card p-4 sm:p-5 transition-all duration-300 w-full">
       <div className="flex items-center justify-between mb-3 border-b border-border-custom/25 pb-2">
-        <h2 className="text-xs font-bold text-text-muted uppercase tracking-wider">
+        <h2 className="text-xs font-bold text-text-primary uppercase tracking-wider">
           {daily.length}-Day Forecast
         </h2>
         <span className="text-[10px] text-text-muted font-semibold">Click row to expand details</span>

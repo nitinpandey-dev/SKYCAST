@@ -55,7 +55,7 @@ export function FavoriteLocations({ onSelect }: FavoriteLocationsProps) {
 
   return (
     <div className="glass-card p-6 mt-6 transition-all duration-300">
-      <h2 className="text-xs font-bold text-text-muted uppercase tracking-wider mb-4 flex items-center gap-2">
+      <h2 className="text-xs font-bold text-text-primary uppercase tracking-wider mb-4 flex items-center gap-2">
         <Heart size={14} className="text-red-500 fill-red-500" />
         Saved Locations
       </h2>

@@ -163,7 +163,7 @@ export function Home() {
 
   if (initLoading) {
     return (
-      <div className={`min-h-screen ${bgClass}`}>
+      <div className={`min-h-screen ${isDark ? 'dark' : ''} ${bgClass}`}>
         <Header 
           onLocationSelect={handleLocationSelect}
           onUseLocation={handleUseLocation}
@@ -178,7 +178,7 @@ export function Home() {
   const summaryText = data ? generateWeatherSummary(data, units) : '';
 
   return (
-    <div className={`min-h-screen ${bgClass} pb-12 transition-[background-color,color,border-color,box-shadow] duration-300 relative overflow-x-hidden`}>
+    <div className={`min-h-screen ${isDark ? 'dark' : ''} ${bgClass} pb-12 transition-[background-color,color,border-color,box-shadow] duration-300 relative overflow-x-hidden`}>
       {/* Dynamic weather overlay */}
       {data?.current && (
         <WeatherEffectsOverlay code={data.current.conditionCode} isDay={data.current.isDay} />
@@ -223,7 +223,7 @@ export function Home() {
                   {summaryText && (
                     <div className="glass-card p-3.5 flex gap-2.5 items-start">
                       <Info size={14} className="text-accent-custom shrink-0 mt-0.5" />
-                      <p className="text-xs text-text-secondary dark:text-[#DCE5F0] leading-relaxed font-semibold">
+                      <p className="text-xs text-text-secondary dark:text-[#D9E2EF] leading-relaxed font-semibold">
                         {summaryText}
                       </p>
                     </div>
@@ -253,7 +253,7 @@ export function Home() {
                     {summaryText && (
                       <div className="glass-card p-4 flex gap-3 items-start">
                         <Info size={16} className="text-accent-custom shrink-0 mt-0.5" />
-                        <p className="text-xs text-text-secondary dark:text-[#DCE5F0] leading-relaxed font-semibold">
+                        <p className="text-xs text-text-secondary dark:text-[#D9E2EF] leading-relaxed font-semibold">
                           {summaryText}
                         </p>
                       </div>
