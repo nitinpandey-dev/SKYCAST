@@ -18,17 +18,21 @@
 
   /* ── Light Mode defaults ── */
   :root {
-    --bg:               #EAF3FB;
-    --surface:          rgba(255, 255, 255, 0.55);
-    --surface-elevated: rgba(255, 255, 255, 0.78);
-    --surface-strong:   rgba(244, 248, 253, 0.97);
+    /* Light page background — bright airy iOS-style blue-white */
+    --bg:               #F2F8FD;
+
+    /* White glass surfaces — much lighter than before */
+    --surface:          rgba(255, 255, 255, 0.72);
+    --surface-elevated: rgba(255, 255, 255, 0.85);
+    --surface-strong:   rgba(248, 252, 255, 0.97);
 
     --text-primary:     #172033;
     --text-secondary:   #536174;
     --text-muted:       #718096;
 
-    --border:           rgba(255, 255, 255, 0.68);
-    --border-subtle:    rgba(0, 0, 0, 0.07);
+    /* Crisp white borders with a hint of blue */
+    --border:           rgba(255, 255, 255, 0.90);
+    --border-subtle:    rgba(100, 130, 160, 0.10);
 
     --accent:           #3478F6;
   }
@@ -91,7 +95,8 @@
     -webkit-backdrop-filter: blur(18px);
     border: 1px solid var(--border);
     border-radius: 20px;
-    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+    /* Light mode: subtle blue-tinted shadow feels airy, not heavy */
+    box-shadow: 0 8px 24px rgba(60, 90, 120, 0.06);
     transition:
       background 0.25s ease,
       border-color 0.25s ease,
@@ -102,15 +107,15 @@
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.30);
   }
 
-  /* Header — slightly stronger than a normal card */
+  /* Header — bright white glass in light mode, dark navy in dark mode */
   .glass-header {
-    background: rgba(255, 255, 255, 0.60);
+    background: rgba(255, 255, 255, 0.78);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
-    border: 1px solid rgba(255, 255, 255, 0.68);
+    border: 1px solid rgba(255, 255, 255, 0.90);
     border-radius: 20px;
-    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
-    transition: background 0.25s ease, border-color 0.25s ease;
+    box-shadow: 0 4px 20px rgba(60, 90, 120, 0.08);
+    transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
   }
 
   html.dark .glass-header {
@@ -136,10 +141,11 @@
 
   /* Sub-panel inside a card (e.g. active hour row) */
   .glass-inset {
-    background: rgba(0, 0, 0, 0.03);
-    border: 1px solid rgba(0, 0, 0, 0.06);
+    /* Light mode: near-white with a hint of blue border */
+    background: rgba(255, 255, 255, 0.80);
+    border: 1px solid rgba(220, 230, 240, 0.90);
     border-radius: 14px;
-    transition: background 0.25s ease;
+    transition: background 0.25s ease, border-color 0.25s ease;
   }
 
   html.dark .glass-inset {
