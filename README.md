@@ -1,17 +1,24 @@
-# SKYCAST
+# 🌤️ SKYCAST
 
-SKYCAST is a fast, beautiful, responsive, and production-quality weather application built with modern React. It provides real-time weather data, accurate hourly and daily forecasts, and beautiful visual cues that adapt to the current weather conditions.
+A modern, responsive weather dashboard built with React, TypeScript and Open-Meteo.
 
-## Features
+[![Live Demo](https://img.shields.io/badge/🌐%20Live%20Demo-SKYCAST-blue?style=for-the-badge)](https://skycast-lovat-two.vercel.app)
 
-- **Real-Time Data**: Current weather conditions, feels-like temperature, high/low, and detailed metrics (UV Index, Humidity, Visibility, Wind, Pressure).
-- **Hourly Forecast**: Scrollable 24-hour forecast with a beautiful temperature trend graph.
-- **7-Day Forecast**: Clean and concise weekly outlook.
-- **Smart Location**: Automatic geolocation detection with fallback, plus a robust global city search.
-- **Favorites**: Save and manage your favorite locations.
-- **Theme & Units**: Light, Dark, and System theme support. Toggle between Celsius and Fahrenheit.
-- **Responsive**: Meticulously designed to look great on mobile, tablet, and desktop.
-- **Dynamic Backgrounds**: The UI subtly shifts its color palette based on the current weather and time of day (Sunny, Rainy, Snowy, Cloudy, Night, etc.).
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-black?style=for-the-badge&logo=github)](https://github.com/nitinpandey-dev/SKYCAST)
+
+---
+
+## ✨ Features
+
+- 🌤️ Real-time weather information
+- 📍 Current location detection
+- 🔎 Global city search
+- 📊 24-hour forecast
+- 📅 7-day forecast
+- 🌙 Light / Dark mode
+- ⭐ Favorite locations
+- 🌡️ Celsius / Fahrenheit
+- 📱 Fully responsive
 
 ## Tech Stack
 
